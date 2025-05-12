@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5a5af3;
+            --primary-light: #eeeeff;
+            --secondary-color: #ff7373;
+            --text-color: #333;
+            --light-bg: #f9faff;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+        }
+        body {
+            background: linear-gradient(135deg, #f9faff 0%, #f0f3ff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        .exam-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .logo-icon {
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-right: 12px;
+            box-shadow: 0 3px 8px rgba(90, 90, 243, 0.2);
+        }
+        .user-name {
+            font-weight: 600;
+        }
+        .user-role {
+            color: #777;
+            font-size: 0.85rem;
+        }
+        .header-action {
+            background-color: transparent;
+            color: #777;
+            border: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .header-action:hover {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--primary-color);
+        }
+        .header-action i {
+            margin-right: 8px;
+        }
+        .exam-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #7d7df8 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(90, 90, 243, 0.3);
+        }
+        .exam-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .exam-header::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .exam-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .exam-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 2px;
+        }
+        .info-value {
+            font-weight: 600;
+        }
+        .exam-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+        .jury-board {
+            background-color: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), #7d7df8);
+            border-radius: 2px;
+        }
+        .jury-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        .jury-member {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-bg);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 250px;
+        }
+        .jury-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .jury-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        .jury-info {
+            flex: 1;
+        }
+        .jury-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .jury-role {
+            color: #777;
+            font-size: 0.85rem;
+        }
+        .questions-section {
+            margin-bottom: 40px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .section-subtitle {
+            color: #777;
+            font-size: 1rem;
+        }
+        .question-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .question-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .question-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .question-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .question-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        .available .question-number {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .locked .question-number {
+            background-color: #f0f0f0;
+            color: #aaa;
+        }
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .available .question-title {
+            color: var(--text-color);
+        }
+        .locked .question-title {
+            color: #aaa;
+        }
+        .question-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+        }
+        .available .question-meta {
+            color: #777;
+        }
+        .locked .question-meta {
+            color: #bbb;
+        }
+        .question-meta span {
+            display: flex;
+            align-items: center;
+        }
+        .question-meta i {
+            margin-right: 5px;
+        }
+        .question-action {
+            margin-left: 15px;
+        }
+        .btn-open {
+            background: linear-gradient(45deg, var(--primary-color), #7d7df8);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-open:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(90, 90, 243, 0.3);
+            color: white;
+        }
+        .btn-open i {
+            margin-right: 8px;
+        }
+        .lock-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+        .locked {
+            opacity: 0.7;
+        }
+        .status-bar {
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+        }
+        .status-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        .available-icon {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .locked-icon {
+            background-color: #f0f0f0;
+            color: #aaa;
+        }
+        .status-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-label {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 2px;
+        }
+        .status-value {
+            font-weight: 700;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .btn-custom {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), #7d7df8);
+            border: none;
+            box-shadow: 0 5px 15px rgba(90, 90, 243, 0.2);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #4b4bea, #6e6ef7);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(90, 90, 243, 0.3);
+            color: white;
+        }
+        .btn-outline {
+            border: 2px solid #ddd;
+            background-color: transparent;
+            color: #777;
+        }
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        .btn-icon {
+            margin-right: 8px;
+        }
+        @media (max-width: 768px) {
+            .exam-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .jury-members {
+                gap: 15px;
+            }
+            .status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <span>ExamPro</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">J</div>
+                <div>
+                    <div class="user-name" id="studentName">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+                <a href="student-dashboard.html" class="header-action">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <button class="header-action" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+        
+        <div class="exam-header">
+            <h1 class="exam-title">Advanced Computer Science - Final Exam</h1>
+            <div class="exam-info">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div>
+                        <div class="info-label">Exam Date</div>
+                        <div class="info-value">May 15, 2025</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <div class="info-label">Duration</div>
+                        <div class="info-value">3 Hours</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <div class="info-label">Total Questions</div>
+                        <div class="info-value">7 Questions</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div>
+                        <div class="info-label">Total Points</div>
+                        <div class="info-value">100 Points</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-description">
+                This comprehensive final exam covers advanced topics in computer science, including algorithms, data structures, system design, and computational theory. Each question requires in-depth understanding and application of concepts.
+            </div>
+        </div>
+        
+        <div class="jury-board">
+            <h2 class="section-title">Jury Board</h2>
+            <div class="jury-members">
+                <div class="jury-member">
+                    <div class="jury-avatar">DP</div>
+                    <div class="jury-info">
+                        <div class="jury-name">Dr. Patricia Johnson</div>
+                        <div class="jury-role">Head of Computer Science Department</div>
+                    </div>
+                </div>
+                
+                <div class="jury-member">
+                    <div class="jury-avatar">RK</div>
+                    <div class="jury-info">
+                        <div class="jury-name">Prof. Robert Kim</div>
+                        <div class="jury-role">Algorithm Specialist</div>
+                    </div>
+                </div>
+                
+                <div class="jury-member">
+                    <div class="jury-avatar">AL</div>
+                    <div class="jury-info">
+                        <div class="jury-name">Dr. Anna Lee</div>
+                        <div class="jury-role">Data Structures Expert</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <strong>Organized by:</strong> Department of Computer Science, University of Technology
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-icon available-icon">
+                    <i class="fas fa-unlock"></i>
+                </div>
+                <div class="status-info">
+                    <div class="status-label">Available Now</div>
+                    <div class="status-value">1 Question</div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-icon locked-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="status-info">
+                    <div class="status-label">Locked</div>
+                    <div class="status-value">6 Questions</div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-icon available-icon">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div class="status-info">
+                    <div class="status-label">Remaining Time</div>
+                    <div class="status-value">2:45:30</div>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-icon available-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="status-info">
+                    <div class="status-label">Completed</div>
+                    <div class="status-value">0/7 Questions</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="questions-section">
+            <div class="section-header">
+                <h2 class="section-title">Exam Questions</h2>
+                <div class="section-subtitle">Complete questions in sequential order to unlock the next question</div>
+            </div>
+            
+            <div class="question-cards">
+                <!-- Question 1 - Available -->
+                <div class="question-card available">
+                    <div class="question-info">
+                        <div class="question-number">1</div>
+                        <div>
+                            <div class="question-title">Algorithm Complexity Analysis</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 25 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Hard</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <a href="question-interface-enhanced.html" class="btn-open">
+                            <i class="fas fa-external-link-alt"></i> Open
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Question 2 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">2</div>
+                        <div>
+                            <div class="question-title">Advanced Data Structures</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 25 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Hard</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">3</div>
+                        <div>
+                            <div class="question-title">Database Systems Design</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 25 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 4 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">4</div>
+                        <div>
+                            <div class="question-title">Networking and Security Protocols</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 25 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 5 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">5</div>
+                        <div>
+                            <div class="question-title">Artificial Intelligence Concepts</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 25 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Hard</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 6 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">6</div>
+                        <div>
+                            <div class="question-title">Software Engineering Principles</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 10 Points</span>
+                                <span><i class="fas fa-clock"></i> 20 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 7 - Locked -->
+                <div class="question-card locked">
+                    <div class="question-info">
+                        <div class="question-number">7</div>
+                        <div>
+                            <div class="question-title">System Design Case Study</div>
+                            <div class="question-meta">
+                                <span><i class="fas fa-award"></i> 15 Points</span>
+                                <span><i class="fas fa-clock"></i> 35 Minutes</span>
+                                <span><i class="fas fa-signal"></i> Difficulty: Expert</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-action">
+                        <div class="lock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="student-dashboard.html" class="btn-custom btn-outline">
+                <i class="fas fa-arrow-left btn-icon"></i> Back to Dashboard
+            </a>
+            <a href="question-interface-enhanced.html" class="btn-custom btn-primary">
+                <i class="fas fa-play btn-icon"></i> Start Exam
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set user info
+            const currentUser = localStorage.getItem('currentUser') || 'John Doe';
+            document.getElementById('studentName').textContent = currentUser;
+            document.getElementById('userAvatar').textContent = currentUser.charAt(0).toUpperCase();
+            
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userType');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+</html>

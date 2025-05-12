@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Countdown Timer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5a5af3;
+            --primary-light: #eeeeff;
+            --secondary-color: #ff7373;
+            --text-color: #333;
+            --light-bg: #f9faff;
+        }
+        body {
+            background: linear-gradient(135deg, #f9faff 0%, #f0f3ff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .countdown-container {
+            max-width: 800px;
+            width: 90%;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+        .countdown-header {
+            background: linear-gradient(135deg, #5a5af3 0%, #7d7df8 100%);
+            color: white;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .countdown-header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .countdown-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 20px;
+        }
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        .user-name {
+            font-weight: 600;
+        }
+        .btn-rounded {
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .btn-back {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+        }
+        .btn-back:hover {
+            background-color: rgba(255,255,255,0.3);
+            color: white;
+        }
+        .btn-back i {
+            margin-right: 6px;
+        }
+        .exam-info {
+            position: relative;
+            z-index: 2;
+        }
+        .exam-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        .exam-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .countdown-body {
+            padding: 40px;
+        }
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .countdown-block {
+            text-align: center;
+            position: relative;
+        }
+        .countdown-block::after {
+            content: ':';
+            position: absolute;
+            right: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #ddd;
+            font-weight: 300;
+        }
+        .countdown-block:last-child::after {
+            display: none;
+        }
+        .countdown-number {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), #7d7df8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .countdown-number::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-light);
+            border-radius: 12px;
+            z-index: -1;
+            transform: skewX(-5deg);
+        }
+        .countdown-label {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #888;
+            letter-spacing: 2px;
+        }
+        .status-message {
+            text-align: center;
+            background-color: var(--primary-light);
+            padding: 15px;
+            border-radius: 12px;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin: 30px 0;
+        }
+        .status-message i {
+            margin-right: 8px;
+        }
+        .exam-details {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .details-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .detail-label {
+            flex: 0 0 120px;
+            font-weight: 600;
+            color: #666;
+        }
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+        }
+        .error-message {
+            text-align: center;
+            padding: 40px;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        .error-description {
+            color: #888;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown-container">
+        <div class="countdown-header">
+            <div class="header-top">
+                <h1 class="header-title">Exam Countdown</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">S</div>
+                    <div class="user-name" id="studentName">Student</div>
+                    <button class="btn btn-rounded btn-back ms-4" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> Dashboard
+                    </button>
+                </div>
+            </div>
+            
+            <div class="exam-info">
+                <h2 class="exam-title" id="examTitle">Final Exam</h2>
+                <p class="exam-description" id="examDescription">Be prepared for your upcoming exam</p>
+            </div>
+        </div>
+        
+        <div class="countdown-body" id="examContainer">            
+            <div class="countdown-display">
+                <div class="countdown-block">
+                    <div class="countdown-number" id="daysDisplay">0</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="hoursDisplay">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="minutesDisplay">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="secondsDisplay">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            
+            <div class="status-message">
+                <i class="fas fa-info-circle"></i> Please be ready to start your exam when the countdown ends.
+            </div>
+            
+            <div class="exam-details">
+                <div class="details-header">
+                    <h4 class="details-title">Exam Details</h4>
+                    <i class="fas fa-clipboard-list" style="color: var(--primary-color);"></i>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Date:</div>
+                    <div class="detail-value" id="examDate">May 10, 2025</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Duration:</div>
+                    <div class="detail-value" id="examDuration">2 hours</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Questions:</div>
+                    <div class="detail-value" id="questionCount">10</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Format:</div>
+                    <div class="detail-value">Written responses</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="errorContainer" class="error-message" style="display: none;">
+            <div class="error-icon">
+                <i class="fas fa-calendar-times"></i>
+            </div>
+            <h3 class="error-title">No Exam Found</h3>
+            <p class="error-description">There is no active exam scheduled at this time.</p>
+            <button class="btn btn-primary btn-rounded" id="dashboardBtn">
+                <i class="fas fa-home"></i> Return to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        
+    </script>
+</body>
+</html>
+
+
+</body>
+</html>
