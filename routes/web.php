@@ -10,38 +10,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified','role:admin'])->name('dashboard');
-
-
-
-Route::middleware('auth')->group(function () {
-
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 //Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::get('dashboard', [DashboardController::class, 'adminIndex'])->name('admin.dashboard');
 
 
-    //Manage Exam
+    // Exam routes
     Route::get('exam/manage', [ExamController::class, 'manageExam'])->name('admin.manage.exam');
     Route::get('exam/create', [ExamController::class, 'createExam'])->name('admin.exam.create');
+    Route::post('exam/store', [ExamController::class, 'store'])->name('admin.exam.store');
+    Route::get('exam/{exam}', [ExamController::class, 'show'])->name('admin.exam.show');
+    Route::get('exam/{exam}/edit', [ExamController::class, 'edit'])->name('admin.exam.edit');
+    Route::post('exam/preview', [ExamController::class, 'preview'])->name('admin.exam.preview');
+
+
 
     //Manage Student
     Route::get('student/manage', [StudentController::class, 'manageStudent'])->name('admin.manage.student');
+    Route::get('student/create', [StudentController::class, 'createStudent'])->name('admin.student.create');
 
 });
 
 //Student Dashboard
 Route::group(['middleware' => ['auth','role:user']], function () {
     Route::get('dashboard', [DashboardController::class, 'studentIndex'])->name('user.dashboard');
-
 
 });
 

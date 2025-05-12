@@ -243,7 +243,7 @@
             color: var(--primary-color);
             line-height: 1;
             background: var(--primary-light);
-            width: 70px;
+            width: 100px;
             height: 70px;
             display: flex;
             align-items: center;
@@ -691,12 +691,12 @@
                 <!-- Calendar Card Example -->
                 <div class="calendar-card">
                     <div class="date-display">
-                        <div class="calendar-day">20</div>
+                        <div class="calendar-day">16</div>
                         <div>
                             <div class="calendar-month">May 2025</div>
-                            <div class="calendar-event">Chemistry Lab Final</div>
+                            <div class="calendar-event">The AI Productivity Contest</div>
                             <div class="calendar-time">
-                                <i class="far fa-clock"></i> 9:30 AM - 11:30 AM
+                                <i class="far fa-clock"></i> 3:00 PM - 5:00 PM
                             </div>
                         </div>
                     </div>

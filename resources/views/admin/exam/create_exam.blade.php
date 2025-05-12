@@ -3,6 +3,30 @@
 @section('pageTitle', 'Create Exam')
 @push('style')
 <style>
+    /* Add this CSS to your stylesheet or in a style tag */
+
+    /* Style for the "mark as correct" button when active */
+    .option-control-btn.active-correct {
+        color: #28a745 !important;
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+
+    /* Style for the correct option */
+    .option-item.option-correct {
+        border-left: 3px solid #28a745;
+        background-color: rgba(40, 167, 69, 0.05);
+    }
+
+    /* Make the active check icon more visible */
+    .option-control-btn.active-correct .fa-check-circle {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    /* Optional: Add a subtle transition effect */
+    .option-item, .option-control-btn {
+        transition: all 0.2s ease-in-out;
+    }
 
     .header-action i {
         margin-right: 8px;
@@ -541,10 +565,12 @@
         <div class="tab-navigation">
             <div class="tab-item active" data-tab="exam-details">Exam Details</div>
             <div class="tab-item" data-tab="questions">Create Questions</div>
-            <div class="tab-item" data-tab="settings">Settings</div>
-            <div class="tab-item" data-tab="preview">Preview & Publish</div>
+            <div class="tab-item" data-tab="settings">Settings & Publish</div>
         </div>
 
+
+        <form id="examForm" method="POST" action="{{ route('admin.exam.store') }}">
+            @csrf
         <div class="tab-content active" id="exam-details">
             <div class="form-section">
                 <h3 class="section-title">
@@ -554,15 +580,15 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="examTitle" class="form-label">Exam Title</label>
-                            <input type="text" class="form-control" id="examTitle" placeholder="e.g. Advanced Mathematics Final Exam">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="e.g. Advanced Mathematics Final Exam">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="subjectArea" class="form-label">Subject Area</label>
-                            <select class="form-select" id="subjectArea">
+                            <label for="subject_area" class="form-label">Subject Area</label>
+                            <select class="form-select" name="subject_area" id="subject_area">
                                 <option selected>Select subject area</option>
-                                <option value="math">Mathematics</option>
+                                <option value="technology">Technology</option>
                                 <option value="science">Science</option>
                                 <option value="english">English</option>
                                 <option value="cs">Computer Science</option>
@@ -577,8 +603,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                            <label for="examDescription" class="form-label">Exam Description</label>
-                            <textarea class="form-control" id="examDescription" rows="4" placeholder="Provide a brief description of the exam..."></textarea>
+                            <label for="description" class="form-label">Exam Description</label>
+                            <textarea class="form-control" name="description" id="description" rows="4" placeholder="Provide a brief description of the exam..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -586,20 +612,20 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="examDate" class="form-label">Exam Date</label>
-                            <input type="date" class="form-control" id="examDate">
+                            <label for="exam_date" class="form-label">Exam Date</label>
+                            <input type="date" name="exam_date" class="form-control" id="exam_date">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="startTime" class="form-label">Start Time</label>
-                            <input type="time" class="form-control" id="startTime">
+                            <label for="start_time" class="form-label">Start Time</label>
+                            <input type="time" name="start_time" class="form-control" id="start_time">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="duration" class="form-label">Duration (minutes)</label>
-                            <input type="number" class="form-control" id="duration" min="10" placeholder="e.g. 120">
+                            <input type="number" class="form-control" name="duration" id="duration" min="10" placeholder="e.g. 120">
                         </div>
                     </div>
                 </div>
@@ -613,19 +639,19 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="passingScore" class="form-label">Passing Score (%)</label>
-                            <input type="number" class="form-control" id="passingScore" min="0" max="100" value="60">
+                            <label for="passing_score" class="form-label">Passing Score (%)</label>
+                            <input type="number" class="form-control" name="passing_score" id="passing_score" min="0" max="100" value="60">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="totalMarks" class="form-label">Total Marks</label>
-                            <input type="number" class="form-control" id="totalMarks" min="1" placeholder="e.g. 100">
+                            <label for="total_marks" class="form-label">Total Marks</label>
+                            <input type="number" class="form-control" name="total_marks" id="total_marks" min="1" placeholder="e.g. 100">
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
+             {{--   <div class="row">
                     <div class="col-md-12">
                         <label class="form-label">Exam Timer</label>
                         <div class="timer-options">
@@ -654,32 +680,32 @@
                         </div>
                     </div>
                 </div>
-
+--}}
                 <div class="row mt-4">
                     <div class="col-md-6">
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="randomizeQuestions">
-                            <label class="form-check-label" for="randomizeQuestions">
+                            <input class="form-check-input" name="randomize_questions"   type="checkbox" id="randomize_questions">
+                            <label class="form-check-label" for="randomize_questions">
                                 Randomize question order
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="showResults">
-                            <label class="form-check-label" for="showResults">
+                            <input class="form-check-input" name="show_results"   type="checkbox" id="show_results">
+                            <label class="form-check-label" for="show_results">
                                 Show results immediately after completion
                             </label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="preventBacktracking">
-                            <label class="form-check-label" for="preventBacktracking">
+                            <input class="form-check-input" name="prevent_backtracking" type="checkbox" id="prevent_backtracking">
+                            <label class="form-check-label" for="prevent_backtracking">
                                 Prevent backtracking to previous questions
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="enableProctoring">
-                            <label class="form-check-label" for="enableProctoring">
+                            <input class="form-check-input" name="enable_proctoring" type="checkbox" id="enable_proctoring">
+                            <label class="form-check-label" for="enable_proctoring">
                                 Enable proctoring (prevents tab switching)
                             </label>
                         </div>
@@ -688,10 +714,12 @@
             </div>
 
             <div class="form-footer">
-                <button class="btn btn-secondary btn-custom">
-                    <i class="fas fa-save btn-icon"></i> Save as Draft
+                <a href="{{route('admin.dashboard')}}">
+               <button class="btn btn-secondary btn-custom" type="button">
+                    <i class="fas fa-dashboard btn-icon"></i> Back To Dashboard
                 </button>
-                <button class="btn btn-primary btn-custom" id="nextToQuestions">
+                </a>
+                <button type="button"  class="btn btn-primary btn-custom" id="nextToQuestions">
                     Continue to Questions <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -702,35 +730,11 @@
                 <h3 class="section-title">
                     <i class="fas fa-plus-circle"></i> Create Questions
                 </h3>
-
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <button class="import-btn">
-                            <i class="fas fa-file-import"></i> Import Questions from Question Bank
-                        </button>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <button class="import-btn">
-                            <i class="fas fa-file-excel"></i> Import from Excel/CSV
-                        </button>
-                    </div>
-                </div>
-
-                <div class="upload-area">
-                    <input type="file" id="bulkUpload" class="file-input">
-                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <div class="upload-text">Drag & drop Excel or CSV file here</div>
-                    <div class="upload-hint">or click to browse files</div>
-                </div>
-
                 <!-- Question 1 -->
                 <div class="question-item" data-question-number="1">
                     <div class="question-number">Question 1</div>
                     <div class="question-actions">
-                        <button class="question-action-btn">
-                            <i class="fas fa-arrows-alt"></i>
-                        </button>
-                        <button class="question-action-btn clone-question-btn" title="Clone this question">
+                        <button class="question-action-btn clone-question-btn" title="Clone this question" type="button">
                             <i class="fas fa-copy"></i>
                         </button>
                         <button class="question-action-btn">
@@ -740,21 +744,26 @@
 
                     <div class="question-content">
                         <div class="mb-3">
-                            <label for="questionText1" class="form-label">Question Text</label>
-                            <textarea class="form-control" id="questionText1" rows="2" placeholder="Enter your question...">What is the capital city of France?</textarea>
+                            <label for="questionText1" class="form-label">Question Title</label>
+                            <input type="text" name="questions[0][question_title]" class="form-control" placeholder="Question Title">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="questionText1" class="form-label">Question Description</label>
+                            <textarea class="form-control" name="questions[0][question_text]" id="questionText1" rows="2" placeholder="Enter your question..."></textarea>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Question Type</label>
                             <div class="question-type-selector d-flex mb-3">
                                 <div class="form-check form-check-inline me-4">
-                                    <input class="form-check-input" type="radio" name="questionType1" id="mcqType1" value="mcq" checked>
+                                    <input class="form-check-input" type="radio" name="questions[0][question_type]" id="mcqType1" value="mcq" checked>
                                     <label class="form-check-label" for="mcqType1">
                                         <i class="fas fa-list-ul me-1"></i> Multiple Choice
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="questionType1" id="descriptionType1" value="description">
+                                    <input class="form-check-input" type="radio" name="questions[0][question_type]" id="descriptionType1" value="description">
                                     <label class="form-check-label" for="descriptionType1">
                                         <i class="fas fa-paragraph me-1"></i> Description Based
                                     </label>
@@ -763,14 +772,15 @@
 
                             <div id="mcqOptions1" class="mcq-options">
                                 <label class="form-label">Question Options</label>
+                                <input type="hidden" name="questions[0][correct_option]" value="0">
 
                                 <div class="option-item option-correct">
                                     <div class="option-marker">A</div>
                                     <div class="option-text">
-                                        <input type="text" class="form-control" placeholder="Option text..." value="Paris">
+                                        <input type="text" class="form-control" name="questions[0][options][0]" placeholder="Option text..." value="">
                                     </div>
                                     <div class="option-controls">
-                                        <button class="option-control-btn">
+                                        <button class="option-control-btn" type="button">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                         <button class="option-control-btn">
@@ -782,10 +792,10 @@
                                 <div class="option-item">
                                     <div class="option-marker">B</div>
                                     <div class="option-text">
-                                        <input type="text" class="form-control" placeholder="Option text..." value="London">
+                                        <input type="text" class="form-control" name="questions[0][options][1]" placeholder="Option text..." value="">
                                     </div>
                                     <div class="option-controls">
-                                        <button class="option-control-btn">
+                                        <button class="option-control-btn" type="button">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                         <button class="option-control-btn">
@@ -797,10 +807,10 @@
                                 <div class="option-item">
                                     <div class="option-marker">C</div>
                                     <div class="option-text">
-                                        <input type="text" class="form-control" placeholder="Option text..." value="Berlin">
+                                        <input type="text" class="form-control" name="questions[0][options][2]" placeholder="Option text..." value="">
                                     </div>
                                     <div class="option-controls">
-                                        <button class="option-control-btn">
+                                        <button class="option-control-btn" type="button">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                         <button class="option-control-btn">
@@ -812,10 +822,10 @@
                                 <div class="option-item">
                                     <div class="option-marker">D</div>
                                     <div class="option-text">
-                                        <input type="text" class="form-control" placeholder="Option text..." value="Madrid">
+                                        <input type="text" class="form-control" name="questions[0][options][3]" placeholder="Option text..." value="">
                                     </div>
                                     <div class="option-controls">
-                                        <button class="option-control-btn">
+                                        <button class="option-control-btn" type="button">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                         <button class="option-control-btn">
@@ -824,7 +834,7 @@
                                     </div>
                                 </div>
 
-                                <button class="add-option-btn">
+                                <button class="add-option-btn" type="button" id="addOptionBtn1">
                                     <i class="fas fa-plus"></i> Add Another Option
                                 </button>
                             </div>
@@ -832,27 +842,26 @@
                             <div id="descriptionOptions1" class="description-options" style="display: none;">
                                 <div class="form-group">
                                     <label class="form-label">Answer Format</label>
-                                    <select class="form-select">
+                                    <select class="form-select" name ="questions[0][answer_format]">
                                         <option value="text">Plain Text</option>
-                                        <option value="richtext">Rich Text</option>
                                         <option value="fileupload">File Upload</option>
                                     </select>
                                     <div class="form-text mt-2">For description-based questions, students will provide detailed written answers or upload files as their response.</div>
                                 </div>
 
                                 <div class="form-group mt-3">
-                                    <label class="form-label">Word Limit (Optional)</label>
+                                    <label class="form-label">Marks & Times (Optional)</label>
                                     <div class="row g-2">
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <span class="input-group-text">Min</span>
-                                                <input type="number" class="form-control" placeholder="Minimum words">
+                                                <span class="input-group-text">Marks</span>
+                                                <input type="number" name="questions[0][marks]" class="form-control" placeholder="Questions Mark">
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <span class="input-group-text">Max</span>
-                                                <input type="number" class="form-control" placeholder="Maximum words">
+                                                <span class="input-group-text">Time</span>
+                                                <input type="number" name="questions[0][time_limit]" class="form-control" placeholder="Optional">
                                             </div>
                                         </div>
                                     </div>
@@ -866,10 +875,7 @@
                             Marks: <span>5</span> | Type: <span>Multiple Choice</span>
                         </div>
                         <div class="question-actions-buttons">
-                            <button class="btn btn-secondary question-footer-btn">
-                                <i class="fas fa-cog"></i> Settings
-                            </button>
-                            <button class="btn btn-primary question-footer-btn add-next-question-btn">
+                            <button class="btn btn-primary question-footer-btn add-next-question-btn" type="button">
                                 <i class="fas fa-plus"></i> Add Question
                             </button>
                         </div>
@@ -887,15 +893,15 @@
 
             <div class="form-footer">
                 <div>
-                    <button class="btn btn-secondary btn-custom">
+                    <button type="button"  class="btn btn-secondary btn-custom" id="backToDetails">
                         <i class="fas fa-arrow-left btn-icon"></i> Back to Details
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-secondary btn-custom me-2">
-                        <i class="fas fa-save btn-icon"></i> Save Questions
+                    <button class="btn btn-secondary btn-custom me-2" type="submit" name="actionBtn" value="draft" id="saveDraft">
+                        <i class="fas fa-save btn-icon"></i> Save as Draft
                     </button>
-                    <button class="btn btn-primary btn-custom">
+                    <button type="button"  class="btn btn-primary btn-custom"  id="nextToSetting">
                         Continue to Settings <i class="fas fa-arrow-right btn-icon"></i>
                     </button>
                 </div>
@@ -913,19 +919,14 @@
                         <div class="mb-4">
                             <label class="form-label">Access Control</label>
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="accessControl" id="accessOpen" checked>
+                                <input class="form-check-input" type="radio" value="open" name="access_control" id="accessOpen" checked>
                                 <label class="form-check-label" for="accessOpen">
                                     Open to all students
                                 </label>
                             </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="accessControl" id="accessRestricted">
-                                <label class="form-check-label" for="accessRestricted">
-                                    Restrict to specific classes/groups
-                                </label>
-                            </div>
+
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="accessControl" id="accessPassword">
+                                <input class="form-check-input" type="radio" value="password" name="access_control" id="accessPassword">
                                 <label class="form-check-label" for="accessPassword">
                                     Require password
                                 </label>
@@ -933,68 +934,30 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="examPassword" class="form-label">Exam Password</label>
-                            <input type="text" class="form-control" id="examPassword" placeholder="Create a password">
+                            <label for="password" class="form-label">Exam Password</label>
+                            <input type="text" class="form-control" name="password" id="password" placeholder="Create a password">
                             <div class="form-text">Leave blank if not using password protection</div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="resultSettings" class="form-label">Result Settings</label>
-                            <select class="form-select" id="resultSettings">
-                                <option value="immediate">Show results immediately after submission</option>
-                                <option value="delayed" selected>Release results after exam closes</option>
-                                <option value="manual">Release results manually</option>
+                            <label for="question_settings" class="form-label">Question Settings</label>
+                            <select class="form-select" id="question_settings" name="question_settings">
+                                <option value="open_all">Open All Question</option>
+                                <option value="one_by_one" selected>Open One By One Question</option>
                             </select>
                         </div>
-
                         <div class="mb-3">
-                            <label for="attemptLimit" class="form-label">Attempt Limit</label>
-                            <select class="form-select" id="attemptLimit">
-                                <option value="1" selected>Single attempt only</option>
-                                <option value="2">2 attempts</option>
-                                <option value="3">3 attempts</option>
-                                <option value="unlimited">Unlimited attempts</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="gradeMethod" class="form-label">Grading Method</label>
-                            <select class="form-select" id="gradeMethod">
-                                <option value="highest">Highest attempt</option>
-                                <option value="latest" selected>Latest attempt</option>
-                                <option value="average">Average of all attempts</option>
+                            <label for="gradeMethod" class="form-label">Time Tracking</label>
+                            <select class="form-select" id="time_tracking" name="time_tracking">
+                                <option value="full_exam">Full Exam</option>
+                                <option value="question_wise" selected>Question Wise</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="form-label">Notification Settings</label>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="notifyStart" checked>
-                                <label class="form-check-label" for="notifyStart">
-                                    Notify students when exam is available
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="notifyReminder" checked>
-                                <label class="form-check-label" for="notifyReminder">
-                                    Send reminder 24 hours before deadline
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="notifyResults" checked>
-                                <label class="form-check-label" for="notifyResults">
-                                    Notify students when results are available
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="form-section">
@@ -1005,21 +968,21 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="form-label">Security Features</label>
-                            <div class="form-check mb-2">
+{{--                            <label class="form-label">Security Features</label>--}}
+                           {{-- <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="preventTabSwitch" checked>
                                 <label class="form-check-label" for="preventTabSwitch">
                                     Prevent tab switching during exam
                                 </label>
-                            </div>
+                            </div>--}}
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="disableCopyPaste" checked>
-                                <label class="form-check-label" for="disableCopyPaste">
+                                <input class="form-check-input" type="checkbox" name="disable_copy_paste"  id="disable_copy_paste" checked>
+                                <label class="form-check-label" for="disable_copy_paste" >
                                     Disable copy and paste functionality
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="disableRightClick">
+                                <input class="form-check-input" name="disable_right_click" type="checkbox" id="disableRightClick">
                                 <label class="form-check-label" for="disableRightClick">
                                     Disable right-click menu
                                 </label>
@@ -1027,655 +990,823 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Monitoring</label>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="randomScreenshots">
-                                <label class="form-check-label" for="randomScreenshots">
-                                    Take random screenshots during exam
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="webcamMonitoring">
-                                <label class="form-check-label" for="webcamMonitoring">
-                                    Enable webcam monitoring
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="recordSession">
-                                <label class="form-check-label" for="recordSession">
-                                    Record exam session
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div class="form-footer">
                 <div>
-                    <button class="btn btn-secondary btn-custom">
+                    <button type="button"  class="btn btn-secondary btn-custom" id="backToQuestion">
                         <i class="fas fa-arrow-left btn-icon"></i> Back to Questions
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-secondary btn-custom me-2">
-                        <i class="fas fa-save btn-icon"></i> Save Settings
-                    </button>
-                    <button class="btn btn-primary btn-custom">
-                        Continue to Preview <i class="fas fa-arrow-right btn-icon"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="preview">
-            <div class="form-section">
-                <h3 class="section-title">
-                    <i class="fas fa-eye"></i> Preview Exam
-                </h3>
-
-                <div class="content-card">
-                    <h4 class="mb-4">Advanced Mathematics Final Exam</h4>
-
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <div class="mb-2"><strong>Subject:</strong> Mathematics</div>
-                            <div class="mb-2"><strong>Date:</strong> May 20, 2025</div>
-                            <div><strong>Duration:</strong> 90 minutes</div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-2"><strong>Total Questions:</strong> 30</div>
-                            <div class="mb-2"><strong>Total Marks:</strong> 100</div>
-                            <div><strong>Passing Score:</strong> 60%</div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-2"><strong>Start Time:</strong> 10:00 AM</div>
-                            <div class="mb-2"><strong>End Time:</strong> 11:30 AM</div>
-                            <div><strong>Status:</strong> <span class="text-warning">Draft</span></div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h5 class="mb-3">Exam Description</h5>
-                        <p>This is the final examination for Advanced Mathematics. It covers all topics from the semester including algebra, calculus, and statistics. Please ensure you have a calculator for this exam.</p>
-                    </div>
-
-                    <div class="mb-4">
-                        <h5 class="mb-3">Exam Questions (30)</h5>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>1. What is the capital city of France?</div>
-                                <span class="badge bg-primary rounded-pill">5 marks</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>2. Which of the following programming languages is used for web development?</div>
-                                <span class="badge bg-primary rounded-pill">5 marks</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center text-muted">
-                                <div>3. [Question text will appear here]</div>
-                                <span class="badge bg-secondary rounded-pill">Not set</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center text-muted">
-                                <em>...and 27 more questions</em>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h5 class="mb-3">Exam Settings</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Randomize Questions
-                                        <span class="badge bg-success rounded-pill">Enabled</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Show Results Immediately
-                                        <span class="badge bg-danger rounded-pill">Disabled</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Prevent Backtracking
-                                        <span class="badge bg-success rounded-pill">Enabled</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Proctoring
-                                        <span class="badge bg-success rounded-pill">Enabled</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Access Control
-                                        <span class="badge bg-primary rounded-pill">All Students</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Attempt Limit
-                                        <span class="badge bg-primary rounded-pill">Single</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-footer">
-                <div>
-                    <button class="btn btn-secondary btn-custom">
-                        <i class="fas fa-arrow-left btn-icon"></i> Back to Settings
-                    </button>
-                </div>
-                <div>
-                    <button class="btn btn-secondary btn-custom me-2">
+                    <button class="btn btn-secondary btn-custom me-2" name="actionBtn" value="status" type="submit">
                         <i class="fas fa-save btn-icon"></i> Save as Draft
                     </button>
-                    <button class="btn btn-primary btn-custom">
-                        <i class="fas fa-paper-plane btn-icon"></i> Publish Exam
+                    <button class="btn btn-primary btn-custom" name="actionBtn" type="submit" value="publish" id="publishExam">
+                       Publish <i class="fas fa-arrow-right btn-icon"></i>
                     </button>
                 </div>
             </div>
         </div>
+        </form>
+
+
     </div>
 @endsection
 
 
 @push('script')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab navigation functionality
-            const tabItems = document.querySelectorAll('.tab-item');
-            const tabContents = document.querySelectorAll('.tab-content');
 
-            tabItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
+        /**
+         * Exam Creation System JavaScript
+         * Complete implementation with fixed correct answer selection
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Question counter for generating unique IDs
+            let questionCounter = 1;
+            let optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // For option markers
+
+            // Object to manage all exam functionality
+            const examManager = {
+                // Store bound event handlers
+                _markAsCorrectHandlers: {},
+
+                // Tab navigation functionality
+                initTabNavigation: function() {
+                    const tabItems = document.querySelectorAll('.tab-item');
+                    const tabContents = document.querySelectorAll('.tab-content');
+
+                    tabItems.forEach(item => {
+                        item.addEventListener('click', function() {
+                            const tabId = this.getAttribute('data-tab');
+                            examManager.switchTab(tabId);
+                        });
+                    });
+
+                    // Tab navigation buttons
+                    document.getElementById('nextToQuestions')?.addEventListener('click', () => examManager.switchTab('questions'));
+                    document.getElementById('nextToSetting')?.addEventListener('click', () => examManager.switchTab('settings'));
+                    document.getElementById('backToDetails')?.addEventListener('click', () => examManager.switchTab('exam-details'));
+                    document.getElementById('backToQuestion')?.addEventListener('click', () => examManager.switchTab('questions'));
+                },
+
+                switchTab: function(tabId) {
+                    // Optional validation before switching tabs
+                    if (tabId === 'questions' && !this.validateExamDetails()) {
+                        return false;
+                    }
+
+                    if (tabId === 'settings' && !this.validateQuestions()) {
+                        return false;
+                    }
+
+                    const tabItems = document.querySelectorAll('.tab-item');
+                    const tabContents = document.querySelectorAll('.tab-content');
 
                     // Remove active class from all tabs and contents
                     tabItems.forEach(tab => tab.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
 
                     // Add active class to selected tab and content
-                    this.classList.add('active');
+                    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
                     document.getElementById(tabId).classList.add('active');
-                });
-            });
 
-            // Timer option selection with custom time input
-            const timerOptions = document.querySelectorAll('.timer-option');
-            const timerContainer = document.querySelector('.timer-options');
-            let customInputCreated = false;
-            let customInput = null;
-            let customTimeValue = null;
+                    return true;
+                },
 
-            timerOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    timerOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
+                // Validation functions
+                validateExamDetails: function() {
+                    const title = document.getElementById('title');
+                    const subject = document.getElementById('subject_area');
+                    const examDate = document.getElementById('exam_date');
 
-                    // Check if this is the custom option (with cog icon or custom value)
-                    const isCustomOption = this.querySelector('.fas.fa-cog') || this.classList.contains('custom-option');
+                    let isValid = true;
 
-                    // Remove any existing custom input
-                    if (customInput) {
-                        customInput.remove();
-                        customInputCreated = false;
+                    // Basic validation example - can be expanded
+                    if (!title.value.trim()) {
+                        this.showValidationError(title, 'Please enter an exam title');
+                        isValid = false;
+                    } else {
+                        this.clearValidationError(title);
                     }
 
-                    // If custom option is clicked, add the input field
-                    if (isCustomOption) {
-                        customInput = document.createElement('div');
-                        customInput.className = 'custom-timer-input';
-                        customInput.innerHTML = `
-                            <div class="input-group mt-3">
-                                <input type="number" class="form-control" id="customTimerInput" min="1" placeholder="Enter minutes" value="${customTimeValue || ''}">
-                                <button class="btn btn-primary" id="applyCustomTime">Apply</button>
-                            </div>
-                        `;
-
-                        timerContainer.insertAdjacentElement('afterend', customInput);
-                        customInputCreated = true;
-
-                        // Focus on the input
-                        const inputField = document.getElementById('customTimerInput');
-                        inputField.focus();
-
-                        // Add event listener for the apply button
-                        document.getElementById('applyCustomTime').addEventListener('click', function() {
-                            const customTime = inputField.value;
-                            if (customTime && !isNaN(customTime) && customTime > 0) {
-                                // Save the current value for future edits
-                                customTimeValue = customTime;
-
-                                // Update the custom option to show the entered value
-                                const customTimerOption = document.querySelector('.timer-option.selected .timer-value');
-                                customTimerOption.innerHTML = customTime;
-                                customTimerOption.style.fontSize = '2rem';
-
-                                // Mark this as a custom option for future editing
-                                document.querySelector('.timer-option.selected').classList.add('custom-option');
-                                document.querySelector('.timer-option.selected .fas.fa-cog')?.remove();
-
-                                // Update the label
-                                const label = document.querySelector('.timer-option.selected .timer-label');
-                                if (label) {
-                                    label.textContent = 'minutes';
-                                }
-
-                                // Add a small edit button to indicate it can be edited
-                                const editIndicator = document.createElement('div');
-                                editIndicator.className = 'edit-indicator';
-                                editIndicator.innerHTML = '<i class="fas fa-edit"></i>';
-
-                                if (!document.querySelector('.timer-option.selected .edit-indicator')) {
-                                    document.querySelector('.timer-option.selected').appendChild(editIndicator);
-                                }
-
-                                // Hide the input after applying
-                                customInput.style.display = 'none';
-                            } else {
-                                // Show error if invalid input
-                                inputField.classList.add('is-invalid');
-                                setTimeout(() => {
-                                    inputField.classList.remove('is-invalid');
-                                }, 2000);
-                            }
-                        });
-
-                        // Also listen for Enter key
-                        inputField.addEventListener('keypress', function(e) {
-                            if (e.key === 'Enter') {
-                                document.getElementById('applyCustomTime').click();
-                            }
-                        });
+                    if (subject.value === 'Select subject area') {
+                        this.showValidationError(subject, 'Please select a subject area');
+                        isValid = false;
+                    } else {
+                        this.clearValidationError(subject);
                     }
-                });
-            });
 
-            // Next button functionality
-            const nextToQuestionsBtn = document.getElementById('nextToQuestions');
-            if (nextToQuestionsBtn) {
-                nextToQuestionsBtn.addEventListener('click', function() {
-                    tabItems.forEach(tab => tab.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
+                    if (!examDate.value) {
+                        this.showValidationError(examDate, 'Please select an exam date');
+                        isValid = false;
+                    } else {
+                        this.clearValidationError(examDate);
+                    }
 
-                    document.querySelector('[data-tab="questions"]').classList.add('active');
-                    document.getElementById('questions').classList.add('active');
-                });
-            }
+                    return isValid;
+                },
 
-            // Add Question functionality
-            const addQuestionBtn = document.getElementById('addQuestionBtn');
-            if (addQuestionBtn) {
-                addQuestionBtn.addEventListener('click', function() {
-                    // In a real application, this would add a new question
-                    alert('Add new question functionality would be implemented here.');
-                });
-            }
+                validateQuestions: function() {
+                    const questions = document.querySelectorAll('.question-item');
+                    if (questions.length === 0) {
+                        alert('Please add at least one question before proceeding.');
+                        return false;
+                    }
 
-            // Add Next Question button functionality
-            const addNextQuestionButtons = document.querySelectorAll('.add-next-question-btn');
-            addNextQuestionButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get the parent question item
-                    const currentQuestionItem = this.closest('.question-item');
+                    let isValid = true;
 
-                    // Get all existing questions
-                    const allQuestions = document.querySelectorAll('.question-item');
+                    questions.forEach((question, index) => {
+                        const questionTitle = question.querySelector('input[name^="questions"][name$="[question_title]"]');
+                        const questionText = question.querySelector('textarea[name^="questions"][name$="[question_text]"]');
 
-                    // Generate a new question number
-                    const newQuestionNumber = allQuestions.length + 1;
+                        if (!questionTitle || !questionTitle.value.trim()) {
+                            this.showValidationError(questionTitle || question, 'Please enter a question title');
+                            isValid = false;
+                        }
 
-                    // Create unique ID for the new question
+                        if (!questionText || !questionText.value.trim()) {
+                            this.showValidationError(questionText || question, 'Please enter question text');
+                            isValid = false;
+                        }
+
+                        // Check if it's MCQ and validate options
+                        const isMCQ = question.querySelector('input[value="mcq"]:checked');
+                        if (isMCQ) {
+                            // Fixed selector to correctly target only option inputs
+                            const options = question.querySelectorAll('.option-item input[type="text"]');
+                            let hasEmptyOption = false;
+
+                            options.forEach(option => {
+                                if (!option.value.trim()) {
+                                    hasEmptyOption = true;
+                                }
+                            });
+
+                            if (hasEmptyOption) {
+                                this.showValidationError(question.querySelector('.mcq-options'), 'Please fill all option fields');
+                                isValid = false;
+                            }
+                        }
+                    });
+
+                    return isValid;
+                },
+
+                showValidationError: function(element, message) {
+                    // Clear any existing error
+                    this.clearValidationError(element);
+
+                    // Add error class to the element
+                    element.classList.add('is-invalid');
+
+                    // Create error message
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'invalid-feedback';
+                    errorDiv.textContent = message;
+
+                    // Insert after the element
+                    element.parentNode.insertBefore(errorDiv, element.nextSibling);
+                },
+
+                clearValidationError: function(element) {
+                    element.classList.remove('is-invalid');
+                    const errorMsg = element.parentNode.querySelector('.invalid-feedback');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
+                },
+
+                // Question management
+                initQuestionFunctionality: function() {
+                    // Add event listener for "Add Question" button
+                    const addQuestionButtons = document.querySelectorAll('.add-next-question-btn');
+                    addQuestionButtons.forEach(button => {
+                        button.addEventListener('click', this.addNewQuestion.bind(this));
+                    });
+
+                    // Initialize existing questions
+                    document.querySelectorAll('.question-item').forEach(question => {
+                        this.initQuestionEventListeners(question);
+                    });
+                },
+
+                addNewQuestion: function(event) {
+                    // Generate a unique ID for the new question
                     const uniqueId = Date.now();
+                    questionCounter++;
 
-                    // Create a new question element
+                    // Create the new question element
                     const newQuestion = document.createElement('div');
                     newQuestion.className = 'question-item';
-                    newQuestion.dataset.questionNumber = newQuestionNumber;
+                    newQuestion.dataset.questionNumber = questionCounter;
 
-                    // Generate HTML for the new question
-                    newQuestion.innerHTML = `
-                        <div class="question-number">Question ${newQuestionNumber}</div>
-                        <div class="question-actions">
-                            <button class="question-action-btn">
-                                <i class="fas fa-arrows-alt"></i>
-                            </button>
-                            <button class="question-action-btn clone-question-btn" title="Clone this question">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button class="question-action-btn">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
+                    // Generate question HTML with proper naming for Laravel
+                    newQuestion.innerHTML = this.generateQuestionHTML(questionCounter - 1, uniqueId);
 
-                        <div class="question-content">
-                            <div class="mb-3">
-                                <label for="questionText${uniqueId}" class="form-label">Question Text</label>
-                                <textarea class="form-control" id="questionText${uniqueId}" rows="2" placeholder="Enter your question..."></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Question Type</label>
-                                <div class="question-type-selector d-flex mb-3">
-                                    <div class="form-check form-check-inline me-4">
-                                        <input class="form-check-input" type="radio" name="questionType${uniqueId}" id="mcqType${uniqueId}" value="mcq" checked>
-                                        <label class="form-check-label" for="mcqType${uniqueId}">
-                                            <i class="fas fa-list-ul me-1"></i> Multiple Choice
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="questionType${uniqueId}" id="descriptionType${uniqueId}" value="description">
-                                        <label class="form-check-label" for="descriptionType${uniqueId}">
-                                            <i class="fas fa-paragraph me-1"></i> Description Based
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div id="mcqOptions${uniqueId}" class="mcq-options">
-                                    <label class="form-label">Question Options</label>
-
-                                    <div class="option-item option-correct">
-                                        <div class="option-marker">A</div>
-                                        <div class="option-text">
-                                            <input type="text" class="form-control" placeholder="Option text...">
-                                        </div>
-                                        <div class="option-controls">
-                                            <button class="option-control-btn">
-                                                <i class="fas fa-check-circle"></i>
-                                            </button>
-                                            <button class="option-control-btn">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="option-item">
-                                        <div class="option-marker">B</div>
-                                        <div class="option-text">
-                                            <input type="text" class="form-control" placeholder="Option text...">
-                                        </div>
-                                        <div class="option-controls">
-                                            <button class="option-control-btn">
-                                                <i class="fas fa-check-circle"></i>
-                                            </button>
-                                            <button class="option-control-btn">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <button class="add-option-btn">
-                                        <i class="fas fa-plus"></i> Add Another Option
-                                    </button>
-                                </div>
-
-                                <div id="descriptionOptions${uniqueId}" class="description-options" style="display: none;">
-                                    <div class="form-group">
-                                        <label class="form-label">Answer Format</label>
-                                        <select class="form-select">
-                                            <option value="text">Plain Text</option>
-                                            <option value="richtext">Rich Text</option>
-                                            <option value="fileupload">File Upload</option>
-                                        </select>
-                                        <div class="form-text mt-2">For description-based questions, students will provide detailed written answers or upload files as their response.</div>
-                                    </div>
-
-                                    <div class="form-group mt-3">
-                                        <label class="form-label">Word Limit (Optional)</label>
-                                        <div class="row g-2">
-                                            <div class="col-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-text">Min</span>
-                                                    <input type="number" class="form-control" placeholder="Minimum words">
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-text">Max</span>
-                                                    <input type="number" class="form-control" placeholder="Maximum words">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="question-footer">
-                            <div class="question-info">
-                                Marks: <span>5</span> | Type: <span>Multiple Choice</span>
-                            </div>
-                            <div class="question-actions-buttons">
-                                <button class="btn btn-secondary question-footer-btn">
-                                    <i class="fas fa-cog"></i> Settings
-                                </button>
-                                <button class="btn btn-primary question-footer-btn add-next-question-btn">
-                                    <i class="fas fa-plus"></i> Add Question
-                                </button>
-                            </div>
-                        </div>
-                    `;
-
-                    // Insert the new question after the current question
-                    currentQuestionItem.insertAdjacentElement('afterend', newQuestion);
-
-                    // Add event listeners to the new question's controls
-                    addQuestionEventListeners(newQuestion);
-
-                    // Add event listener to the new "Add Question" button
-                    const newAddButton = newQuestion.querySelector('.add-next-question-btn');
-                    if (newAddButton) {
-                        newAddButton.addEventListener('click', function() {
-                            // Reuse the same function for adding more questions
-                            addNextQuestionButtons[0].click();
-                        });
+                    // Insert the new question
+                    if (event.target) {
+                        const currentQuestion = event.target.closest('.question-item');
+                        currentQuestion.insertAdjacentElement('afterend', newQuestion);
+                    } else {
+                        const questionsContainer = document.querySelector('.form-section');
+                        questionsContainer.appendChild(newQuestion);
                     }
+
+                    // Add event listeners to the new question
+                    this.initQuestionEventListeners(newQuestion);
+
+                    // Update all question numbers
+                    this.updateQuestionNumbers();
 
                     // Scroll to the new question
                     newQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            });
+                },
 
-            // Question type toggle functionality
-            const questionTypeRadios = document.querySelectorAll('input[name^="questionType"]');
-            questionTypeRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const questionItem = this.closest('.question-item');
-                    const mcqOptions = questionItem.querySelector('.mcq-options');
-                    const descriptionOptions = questionItem.querySelector('.description-options');
+                generateQuestionHTML: function(index, uniqueId) {
+                    return `
+                <div class="question-number">Question ${questionCounter}</div>
+                <div class="question-actions">
+                    <button class="question-action-btn clone-question-btn" title="Clone this question" type="button">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="question-action-btn delete-question-btn" title="Delete this question" type="button">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
 
-                    if (this.value === 'mcq') {
-                        mcqOptions.style.display = 'block';
-                        descriptionOptions.style.display = 'none';
-                    } else {
-                        mcqOptions.style.display = 'none';
-                        descriptionOptions.style.display = 'block';
+                <div class="question-content">
+                    <div class="mb-3">
+                        <label for="questionTitle${uniqueId}" class="form-label">Question Title</label>
+                        <input type="text" name="questions[${index}][question_title]" class="form-control" id="questionTitle${uniqueId}" placeholder="Question Title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="questionText${uniqueId}" class="form-label">Question Description</label>
+                        <textarea class="form-control" name="questions[${index}][question_text]" id="questionText${uniqueId}" rows="2" placeholder="Enter your question..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Question Type</label>
+                        <div class="question-type-selector d-flex mb-3">
+                            <div class="form-check form-check-inline me-4">
+                                <input class="form-check-input" type="radio" name="questions[${index}][question_type]" id="mcqType${uniqueId}" value="mcq" checked>
+                                <label class="form-check-label" for="mcqType${uniqueId}">
+                                    <i class="fas fa-list-ul me-1"></i> Multiple Choice
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="questions[${index}][question_type]" id="descriptionType${uniqueId}" value="description">
+                                <label class="form-check-label" for="descriptionType${uniqueId}">
+                                    <i class="fas fa-paragraph me-1"></i> Description Based
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="mcqOptions${uniqueId}" class="mcq-options">
+                            <label class="form-label">Question Options</label>
+                            <input type="hidden" name="questions[${index}][correct_option]" value="0" class="correct-option-input">
+
+                            <div class="option-item option-correct">
+                                <div class="option-marker">A</div>
+                                <div class="option-text">
+                                    <input type="text" class="form-control" name="questions[${index}][options][0]" placeholder="Option text..." value="">
+                                </div>
+                                <div class="option-controls">
+                                    <button class="option-control-btn mark-correct-btn active-correct" type="button" title="Mark as correct answer">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="option-item">
+                                <div class="option-marker">B</div>
+                                <div class="option-text">
+                                    <input type="text" class="form-control" name="questions[${index}][options][1]" placeholder="Option text..." value="">
+                                </div>
+                                <div class="option-controls">
+                                    <button class="option-control-btn mark-correct-btn" type="button" title="Mark as correct answer">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="option-item">
+                                <div class="option-marker">C</div>
+                                <div class="option-text">
+                                    <input type="text" class="form-control" name="questions[${index}][options][2]" placeholder="Option text..." value="">
+                                </div>
+                                <div class="option-controls">
+                                    <button class="option-control-btn mark-correct-btn" type="button" title="Mark as correct answer">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="option-item">
+                                <div class="option-marker">D</div>
+                                <div class="option-text">
+                                    <input type="text" class="form-control" name="questions[${index}][options][3]" placeholder="Option text..." value="">
+                                </div>
+                                <div class="option-controls">
+                                    <button class="option-control-btn mark-correct-btn" type="button" title="Mark as correct answer">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="add-option-btn" type="button">
+                                <i class="fas fa-plus"></i> Add Another Option
+                            </button>
+                        </div>
+
+                        <div id="descriptionOptions${uniqueId}" class="description-options" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">Answer Format</label>
+                                <select class="form-select" name="questions[${index}][answer_format]">
+                                    <option value="text">Plain Text</option>
+                                    <option value="fileupload">File Upload</option>
+                                </select>
+                                <div class="form-text mt-2">For description-based questions, students will provide detailed written answers or upload files as their response.</div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label class="form-label">Marks & Times (Optional)</label>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Marks</span>
+                                            <input type="number" name="questions[${index}][marks]" class="form-control" placeholder="Question Mark">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Time</span>
+                                            <input type="number" name="questions[${index}][time_limit]" class="form-control" placeholder="Optional">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-footer">
+                    <div class="question-info">
+                        Marks: <span>5</span> | Type: <span>Multiple Choice</span>
+                    </div>
+                    <div class="question-actions-buttons">
+                        <button class="btn btn-primary question-footer-btn add-next-question-btn" type="button">
+                            <i class="fas fa-plus"></i> Add Question
+                        </button>
+                    </div>
+                </div>
+            `;
+                },
+
+                // Updated event listeners function with proper event handling for correct answers
+                initQuestionEventListeners: function(questionElement) {
+                    // Question type toggle (MCQ vs Description)
+                    const radioButtons = questionElement.querySelectorAll('input[type="radio"][name^="questions"][name$="[question_type]"]');
+                    radioButtons.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            const mcqOptions = questionElement.querySelector('.mcq-options');
+                            const descriptionOptions = questionElement.querySelector('.description-options');
+
+                            if (this.value === 'mcq') {
+                                mcqOptions.style.display = 'block';
+                                descriptionOptions.style.display = 'none';
+                            } else {
+                                mcqOptions.style.display = 'none';
+                                descriptionOptions.style.display = 'block';
+                            }
+                        });
+                    });
+
+                    // Clone question button
+                    const cloneBtn = questionElement.querySelector('.clone-question-btn');
+                    if (cloneBtn) {
+                        cloneBtn.addEventListener('click', () => this.cloneQuestion(questionElement));
                     }
-                });
-            });
 
-            // Clone question functionality
-            const cloneButtons = document.querySelectorAll('.clone-question-btn');
-            cloneButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get the parent question item
-                    const questionItem = this.closest('.question-item');
-
-                    // Clone the question
-                    const clonedQuestion = questionItem.cloneNode(true);
-
-                    // Update question number
-                    const questionItems = document.querySelectorAll('.question-item');
-                    const newQuestionNumber = questionItems.length + 1;
-                    clonedQuestion.querySelector('.question-number').textContent = `Question ${newQuestionNumber}`;
-
-                    // Update IDs and names to avoid duplicates
-                    const uniqueId = Date.now();
-                    const questionText = clonedQuestion.querySelector('textarea');
-                    if (questionText) {
-                        questionText.id = `questionText${uniqueId}`;
+                    // Delete question button
+                    const deleteBtn = questionElement.querySelector('.delete-question-btn');
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', () => this.deleteQuestion(questionElement));
                     }
 
-                    // Update radio button IDs and names
-                    const radioButtons = clonedQuestion.querySelectorAll('input[type="radio"]');
-                    const newGroupName = `questionType${uniqueId}`;
-                    radioButtons.forEach((radio, index) => {
-                        radio.name = newGroupName;
-                        radio.id = `${radio.value}Type${uniqueId}`;
-                        const label = radio.nextElementSibling;
-                        if (label) {
-                            label.setAttribute('for', radio.id);
+                    // Add option button
+                    const addOptionBtn = questionElement.querySelector('.add-option-btn');
+                    if (addOptionBtn) {
+                        addOptionBtn.addEventListener('click', () => this.addOption(questionElement));
+                    }
+
+                    // Mark as correct buttons for options - FIXED
+                    const markCorrectButtons = questionElement.querySelectorAll('.mark-correct-btn');
+                    markCorrectButtons.forEach(btn => {
+                        // Create a unique ID for this button
+                        const btnId = 'btn_' + Math.random().toString(36).substr(2, 9);
+                        btn.dataset.btnId = btnId;
+
+                        // Remove any existing event listeners
+                        if (this._markAsCorrectHandlers[btnId]) {
+                            btn.removeEventListener('click', this._markAsCorrectHandlers[btnId]);
+                        }
+
+                        // Create a new handler function and store it
+                        this._markAsCorrectHandlers[btnId] = () => this.markAsCorrect(btn);
+
+                        // Add the new event listener
+                        btn.addEventListener('click', this._markAsCorrectHandlers[btnId]);
+
+                        // Add visual indication for the active correct button
+                        if (btn.closest('.option-item').classList.contains('option-correct')) {
+                            btn.classList.add('active-correct');
+                        } else {
+                            btn.classList.remove('active-correct');
                         }
                     });
 
-                    // Update option container IDs
-                    const mcqOptions = clonedQuestion.querySelector('.mcq-options');
-                    const descOptions = clonedQuestion.querySelector('.description-options');
-                    if (mcqOptions) mcqOptions.id = `mcqOptions${uniqueId}`;
-                    if (descOptions) descOptions.id = `descriptionOptions${uniqueId}`;
+                    // Delete option buttons
+                    const deleteOptionButtons = questionElement.querySelectorAll('.delete-option-btn');
+                    deleteOptionButtons.forEach(btn => {
+                        btn.addEventListener('click', () => this.deleteOption(btn));
+                    });
 
-                    // Add event listeners to the cloned question's controls
-                    addQuestionEventListeners(clonedQuestion);
+                    // Add next question button
+                    const addNextBtn = questionElement.querySelector('.add-next-question-btn');
+                    if (addNextBtn) {
+                        addNextBtn.addEventListener('click', this.addNewQuestion.bind(this));
+                    }
+                },
 
-                    // Insert the cloned question before the "Add Question" card
-                    const addQuestionCard = document.getElementById('addQuestionBtn');
-                    addQuestionCard.parentNode.insertBefore(clonedQuestion, addQuestionCard);
+                // Fixed markAsCorrect function
+                markAsCorrect: function(button) {
+                    const optionItem = button.closest('.option-item');
+                    const questionItem = optionItem.closest('.question-item');
+
+                    // Remove correct class and active-correct class from all options
+                    const allOptions = questionItem.querySelectorAll('.option-item');
+                    allOptions.forEach(option => {
+                        option.classList.remove('option-correct');
+                        const checkBtn = option.querySelector('.mark-correct-btn');
+                        if (checkBtn) {
+                            checkBtn.classList.remove('active-correct');
+                        }
+                    });
+
+                    // Add correct class to this option
+                    optionItem.classList.add('option-correct');
+
+                    // Add active-correct class to this button
+                    button.classList.add('active-correct');
+
+                    // Find this option's index
+                    const optionIndex = Array.from(allOptions).indexOf(optionItem);
+
+                    // Update hidden input for correct option
+                    const correctOptionInput = questionItem.querySelector('.correct-option-input');
+                    if (correctOptionInput) {
+                        correctOptionInput.value = optionIndex;
+                    } else {
+                        // If hidden input doesn't exist, create it
+                        const questionIndexMatch = questionItem.querySelector('input[name^="questions"]').name.match(/questions\[(\d+)\]/);
+                        const questionIndex = questionIndexMatch ? questionIndexMatch[1] : 0;
+
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = `questions[${questionIndex}][correct_option]`;
+                        hiddenInput.value = optionIndex;
+                        hiddenInput.className = 'correct-option-input';
+                        questionItem.appendChild(hiddenInput);
+                    }
+                },
+
+                cloneQuestion: function(questionElement) {
+                    // Clone the question element
+                    const clonedQuestion = questionElement.cloneNode(true);
+
+                    // Update question index (for form submission)
+                    questionCounter++;
+                    const newIndex = document.querySelectorAll('.question-item').length;
+
+                    // Update all input names with new index
+                    const inputs = clonedQuestion.querySelectorAll('input, textarea, select');
+                    inputs.forEach(input => {
+                        if (input.name) {
+                            input.name = input.name.replace(/questions\[\d+\]/, `questions[${newIndex}]`);
+                        }
+                    });
+
+                    // Insert the cloned question after the original
+                    questionElement.insertAdjacentElement('afterend', clonedQuestion);
+
+                    // Add event listeners to the cloned question
+                    this.initQuestionEventListeners(clonedQuestion);
+
+                    // Update question numbers
+                    this.updateQuestionNumbers();
 
                     // Show success message
-                    alert('Question cloned successfully!');
-                });
-            });
+                    this.showToast('Question cloned successfully!');
+                },
 
-            // Function to add event listeners to question controls
-            function addQuestionEventListeners(questionElement) {
-                // Add event listeners to radio buttons
-                const radios = questionElement.querySelectorAll('input[name^="questionType"]');
-                radios.forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        const mcqOptions = questionElement.querySelector('.mcq-options');
-                        const descriptionOptions = questionElement.querySelector('.description-options');
+                deleteQuestion: function(questionElement) {
+                    if (confirm('Are you sure you want to delete this question?')) {
+                        questionElement.remove();
+                        this.updateQuestionNumbers();
+                        this.updateQuestionIndexes();
+                    }
+                },
 
-                        if (this.value === 'mcq') {
-                            mcqOptions.style.display = 'block';
-                            descriptionOptions.style.display = 'none';
-                        } else {
-                            mcqOptions.style.display = 'none';
-                            descriptionOptions.style.display = 'block';
+                addOption: function(questionElement) {
+                    const optionsContainer = questionElement.querySelector('.mcq-options');
+                    const options = optionsContainer.querySelectorAll('.option-item');
+                    const optionIndex = options.length;
+
+                    // Get question index from the input name
+                    const questionInput = questionElement.querySelector('input[name^="questions"][name$="[question_title]"]');
+                    const questionName = questionInput.name;
+                    const questionIndexMatch = questionName.match(/questions\[(\d+)\]/);
+                    const questionIndex = questionIndexMatch ? questionIndexMatch[1] : 0;
+
+                    // Get next letter for option (A, B, C...)
+                    const nextLetter = optionLetters[optionIndex % optionLetters.length];
+
+                    // Create new option
+                    const newOption = document.createElement('div');
+                    newOption.className = 'option-item';
+                    newOption.innerHTML = `
+                <div class="option-marker">${nextLetter}</div>
+                <div class="option-text">
+                    <input type="text" class="form-control" name="questions[${questionIndex}][options][${optionIndex}]" placeholder="Option text...">
+                </div>
+                <div class="option-controls">
+                    <button class="option-control-btn mark-correct-btn" type="button" title="Mark as correct answer">
+                        <i class="fas fa-check-circle"></i>
+                    </button>
+                    <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+                    // Insert the new option before the add button
+                    optionsContainer.insertBefore(newOption, optionsContainer.querySelector('.add-option-btn'));
+
+                    // Add event listeners to the new option
+                    const markCorrectBtn = newOption.querySelector('.mark-correct-btn');
+                    const btnId = 'btn_' + Math.random().toString(36).substr(2, 9);
+                    markCorrectBtn.dataset.btnId = btnId;
+                    this._markAsCorrectHandlers[btnId] = () => this.markAsCorrect(markCorrectBtn);
+                    markCorrectBtn.addEventListener('click', this._markAsCorrectHandlers[btnId]);
+
+                    const deleteOptionBtn = newOption.querySelector('.delete-option-btn');
+                    deleteOptionBtn.addEventListener('click', () => this.deleteOption(deleteOptionBtn));
+                },
+
+                deleteOption: function(button) {
+                    const optionItem = button.closest('.option-item');
+                    const questionItem = optionItem.closest('.question-item');
+
+                    // Check if this is the correct option
+                    const isCorrect = optionItem.classList.contains('option-correct');
+
+                    // Don't allow deleting if it's the only option remaining
+                    const optionsContainer = questionItem.querySelector('.mcq-options');
+                    const allOptions = optionsContainer.querySelectorAll('.option-item');
+                    if (allOptions.length <= 2) {
+                        alert("You must have at least two options for a multiple choice question.");
+                        return;
+                    }
+
+                    // Delete the option
+                    optionItem.remove();
+
+                    // If we deleted the correct option, mark the first remaining option as correct
+                    if (isCorrect) {
+                        const firstOption = questionItem.querySelector('.option-item');
+                        if (firstOption) {
+                            firstOption.classList.add('option-correct');
+                            const checkBtn = firstOption.querySelector('.mark-correct-btn');
+                            if (checkBtn) {
+                                checkBtn.classList.add('active-correct');
+                            }
+
+                            // Update hidden input
+                            const correctOptionInput = questionItem.querySelector('.correct-option-input');
+                            if (correctOptionInput) {
+                                correctOptionInput.value = 0;
+                            }
+                        }
+                    }
+
+                    // Update option letters
+                    this.updateOptionLetters(questionItem);
+
+                    // Update option indexes in the input names
+                    this.updateOptionIndexes(questionItem);
+                },
+
+                updateOptionLetters: function(questionItem) {
+                    const options = questionItem.querySelectorAll('.option-item');
+                    options.forEach((option, index) => {
+                        const letter = optionLetters[index % optionLetters.length];
+                        option.querySelector('.option-marker').textContent = letter;
+                    });
+                },
+
+                updateOptionIndexes: function(questionItem) {
+                    // Get question index from the input name
+                    const questionInput = questionItem.querySelector('input[name^="questions"][name$="[question_title]"]');
+                    const questionName = questionInput.name;
+                    const questionIndexMatch = questionName.match(/questions\[(\d+)\]/);
+                    const questionIndex = questionIndexMatch ? questionIndexMatch[1] : 0;
+
+                    // Update all option input names
+                    const options = questionItem.querySelectorAll('.option-item');
+                    options.forEach((option, index) => {
+                        const input = option.querySelector('input[type="text"]');
+                        if (input) {
+                            input.name = `questions[${questionIndex}][options][${index}]`;
                         }
                     });
-                });
 
-                // Add event listener to clone button
-                const cloneBtn = questionElement.querySelector('.clone-question-btn');
-                if (cloneBtn) {
-                    cloneBtn.addEventListener('click', function() {
-                        const questionItem = this.closest('.question-item');
-                        // Clone functionality would be identical to the one above
-                        // Using the existing clone buttons event handler system
-                    });
-                }
-
-                // Add event listener to delete button
-                const deleteBtn = questionElement.querySelector('.question-action-btn:last-child');
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('click', function() {
-                        if (confirm('Are you sure you want to delete this question?')) {
-                            questionElement.remove();
-                            // Renumber remaining questions
-                            updateQuestionNumbers();
+                    // Update correct option index if needed
+                    const correctOption = questionItem.querySelector('.option-item.option-correct');
+                    if (correctOption) {
+                        const correctIndex = Array.from(options).indexOf(correctOption);
+                        const correctOptionInput = questionItem.querySelector('.correct-option-input');
+                        if (correctOptionInput) {
+                            correctOptionInput.value = correctIndex;
                         }
+                    }
+                },
+
+                updateQuestionNumbers: function() {
+                    const questions = document.querySelectorAll('.question-item');
+                    questions.forEach((question, index) => {
+                        question.dataset.questionNumber = index + 1;
+                        question.querySelector('.question-number').textContent = `Question ${index + 1}`;
                     });
-                }
+                },
 
-                // Add event listeners to option control buttons
-                const optionButtons = questionElement.querySelectorAll('.option-control-btn');
-                optionButtons.forEach((btn, index) => {
-                    if (index % 2 === 0) { // Check button (even index)
-                        btn.addEventListener('click', function() {
-                            const optionItem = this.closest('.option-item');
-
-                            // Toggle correct answer selection
-                            const allOptions = questionElement.querySelectorAll('.option-item');
-                            allOptions.forEach(option => {
-                                option.classList.remove('option-correct');
-                            });
-
-                            optionItem.classList.add('option-correct');
+                updateQuestionIndexes: function() {
+                    const questions = document.querySelectorAll('.question-item');
+                    questions.forEach((question, index) => {
+                        // Update all input names
+                        const inputs = question.querySelectorAll('input, textarea, select');
+                        inputs.forEach(input => {
+                            if (input.name) {
+                                input.name = input.name.replace(/questions\[\d+\]/, `questions[${index}]`);
+                            }
                         });
-                    } else { // Delete button (odd index)
-                        btn.addEventListener('click', function() {
-                            const optionItem = this.closest('.option-item');
-                            optionItem.remove();
+                    });
+                },
+
+                // Form submission
+                initFormSubmission: function() {
+                    const examForm = document.getElementById('examForm');
+                    if (examForm) {
+                        examForm.addEventListener('submit', function(e) {
+                            // Optional: Validate form before submission
+                            const isDetailsValid = examManager.validateExamDetails();
+                            const isQuestionsValid = examManager.validateQuestions();
+
+                            if (!isDetailsValid || !isQuestionsValid) {
+                                e.preventDefault();
+                                return false;
+                            }
+
+                            // Update all question indexes before submission
+                            examManager.updateQuestionIndexes();
                         });
                     }
-                });
+                },
 
-                // Add event listener to "Add Another Option" button
-                const addOptionBtn = questionElement.querySelector('.add-option-btn');
-                if (addOptionBtn) {
-                    addOptionBtn.addEventListener('click', function() {
-                        const optionsContainer = this.closest('.mcq-options');
-                        const options = optionsContainer.querySelectorAll('.option-item');
-                        const nextLetter = String.fromCharCode(65 + options.length); // A, B, C...
+                // Toast notification
+                showToast: function(message) {
+                    // Check if toast container exists, if not create it
+                    let toastContainer = document.querySelector('.toast-container');
+                    if (!toastContainer) {
+                        toastContainer = document.createElement('div');
+                        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                        document.body.appendChild(toastContainer);
+                    }
 
-                        const newOption = document.createElement('div');
-                        newOption.className = 'option-item';
-                        newOption.innerHTML = `
-                            <div class="option-marker">${nextLetter}</div>
-                            <div class="option-text">
-                                <input type="text" class="form-control" placeholder="Option text...">
-                            </div>
-                            <div class="option-controls">
-                                <button class="option-control-btn">
-                                    <i class="fas fa-check-circle"></i>
-                                </button>
-                                <button class="option-control-btn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        `;
+                    // Create a new toast
+                    const toastId = 'toast-' + Date.now();
+                    const toast = document.createElement('div');
+                    toast.className = 'toast show';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.setAttribute('aria-atomic', 'true');
+                    toast.id = toastId;
 
-                        // Insert before the "Add Another Option" button
-                        optionsContainer.insertBefore(newOption, this);
+                    toast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="me-auto">Notification</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
 
-                        // Add event listeners to the new option's buttons
-                        const checkBtn = newOption.querySelector('.option-control-btn:first-child');
-                        const deleteBtn = newOption.querySelector('.option-control-btn:last-child');
+                    // Add toast to container
+                    toastContainer.appendChild(toast);
 
-                        checkBtn.addEventListener('click', function() {
-                            const optionItem = this.closest('.option-item');
-                            const allOptions = optionsContainer.querySelectorAll('.option-item');
+                    // Auto-remove toast after 3 seconds
+                    setTimeout(() => {
+                        const toastElement = document.getElementById(toastId);
+                        if (toastElement) {
+                            toastElement.remove();
+                        }
+                    }, 3000);
 
-                            allOptions.forEach(option => {
-                                option.classList.remove('option-correct');
-                            });
-
-                            optionItem.classList.add('option-correct');
+                    // Add close button functionality
+                    const closeBtn = toast.querySelector('.btn-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function() {
+                            toast.remove();
                         });
+                    }
+                },
 
-                        deleteBtn.addEventListener('click', function() {
-                            newOption.remove();
-                        });
-                    });
+                // Initialize everything
+                init: function() {
+                    this.initTabNavigation();
+                    this.initQuestionFunctionality();
+                    this.initFormSubmission();
+
+                    // Add CSS for correct option styling
+                    this.addCorrectOptionStyles();
+
+                    // Check for existing questions and count them
+                    const existingQuestions = document.querySelectorAll('.question-item');
+                    if (existingQuestions.length > 0) {
+                        questionCounter = existingQuestions.length;
+                    }
+                },
+
+                // Add required CSS styling for correct options
+                addCorrectOptionStyles: function() {
+                    // Check if styles already exist
+                    if (document.getElementById('correct-option-styles')) {
+                        return;
+                    }
+
+                    // Create style element
+                    const style = document.createElement('style');
+                    style.id = 'correct-option-styles';
+                    style.textContent = `
+                /* Style for the "mark as correct" button when active */
+                .option-control-btn.active-correct {
+                    color: #28a745 !important;
+                    background-color: rgba(40, 167, 69, 0.1);
                 }
-            }
 
-            // Function to update question numbers after deletion
-            function updateQuestionNumbers() {
-                const questions = document.querySelectorAll('.question-item');
-                questions.forEach((question, index) => {
-                    question.querySelector('.question-number').textContent = `Question ${index + 1}`;
-                });
-            }
+                /* Style for the correct option */
+                .option-item.option-correct {
+                    border-left: 3px solid #28a745;
+                    background-color: rgba(40, 167, 69, 0.05);
+                }
 
-            // Initialize event listeners for all existing questions
-            document.querySelectorAll('.question-item').forEach(question => {
-                addQuestionEventListeners(question);
-            });
+                /* Make the active check icon more visible */
+                .option-control-btn.active-correct .fa-check-circle {
+                    font-weight: bold;
+                    font-size: 1.1em;
+                }
+
+                /* Optional: Add a subtle transition effect */
+                .option-item, .option-control-btn {
+                    transition: all 0.2s ease-in-out;
+                }
+            `;
+
+                    // Append to head
+                    document.head.appendChild(style);
+
+                }
+            };
+
+            // Initialize the exam manager
+            examManager.init();
         });
+
     </script>
 @endpush

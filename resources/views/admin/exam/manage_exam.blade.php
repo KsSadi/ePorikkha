@@ -469,7 +469,7 @@
 
     <div class="page-header">
         <h1 class="page-title">Manage Exams</h1>
-        <a href="{{route('admin.exam.create')}}" class="btn-primary-custom">
+        <a href="{{route('admin.exam.create')}}" class="btn-primary-custom"  style="text-decoration: none;">
             <i class="fas fa-plus"></i>
             Create New Exam
         </a>
@@ -539,7 +539,7 @@
             </div>
             <h3 class="create-title">Create New Exam</h3>
             <p class="create-text">Set up a new exam with questions, settings, and schedule</p>
-            <button class="btn-primary-custom">Get Started</button>
+            <a href="{{route('admin.exam.create')}}"> <button class="btn-primary-custom">Get Started</button></a>
         </div>
 
         <!-- Computer Science 101 Card -->

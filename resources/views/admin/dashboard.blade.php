@@ -6,10 +6,13 @@
     <div class="welcome-card">
         <div class="welcome-content">
             <h2 class="welcome-title" id="welcomeMessage">Welcome back, {{ Auth::user()->name }}!</h2>
-            <p class="welcome-subtitle">Manage exams, create questions, monitor student performance, and oversee all academic activities from your dashboard.</p>
+            <p class="welcome-subtitle">Manage exams, create questions, monitor student performance from your dashboard.</p>
+            <a href="{{route('admin.manage.exam')}}" >
             <button class="btn btn-light btn-custom">
-                <i class="fas fa-plus btn-icon"></i> Create New Exam
+                <i class="fas fa-plus btn-icon"></i> Manage Exam
             </button>
+            </a>
+
         </div>
     </div>
 
@@ -53,7 +56,7 @@
     </div>
 
     <div class="exams-grid">
-        <a href="exam-question-create.html" class="quick-action-card">
+        <a href="{{route('admin.exam.create')}}" class="quick-action-card">
             <div class="quick-action-icon">
                 <i class="fas fa-plus-circle"></i>
             </div>
@@ -61,15 +64,15 @@
             <div class="quick-action-desc">Set up a new exam with questions and time limits</div>
         </a>
 
-        <a href="#" class="quick-action-card">
+     {{--   <a href="#" class="quick-action-card">
             <div class="quick-action-icon">
                 <i class="fas fa-question-circle"></i>
             </div>
             <div class="quick-action-title">Question Bank</div>
             <div class="quick-action-desc">Manage your collection of questions</div>
-        </a>
+        </a>--}}
 
-        <a href="#" class="quick-action-card">
+        <a href="{{route('admin.student.create')}}" class="quick-action-card">
             <div class="quick-action-icon">
                 <i class="fas fa-user-plus"></i>
             </div>
@@ -85,6 +88,29 @@
             <div class="quick-action-desc">Analyze exam performances and statistics</div>
         </a>
     </div>
+
+    <div class="countdown-card">
+        <h3 class="countdown-title">Next Exam: Advanced Mathematics</h3>
+        <div class="countdown-display">
+            <div class="countdown-item">
+                <div class="countdown-value" id="daysValue">03</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hoursValue">18</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutesValue">45</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="secondsValue">22</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Exam Available But Not Started State -->
     <div id="upcomingExamContainer">
@@ -215,30 +241,7 @@
             </div>
         </div>
 
-        <div class="countdown-card">
-            <h3 class="countdown-title">Next Exam: Advanced Mathematics</h3>
-            <div class="countdown-display">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="daysValue">03</div>
-                    <div class="countdown-label">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="hoursValue">18</div>
-                    <div class="countdown-label">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="minutesValue">45</div>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="secondsValue">22</div>
-                    <div class="countdown-label">Seconds</div>
-                </div>
-            </div>
-            <button class="btn btn-primary btn-custom">
-                <i class="fas fa-bell btn-icon"></i> Set Reminder
-            </button>
-        </div>
+
     </div>
 
     <!-- Exam Results Section -->
@@ -282,57 +285,6 @@
         </div>
     </div>
 
-    <!-- Academic Calendar -->
-    <div class="section-header">
-        <h2 class="section-title">Academic Calendar</h2>
-        <a href="#" class="view-all">View Full Calendar <i class="fas fa-chevron-right"></i></a>
-    </div>
-
-    <div class="calendar-events">
-        <div class="event-item">
-            <div class="event-date">
-                <div class="event-day">10</div>
-                <div class="event-month">May</div>
-            </div>
-            <div class="event-content">
-                <div class="event-title">Advanced Mathematics Exam</div>
-                <div class="event-time"><i class="fas fa-clock"></i> 10:00 AM - 12:00 PM</div>
-            </div>
-        </div>
-
-        <div class="event-item">
-            <div class="event-date">
-                <div class="event-day">15</div>
-                <div class="event-month">May</div>
-            </div>
-            <div class="event-content">
-                <div class="event-title">Biology Fundamentals Exam</div>
-                <div class="event-time"><i class="fas fa-clock"></i> 2:30 PM - 4:00 PM</div>
-            </div>
-        </div>
-
-        <div class="event-item">
-            <div class="event-date">
-                <div class="event-day">17</div>
-                <div class="event-month">May</div>
-            </div>
-            <div class="event-content">
-                <div class="event-title">Group Project Presentation</div>
-                <div class="event-time"><i class="fas fa-clock"></i> 11:00 AM - 12:30 PM</div>
-            </div>
-        </div>
-
-        <div class="event-item">
-            <div class="event-date">
-                <div class="event-day">20</div>
-                <div class="event-month">May</div>
-            </div>
-            <div class="event-content">
-                <div class="event-title">Chemistry Lab Final</div>
-                <div class="event-time"><i class="fas fa-clock"></i> 9:30 AM - 11:30 AM</div>
-            </div>
-        </div>
-    </div>
     <br>
 
 @endsection
