@@ -23,6 +23,8 @@ class StudentAnswer extends Model
         'is_correct',
         'marks_awarded',
         'time_spent',
+        'status',
+        'feedback',
     ];
 
     /**

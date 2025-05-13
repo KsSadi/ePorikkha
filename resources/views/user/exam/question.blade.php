@@ -488,10 +488,6 @@
     </style>
 
     <style>
-
-
-
-
         .question-number {
             width: 40px;
             height: 40px;
@@ -827,11 +823,11 @@
                         <!-- Replace your file upload section with this -->
                         <!-- Replace your file upload section with this -->
                         <div class="file-upload-container" id="fileUploadContainer" onclick="
-    // Only open file dialog if clicking container (not the file info)
-    if (document.getElementById('fileInfo').style.display === 'none') {
-        document.getElementById('fileInput').click();
-    }
-">
+                                // Only open file dialog if clicking container (not the file info)
+                                if (document.getElementById('fileInfo').style.display === 'none') {
+                                    document.getElementById('fileInput').click();
+                                }
+                            ">
                             <i class="fas fa-cloud-upload-alt upload-icon"></i>
                             <div class="upload-text" id="uploadText">Click to upload your answer file</div>
                             <div class="upload-subtext">or</div>

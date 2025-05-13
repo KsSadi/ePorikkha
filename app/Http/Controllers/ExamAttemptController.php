@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ExamAttemptController extends Controller
 {
-
-
     /**
      * Show exam overview for student before/during the attempt
      */
@@ -25,9 +23,21 @@ class ExamAttemptController extends Controller
         if (!$exam->isPublished()) {
             return redirect()->route('user.dashboard')->with('error', 'This exam is not available.');
         }
-
         // Get or create exam attempt
         $attempt = $this->getOrCreateAttempt($exam);
+
+        // If the attempt is null, it means the exam is completed
+        if ($attempt === null) {
+            return redirect()->route('user.dashboard')
+                ->with('info', 'You have already completed this exam.');
+        }
+
+        // Check if the attempt is locked
+        if ($attempt->access_control == '0' && $exam->access_control == 'password') {
+
+            return view('user.exam.password', compact('exam', 'attempt'));
+        }
+
 
         // Get questions with their status (available, locked, completed)
         $questions = $this->getQuestionsWithStatus($exam, $attempt);
@@ -35,20 +45,17 @@ class ExamAttemptController extends Controller
         // Calculate remaining time
         $remainingTime = $this->calculateRemainingTime($attempt);
 
+
         // Get count of completed questions
-        $completedCount = $attempt->answers()->where('is_correct', true)->count();
+        $completedCount = $attempt->answers()->where('status', 1)->count();
+        // Get count of available questions
+        $availableCount = $attempt->answers()->where('status', -1)->count();
 
-        // Process questions to determine available vs locked status
-        $availableCount = 0;
-        $lockedCount = 0;
+        // Total questions - completed - available = locked
+        $lockedCount = $questions->count() - $completedCount - $availableCount;
 
-        foreach ($questions as $question) {
-            if ($question->status === 'available') {
-                $availableCount++;
-            } elseif ($question->status === 'locked') {
-                $lockedCount++;
-            }
-        }
+
+
 
         return view('user.exam.index', compact(
             'exam',
@@ -67,16 +74,25 @@ class ExamAttemptController extends Controller
     {
         $user = Auth::user();
 
-        // Check for an existing in-progress attempt
+        // Check for completed attempt
+        $completedAttempt = ExamAttempt::where('user_id', $user->id)
+            ->where('exam_id', $exam->id)
+            ->where('status', 'completed')
+            ->first();
+
+        if ($completedAttempt) {
+            return null; // signal redirect needed
+        }
+
+        // Check for in-progress or not-started attempt
         $attempt = ExamAttempt::where('user_id', $user->id)
             ->where('exam_id', $exam->id)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('status', 'not_started')
                     ->orWhere('status', 'in_progress');
             })
             ->first();
 
-        // If no attempt exists, create one
         if (!$attempt) {
             $attempt = ExamAttempt::create([
                 'user_id' => $user->id,
@@ -84,7 +100,7 @@ class ExamAttemptController extends Controller
                 'start_time' => Carbon::now(),
                 'status' => 'in_progress',
                 'ip_address' => request()->ip(),
-                'device_info' => $this->getDeviceInfo(),
+                'device_info' => request()->userAgent(),
             ]);
         }
 
@@ -153,27 +169,32 @@ class ExamAttemptController extends Controller
         $answers = $attempt->answers()->get()->keyBy('question_id');
 
         // In a sequential exam, only the first unanswered question is available
+
         $foundFirstAvailable = false;
 
         foreach ($questions as $index => $question) {
-            // If this question has been answered correctly
-            if (isset($answers[$question->id]) && $answers[$question->id]->is_correct) {
-                $question->status = 'completed';
-                continue;
+            $questionId = $question->id;
+            $status = 0; // default: locked
+
+            if (isset($answers[$questionId])) {
+                $status = $answers[$questionId]->status;
+            } elseif (!$foundFirstAvailable && $index === 0) {
+                // First question always available if unanswered
+                $status = -1;
             }
 
-            // If we haven't found the first available question yet
-            if (!$foundFirstAvailable) {
+            // Assign human-readable status for UI use
+            if ($status === 1) {
+                $question->status = 'completed';
+            } elseif ($status === -1) {
                 $question->status = 'available';
+                $question->route = route('student.question', ['exam' => $exam->id, 'question' => $questionId]);
                 $foundFirstAvailable = true;
-
-                // Set the question route for the available question
-                $question->route = route('student.question', ['exam' => $exam->id, 'question' => $question->id]);
             } else {
-                // All subsequent questions are locked if prevent_backtracking is enabled
                 $question->status = 'locked';
             }
         }
+
 
         return $questions;
     }
@@ -219,6 +240,7 @@ class ExamAttemptController extends Controller
      */
     public function showQuestion(Exam $exam, Question $question)
     {
+
         // Check if user has an active attempt for this exam
         $attempt = ExamAttempt::where('user_id', Auth::id())
             ->where('exam_id', $exam->id)
@@ -238,6 +260,13 @@ class ExamAttemptController extends Controller
                 ]),
             ]);
         }
+
+        // Check if the attempt is locked
+        if ($attempt->access_control == '0' && $exam->access_control == 'password') {
+
+            return view('user.exam.password', compact('exam', 'attempt'));
+        }
+
 
         // Get all questions to determine progress
         $questions = $exam->questions()->orderBy('sort_order')->get();
@@ -261,6 +290,11 @@ class ExamAttemptController extends Controller
             'exam_attempt_id' => $attempt->id,
             'question_id' => $question->id,
         ]);
+
+        //update $answer status to -1 if not already set
+        if ($answer->status == 0) {
+            $answer->update(['status' => -1]);
+        }
 
         // Calculate exam time spent
         $startTime = Carbon::parse($attempt->start_time);
@@ -322,6 +356,7 @@ class ExamAttemptController extends Controller
             $answer->update([
                 'selected_option_id' => $validated['selected_option_id'],
                 'time_spent' => Carbon::parse($attempt->created_at)->diffInSeconds(Carbon::now(), false),
+                'status' => 1,
             ]);
 
             // Check correctness for MCQ
@@ -367,6 +402,7 @@ class ExamAttemptController extends Controller
                         // Update the answer
                         $answer->update([
                             'time_spent' => Carbon::parse($attempt->created_at)->diffInSeconds(Carbon::now(), false),
+                            'status' => 1,
                         ]);
 
                     } else {
@@ -445,11 +481,39 @@ class ExamAttemptController extends Controller
             'end_time' => Carbon::now(),
         ]);
 
-        // Calculate the final result
-        $attempt->calculateResult();
 
-        return redirect()->route('student.exam.result', $attempt->id)
-            ->with('success', 'Exam submitted successfully.');
+        // Get questions with their status (available, locked, completed)
+        $questions = $this->getQuestionsWithStatus($exam, $attempt);
+        //total questions
+        $totalQuestions = $questions->count();
+        // Get count of completed questions
+        $completedCount = $attempt->answers()->where('status', 1)->count();
+
+
+        $start = Carbon::parse($attempt->start_time);
+        $end = $attempt->end_time ? Carbon::parse($attempt->end_time) : Carbon::now();
+
+        $totalSeconds = $start->diffInSeconds($end);
+
+// Convert total seconds to hours, minutes, and seconds
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        $timeSpent = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+        // 🔹 Average Time per Question (HH:MM:SS)
+        $avgSeconds = $completedCount > 0 ? $totalSeconds / $completedCount : 0;
+
+        $avgHours = floor($avgSeconds / 3600);
+        $avgMinutes = floor(($avgSeconds % 3600) / 60);
+        $avgSecondsRemainder = $avgSeconds % 60;
+
+        $avgTimePerQuestion = sprintf('%02d:%02d:%02d', $avgHours, $avgMinutes, $avgSecondsRemainder);
+
+
+
+        return view('user.exam.complete', compact('totalQuestions', 'completedCount','timeSpent','avgTimePerQuestion'));
     }
 
     /**
@@ -599,5 +663,34 @@ class ExamAttemptController extends Controller
             $i++;
         }
         return round($size, 2) . ' ' . $units[$i];
+    }
+
+
+    /**
+     * Check if the exam password is correct
+     */
+    public function checkPassword(Request $request, Exam $exam)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if ($exam->password === $request->input('password')) {
+            $attempt = ExamAttempt::where('user_id', Auth::id())
+                ->where('exam_id', $exam->id)
+                ->first();
+
+            //update attempt access_control to 1
+            if ($attempt) {
+                $attempt->update(['access_control' => 1]);
+            }
+
+            return redirect()->route('student.exam', $exam->id)
+                ->with('success', 'Password verified successfully. You can now access the exam.');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Incorrect password. Please try again.')
+            ->withInput($request->except('password'));
     }
 }

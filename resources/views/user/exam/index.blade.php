@@ -449,6 +449,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="question-action">
                         @if($question->status === 'available')
                             <a href="{{ route('student.question', ['exam' => $exam->id, 'question' => $question->id]) }}" class="btn-open">
@@ -477,14 +478,16 @@
         @if($attempt->status === 'in_progress')
             <form method="POST" action="{{ route('student.exam.submit', $exam->id) }}" class="d-inline" id="submit-exam-form">
                 @csrf
-                <button type="button" class="btn-custom btn-primary" onclick="confirmSubmitExam()">
+                <button type="submit" class="btn-custom btn-primary">
                     <i class="fas fa-check-circle btn-icon"></i> Submit Exam
                 </button>
             </form>
         @endif
     </div>
 
+
     @push('scripts')
+
 
     @endpush
 @endsection

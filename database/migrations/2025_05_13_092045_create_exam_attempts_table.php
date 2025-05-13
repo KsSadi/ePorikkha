@@ -26,6 +26,8 @@ return new class extends Migration
             $table->text('device_info')->nullable();
             $table->integer('time_spent')->nullable()->comment('Total time spent in seconds');
             $table->json('proctoring_flags')->nullable()->comment('Any flags raised during proctoring');
+            $table->boolean('access_control')->default(false)->comment('Whether the exam is locked for the user');
+            $table->boolean('result_published')->default(false)->comment('Whether the result is published for the user');
             $table->timestamps();
         });
     }

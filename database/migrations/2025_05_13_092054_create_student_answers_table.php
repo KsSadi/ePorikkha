@@ -19,7 +19,9 @@ return new class extends Migration
             $table->text('written_answer')->nullable();
             $table->boolean('is_correct')->nullable();
             $table->decimal('marks_awarded', 8, 2)->nullable();
+            $table->text('feedback')->nullable();
             $table->integer('time_spent')->nullable()->comment('Time spent on this question in seconds');
+            $table->tinyInteger('status')->default(0)->comment('0: Not Attempted, -1: Attempt, 1: Submitted');
             $table->timestamps();
         });
     }

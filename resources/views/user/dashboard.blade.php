@@ -18,7 +18,7 @@
                 <div class="stat-icon">
                     <i class="fas fa-clipboard-check"></i>
                 </div>
-                <div class="stat-value">5</div>
+                <div class="stat-value">{{$completedAttempts}}</div>
                 <div class="stat-label">Exams Completed</div>
             </div>
 
@@ -26,15 +26,15 @@
                 <div class="stat-icon">
                     <i class="fas fa-clock"></i>
                 </div>
-                <div class="stat-value">87%</div>
-                <div class="stat-label">Average Score</div>
+                <div class="stat-value">{{$inProgressAttemptsCount}}</div>
+                <div class="stat-label">In Progress Exam</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-icon">
                     <i class="fas fa-calendar-day"></i>
                 </div>
-                <div class="stat-value">2</div>
+                <div class="stat-value">{{$upcomingExamsCount}}</div>
                 <div class="stat-label">Upcoming Exams</div>
             </div>
 
@@ -42,8 +42,8 @@
                 <div class="stat-icon">
                     <i class="fas fa-medal"></i>
                 </div>
-                <div class="stat-value">12</div>
-                <div class="stat-label">Achievements</div>
+                <div class="stat-value">{{$publishedExams}}</div>
+                <div class="stat-label">Total Exam</div>
             </div>
         </div>
 
@@ -53,7 +53,7 @@
         <div id="inProgressExamContainer">
             <div class="section-header">
                 <h2 class="section-title">In-Progress Exams</h2>
-                <a href="{{ route('admin.manage.exam') }}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+{{--                <a href="{{ route('admin.manage.exam') }}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>--}}
             </div>
 
             <div class="exams-grid">
@@ -102,7 +102,6 @@
             <div id="upcomingExamContainer">
                 <div class="section-header">
                     <h2 class="section-title">Upcoming Exams</h2>
-                    <a href="{{ route('admin.manage.exam') }}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
                 </div>
 
                 <div class="exams-grid">
@@ -154,9 +153,9 @@
                                         <i class="fas fa-play"></i> Start Exam
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.exam.show', $exam->id) }}" class="exam-action action-view">
+                                {{--    <a href="{{ route('admin.exam.show', $exam->id) }}" class="exam-action action-view">
                                         <i class="fas fa-eye"></i> View Details
-                                    </a>
+                                    </a>--}}
                                 @endif
                             </div>
                         </div>

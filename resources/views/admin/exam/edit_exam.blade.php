@@ -709,9 +709,9 @@
                             <div class="question-item" data-question-number="{{ $index + 1 }}">
                                 <div class="question-number">Question {{ $index + 1 }}</div>
                                 <div class="question-actions">
-                                    <button class="question-action-btn clone-question-btn" title="Clone this question" type="button">
+                                   {{-- <button class="question-action-btn clone-question-btn" title="Clone this question" type="button">
                                         <i class="fas fa-copy"></i>
-                                    </button>
+                                    </button>--}}
                                     <button class="question-action-btn delete-question-btn" title="Delete this question" type="button">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -732,12 +732,12 @@
                                     <div class="mb-3">
                                         <label class="form-label">Question Type</label>
                                         <div class="question-type-selector d-flex mb-3">
-                                            <div class="form-check form-check-inline me-4">
+                                           {{-- <div class="form-check form-check-inline me-4">
                                                 <input class="form-check-input" type="radio" name="questions[{{ $index }}][question_type]" id="mcqType{{ $question->id }}" value="mcq" {{ $question->question_type == 'mcq' ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="mcqType{{ $question->id }}">
                                                     <i class="fas fa-list-ul me-1"></i> Multiple Choice
                                                 </label>
-                                            </div>
+                                            </div>--}}
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="questions[{{ $index }}][question_type]" id="descriptionType{{ $question->id }}" value="description" {{ $question->question_type == 'description' ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="descriptionType{{ $question->id }}">
@@ -764,9 +764,9 @@
                                                             <input type="hidden" name="questions[{{ $index }}][option_ids][{{ $optionIndex }}]" value="{{ $option->id }}">
                                                         </div>
                                                         <div class="option-controls">
-                                                            <button class="option-control-btn mark-correct-btn {{ $option->is_correct ? 'active-correct' : '' }}" type="button" title="Mark as correct answer">
+                                                          {{--  <button class="option-control-btn mark-correct-btn {{ $option->is_correct ? 'active-correct' : '' }}" type="button" title="Mark as correct answer">
                                                                 <i class="fas fa-check-circle"></i>
-                                                            </button>
+                                                            </button>--}}
                                                             <button class="option-control-btn delete-option-btn" type="button" title="Delete option">
                                                                 <i class="fas fa-times"></i>
                                                             </button>
@@ -965,9 +965,9 @@
                             </div>
 
                             <div class="question-footer">
-                                <div class="question-info">
+                              {{--  <div class="question-info">
                                     Marks: <span>5</span> | Type: <span>Multiple Choice</span>
-                                </div>
+                                </div>--}}
                                 <div class="question-actions-buttons">
                                     <button class="btn btn-primary question-footer-btn add-next-question-btn" type="button">
                                         <i class="fas fa-plus"></i> Add Question
@@ -1358,21 +1358,16 @@
                     <div class="mb-3">
                         <label class="form-label">Question Type</label>
                         <div class="question-type-selector d-flex mb-3">
-                            <div class="form-check form-check-inline me-4">
-                                <input class="form-check-input" type="radio" name="questions[${index}][question_type]" id="mcqType${uniqueId}" value="mcq" checked>
-                                <label class="form-check-label" for="mcqType${uniqueId}">
-                                    <i class="fas fa-list-ul me-1"></i> Multiple Choice
-                                </label>
-                            </div>
+
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="questions[${index}][question_type]" id="descriptionType${uniqueId}" value="description">
+                                <input class="form-check-input" type="radio" name="questions[${index}][question_type]" id="descriptionType${uniqueId}" value="description" checked>
                                 <label class="form-check-label" for="descriptionType${uniqueId}">
                                     <i class="fas fa-paragraph me-1"></i> Description Based
                                 </label>
                             </div>
                         </div>
 
-                        <div id="mcqOptions${uniqueId}" class="mcq-options">
+                        <div id="mcqOptions${uniqueId}" class="mcq-options" style="display: none;">
                             <label class="form-label">Question Options</label>
                             <input type="hidden" name="questions[${index}][correct_option]" value="0" class="correct-option-input">
 
@@ -1411,7 +1406,7 @@
                             </button>
                         </div>
 
-                        <div id="descriptionOptions${uniqueId}" class="description-options" style="display: none;">
+                        <div id="descriptionOptions${uniqueId}" class="description-options">
                             <div class="form-group">
                                 <label class="form-label">Answer Format</label>
                                 <select class="form-select" name="questions[${index}][answer_format]">
@@ -1443,9 +1438,9 @@
                 </div>
 
                 <div class="question-footer">
-                    <div class="question-info">
+                   <!-- <div class="question-info">
                         Marks: <span>5</span> | Type: <span>Multiple Choice</span>
-                    </div>
+                    </div>-->
                     <div class="question-actions-buttons">
                         <button class="btn btn-primary question-footer-btn add-next-question-btn" type="button">
                             <i class="fas fa-plus"></i> Add Question

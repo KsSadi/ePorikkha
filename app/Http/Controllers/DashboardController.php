@@ -119,6 +119,10 @@ class DashboardController extends Controller
                     });
             })
             ->count();
+        //count total attempts and complete
+        $completedAttempts = ExamAttempt::where('user_id', Auth::id())
+            ->whereIn('status', ['completed', 'timed_out'])
+            ->count();
 
 
 
@@ -137,6 +141,22 @@ class DashboardController extends Controller
             ->orderBy('start_time')
             ->take(3)
             ->get();
+
+        $upcomingExamsCount = Exam::where(function ($query) use ($now) {
+            $query->where('exam_date', '>', $now->toDateString())
+                ->orWhere(function ($subQuery) use ($now) {
+                    $subQuery->where('exam_date', $now->toDateString())
+                        ->whereTime('start_time', '>=', $now->format('H:i:s'));
+                })
+                ->orWhere(function ($subQuery) use ($now) {
+                    $subQuery->where('exam_date', $now->toDateString())
+                        ->whereRaw("ADDTIME(start_time, SEC_TO_TIME(duration * 60)) > ?", [$now->format('H:i:s')]);
+                });
+        })
+            ->orderBy('exam_date')
+            ->orderBy('start_time')
+            ->count();
+
 
         $nextExam = Exam::where('exam_date', '>=', now()->format('Y-m-d'))
             ->orderBy('exam_date')
@@ -165,13 +185,10 @@ class DashboardController extends Controller
             ->with('exam')
             ->get();
 
-        // Get user's completed exam attempts
-        $completedAttempts = ExamAttempt::where('user_id', $user->id)
-            ->whereIn('status', ['completed', 'timed_out'])
+        $inProgressAttemptsCount = ExamAttempt::where('user_id', $user->id)
+            ->where('status', 'in_progress')
             ->with('exam')
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
+            ->count();
 
 
         // Pass all stats to the view
@@ -187,7 +204,9 @@ class DashboardController extends Controller
             'completedAttempts',
             'publishedExams',
             'completedExams',
-            'user'
+            'user',
+            'upcomingExamsCount',
+            'inProgressAttemptsCount',
 
 
         ));

@@ -26,6 +26,7 @@ class ExamAttempt extends Model
         'device_info',
         'time_spent',
         'proctoring_flags',
+        'access_control',
     ];
 
     /**

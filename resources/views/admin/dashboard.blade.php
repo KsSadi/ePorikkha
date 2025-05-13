@@ -81,7 +81,7 @@
             <div class="quick-action-desc">Register new students or import from CSV</div>
         </a>
 
-        <a href="#" class="quick-action-card">
+        <a href="{{route('admin.manage.report')}}" class="quick-action-card">
             <div class="quick-action-icon">
                 <i class="fas fa-chart-bar"></i>
             </div>
