@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
@@ -20,7 +21,6 @@ class Question extends Model
         'question_title',
         'question_text',
         'question_type',
-        'options',
         'correct_option',
         'answer_format',
         'marks',
@@ -48,10 +48,17 @@ class Question extends Model
     /**
      * Get the options for the question.
      */
-    public function options()
+    /**
+     * Get the options for the question.
+     */
+    /**
+     * Get the options for the question.
+     */
+    public function options(): HasMany
     {
         return $this->hasMany(QuestionOption::class)->orderBy('sort_order');
     }
+
 
     /**
      * Check if the question is MCQ type.

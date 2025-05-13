@@ -1,3 +1,4 @@
+
 @extends('layouts.main')
 
 @section('pageTitle', 'Manage Exam')
@@ -320,6 +321,10 @@
             background-color: #e3f2fd;
             color: var(--info-color);
         }
+        .status-draft {
+            background-color: #fce4ec;
+            color: var(--danger-color);
+        }
 
         .exam-title {
             font-size: 1.2rem;
@@ -463,74 +468,107 @@
 
 
     </style>
+    <style>
+        .icon-history {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+        /* You can add any additional styles here */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
 
+        .empty-state i {
+            font-size: 3rem;
+            color: #adb5bd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .empty-state p {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+    </style>
 @endpush
-@section('content')
 
+@section('content')
     <div class="page-header">
         <h1 class="page-title">Manage Exams</h1>
-        <a href="{{route('admin.exam.create')}}" class="btn-primary-custom"  style="text-decoration: none;">
+        <a href="{{ route('admin.exam.create') }}" class="btn-primary-custom" style="text-decoration: none;">
             <i class="fas fa-plus"></i>
             Create New Exam
         </a>
     </div>
 
     <div class="search-filter-container">
-        <div class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Search exams...">
-        </div>
+        <form id="searchForm" action="{{ route('admin.manage.exam') }}" method="GET">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="search" class="search-input" placeholder="Search exams..." value="{{ request('search') }}">
+            </div>
+            <input type="hidden" name="filter" id="filterInput" value="{{ $filter ?? 'all' }}">
+        </form>
+
         <div class="filter-buttons">
-            <button class="filter-btn active">
+            <button class="filter-btn {{ ($filter ?? 'all') == 'all' ? 'active' : '' }}" data-filter="all">
                 <i class="fas fa-list"></i>
                 All
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn {{ ($filter ?? '') == 'upcoming' ? 'active' : '' }}" data-filter="upcoming">
                 <i class="fas fa-clock"></i>
                 Upcoming
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn {{ ($filter ?? '') == 'active' ? 'active' : '' }}" data-filter="active">
                 <i class="fas fa-play-circle"></i>
                 Active
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn {{ ($filter ?? '') == 'completed' ? 'active' : '' }}" data-filter="completed">
                 <i class="fas fa-check-circle"></i>
                 Completed
             </button>
-            <button class="filter-btn">
+            <button class="filter-btn {{ ($filter ?? '') == 'draft' ? 'active' : '' }}" data-filter="draft">
                 <i class="fas fa-file-alt"></i>
                 Draft
             </button>
         </div>
     </div>
 
-    <div class="featured-exam">
-        <div class="featured-content">
-            <div class="featured-badge">Featured Exam</div>
-            <h2 class="featured-title">Final Computer Science Exam</h2>
-            <div class="featured-details">
-                <div class="featured-detail-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>May 15, 2025</span>
+    @if(isset($featuredExam) && $featuredExam)
+        <div class="featured-exam">
+            <div class="featured-content">
+                <div class="featured-badge">Featured Exam</div>
+                <h2 class="featured-title">{{ $featuredExam->title }}</h2>
+                <div class="featured-details">
+                    <div class="featured-detail-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>{{ $featuredExam->formatted_date }}</span>
+                    </div>
+                    <div class="featured-detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ $featuredExam->formatted_time }}</span>
+                    </div>
+
                 </div>
-                <div class="featured-detail-item">
-                    <i class="fas fa-clock"></i>
-                    <span>9:00 AM</span>
-                </div>
-                <div class="featured-detail-item">
-                    <i class="fas fa-users"></i>
-                    <span>45 Students</span>
-                </div>
+                <a href="{{ route('admin.exam.show', $featuredExam) }}" class="featured-action">
+                    <i class="fas fa-eye"></i>
+                    View Details
+                </a>
             </div>
-            <a href="#" class="featured-action">
-                <i class="fas fa-eye"></i>
-                View Details
-            </a>
+            <div class="featured-illustration">
+                <i class="{{ $featuredExam->icon_class }} featured-icon"></i>
+            </div>
         </div>
-        <div class="featured-illustration">
-            <i class="fas fa-laptop-code featured-icon"></i>
-        </div>
-    </div>
+    @endif
+
     <div class="exam-grid">
         <!-- Create New Exam Card -->
         <div class="create-exam-card">
@@ -539,120 +577,98 @@
             </div>
             <h3 class="create-title">Create New Exam</h3>
             <p class="create-text">Set up a new exam with questions, settings, and schedule</p>
-            <a href="{{route('admin.exam.create')}}"> <button class="btn-primary-custom">Get Started</button></a>
+            <a href="{{ route('admin.exam.create') }}">
+                <button class="btn-primary-custom">Get Started</button>
+            </a>
         </div>
 
-        <!-- Computer Science 101 Card -->
-        <div class="exam-card">
-            <span class="status-badge status-active">Active</span>
-            <div class="subject-icon icon-cs">
-                <i class="fas fa-laptop-code"></i>
-            </div>
-            <h3 class="exam-title">Computer Science 101</h3>
-            <div class="exam-info">
-                <div class="info-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Today, 9:00 AM</span>
+        @forelse($exams as $exam)
+            <!-- Exam Card -->
+            <div class="exam-card">
+                <span class="status-badge {{ $exam->status_class }}">{{ $exam->status_text }}</span>
+                <div class="subject-icon {{ explode(' ', $exam->icon_class)[0] }}">
+                    <i class="{{ implode(' ', array_slice(explode(' ', $exam->icon_class), 1)) }}"></i>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-clock"></i>
-                    <span>2.5 hours</span>
+                <h3 class="exam-title">{{ $exam->title }}</h3>
+                <div class="exam-info">
+                    <div class="info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        {{ $exam->isActive() ? 'Today' : \Carbon\Carbon::parse($exam->exam_date)->format('j M Y') }} , {{ $exam->isActive() ? 'Now' : \Carbon\Carbon::parse($exam->start_time)->format('h:i A') }}
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ $exam->formatted_duration }}</span>
+                    </div>
+                  {{--  <div class="info-item">
+                        <i class="fas fa-user-tie"></i>
+                        <span>{{ $exam->creator->name ?? 'Unknown' }}</span>
+                    </div>--}}
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Prof. Anderson</span>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ $exam->question_count }}</div>
+                        <div class="stat-label">{{ Str::plural('Question', $exam->question_count) }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ $exam->total_marks }}</div>
+                        <div class="stat-label">{{ Str::plural('Mark', $exam->total_marks) }}</div>
+                    </div>
                 </div>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">40</div>
-                    <div class="stat-label">Questions</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">36</div>
-                    <div class="stat-label">Students</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">100</div>
-                    <div class="stat-label">Marks</div>
-                </div>
-            </div>
-            <div class="card-actions">
-                <button class="btn-view">
-                    <i class="fas fa-eye"></i>
-                    View Details
-                </button>
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                    Edit
-                </button>
-            </div>
-        </div>
-
-        <!-- Advanced Mathematics Card -->
-        <div class="exam-card">
-            <span class="status-badge status-upcoming">Upcoming</span>
-            <div class="subject-icon icon-math">
-                <i class="fas fa-square-root-alt"></i>
-            </div>
-            <h3 class="exam-title">Advanced Mathematics</h3>
-            <div class="exam-info">
-                <div class="info-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>May 10, 2025</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-clock"></i>
-                    <span>2 hours</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Prof. Johnson</span>
+                <div class="card-actions">
+                    <a href="{{ route('admin.exam.show', $exam) }}" class="btn-view" style="text-decoration: none">
+                        <i class="fas fa-eye"></i>
+                        View Details
+                    </a>
+                    <a href="{{ route('admin.exam.edit', $exam) }}" class="btn-edit" style="text-decoration: none">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>
                 </div>
             </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">30</div>
-                    <div class="stat-label">Questions</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">28</div>
-                    <div class="stat-label">Students</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">100</div>
-                    <div class="stat-label">Marks</div>
-                </div>
+        @empty
+            <!-- Empty State -->
+            <div class="empty-state" style="grid-column: span 3;">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>No Exams Found</h3>
+                <p>There are no exams matching your criteria. Try adjusting your search or filters.</p>
             </div>
-            <div class="card-actions">
-                <button class="btn-view">
-                    <i class="fas fa-eye"></i>
-                    View Details
-                </button>
-                <button class="btn-edit">
-                    <i class="fas fa-edit"></i>
-                    Edit
-                </button>
-            </div>
-        </div>
+        @endforelse
     </div>
 
+    <!-- Pagination -->
     <div class="pagination-container">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            </li>
-        </ul>
+        {{ $exams->appends(['search' => request('search'), 'filter' => $filter ?? 'all'])->links() }}
     </div>
-
 @endsection
+
+@push('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle search form submission
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.querySelector('.search-input');
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchForm.submit();
+                }
+            });
+
+            // Handle filter button clicks
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const filterInput = document.getElementById('filterInput');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active class
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Update hidden filter input and submit form
+                    filterInput.value = this.getAttribute('data-filter');
+                    searchForm.submit();
+                });
+            });
+        });
+    </script>
+@endpush

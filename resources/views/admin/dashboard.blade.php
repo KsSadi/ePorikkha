@@ -16,12 +16,14 @@
         </div>
     </div>
 
+
+    <!-- Dynamic Statistics Section -->
     <div class="stats-container">
         <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-clipboard-list"></i>
             </div>
-            <div class="stat-value">24</div>
+            <div class="stat-value counter-animation">{{ $totalExams }}</div>
             <div class="stat-label">Total Exams</div>
         </div>
 
@@ -29,7 +31,7 @@
             <div class="stat-icon">
                 <i class="fas fa-user-graduate"></i>
             </div>
-            <div class="stat-value">156</div>
+            <div class="stat-value counter-animation">{{ $activeStudents }}</div>
             <div class="stat-label">Active Students</div>
         </div>
 
@@ -37,7 +39,7 @@
             <div class="stat-icon">
                 <i class="fas fa-question-circle"></i>
             </div>
-            <div class="stat-value">485</div>
+            <div class="stat-value counter-animation">{{ $totalQuestions }}</div>
             <div class="stat-label">Questions Created</div>
         </div>
 
@@ -45,11 +47,10 @@
             <div class="stat-icon">
                 <i class="fas fa-chart-bar"></i>
             </div>
-            <div class="stat-value">92%</div>
+            <div class="stat-value counter-animation">{{ $completionRate }}%</div>
             <div class="stat-label">Completion Rate</div>
         </div>
     </div>
-
     <!-- Quick Actions Panel -->
     <div class="section-header">
         <h2 class="section-title">Quick Actions</h2>
@@ -89,162 +90,127 @@
         </a>
     </div>
 
+
     <div class="countdown-card">
-        <h3 class="countdown-title">Next Exam: Advanced Mathematics</h3>
+        <h3 class="countdown-title">Next Exam: {{ $examTitle }}</h3>
         <div class="countdown-display">
-            <div class="countdown-item">
-                <div class="countdown-value" id="daysValue">03</div>
-                <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="hoursValue">18</div>
-                <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="minutesValue">45</div>
-                <div class="countdown-label">Minutes</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="secondsValue">22</div>
-                <div class="countdown-label">Seconds</div>
-            </div>
+            @foreach(['days' => 'DAYS', 'hours' => 'HOURS', 'minutes' => 'MINUTES', 'seconds' => 'SECONDS'] as $id => $label)
+                <div class="countdown-item">
+                    <div class="countdown-value" id="{{ $id }}Value">--</div>
+                    <div class="countdown-label">{{ $label }}</div>
+                </div>
+            @endforeach
         </div>
     </div>
 
+    @if($examTimestamp)
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const countdownElements = {
+                    days: document.getElementById('daysValue'),
+                    hours: document.getElementById('hoursValue'),
+                    minutes: document.getElementById('minutesValue'),
+                    seconds: document.getElementById('secondsValue'),
+                };
 
-    <!-- Exam Available But Not Started State -->
+                const targetTime = new Date({{ $examTimestamp }});
+
+                const updateCountdown = () => {
+                    const now = new Date().getTime();
+                    const distance = targetTime.getTime() - now;
+
+                    if (distance <= 0) {
+                        clearInterval(timer);
+                        for (const key in countdownElements) {
+                            countdownElements[key].textContent = '00';
+                        }
+                        document.querySelector('.countdown-title').textContent = 'Exam In Progress';
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElements.days.textContent = String(days).padStart(2, '0');
+                    countdownElements.hours.textContent = String(hours).padStart(2, '0');
+                    countdownElements.minutes.textContent = String(minutes).padStart(2, '0');
+                    countdownElements.seconds.textContent = String(seconds).padStart(2, '0');
+                };
+
+                const timer = setInterval(updateCountdown, 1000);
+                updateCountdown(); // initial call
+            });
+        </script>
+    @endif
+
+
     <div id="upcomingExamContainer">
         <div class="section-header">
             <h2 class="section-title">Upcoming Exams</h2>
-            <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+            <a href="{{ route('admin.manage.exam') }}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
         </div>
 
         <div class="exams-grid">
-            <div class="exam-card">
-                <div class="exam-card-header">
-                    <div class="exam-subject-icon math-icon">
-                        <i class="fas fa-square-root-alt"></i>
-                    </div>
-                    <div class="exam-info">
-                        <div class="exam-title" id="examTitle">Advanced Mathematics</div>
-                        <div class="exam-subtitle">30 questions • 2 hours</div>
-                    </div>
-                </div>
+            @forelse($upcomingExams as $exam)
+                @php
+                    $examDate = \Carbon\Carbon::parse($exam->exam_date);
+                    $startTime = \Carbon\Carbon::parse($exam->start_time);
+                    $duration = $exam->duration ?? 0;
+                    $startDateTime = $examDate->copy()->setTimeFrom($startTime);
+                    $endDateTime = $startDateTime->copy()->addMinutes($duration);
+                    $now = \Carbon\Carbon::now();
 
-                <div class="exam-details">
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="detail-text">May 10, 2025</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="detail-text">10:00 AM</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="detail-text">Prof. Johnson</div>
-                    </div>
-                </div>
+                    $statusText = $now->between($startDateTime, $endDateTime)
+                        ? 'Active Now'
+                        : 'Starts in ' . ceil($now->floatDiffInDays($startDateTime)) . ' days';
+                    $statusClass = $now->between($startDateTime, $endDateTime)
+                        ? 'status-active pulse-animation'
+                        : 'status-upcoming';
+                @endphp
 
-                <div class="exam-status">
-                    <span class="status-badge status-upcoming">Starts in 3 days</span>
-                    <a href="countdown-timer.html?id=1" class="exam-action action-view">
-                        <i class="fas fa-eye"></i> View Details
-                    </a>
-                </div>
-            </div>
-
-            <div class="exam-card">
-                <div class="exam-card-header">
-                    <div class="exam-subject-icon science-icon">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <div class="exam-info">
-                        <div class="exam-title" id="examTitle">Basic Science</div>
-                        <div class="exam-subtitle">25 questions • 1.5 hours</div>
-                    </div>
-                </div>
-
-                <div class="exam-details">
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                <div class="exam-card">
+                    <div class="exam-card-header">
+                        <div class="exam-subject-icon {{ strtolower(str_replace(' ', '-', $exam->subject_area)) }}-icon">
+                            <i class="fas fa-book-open"></i>
                         </div>
-                        <div class="detail-text">May 15, 2025</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-clock"></i>
+                        <div class="exam-info">
+                            <div class="exam-title">{{ $exam->title }}</div>
+                            <div class="exam-subtitle">
+                                {{ $exam->question_count ?? 'N/A' }} questions
+                            </div>
                         </div>
-                        <div class="detail-text">2:00 PM</div>
                     </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="detail-text">Dr. Williams</div>
-                    </div>
-                </div>
 
-                <div class="exam-status">
-                    <span class="status-badge status-upcoming">Starts in 8 days</span>
-                    <a href="countdown-timer.html?id=2" class="exam-action action-view">
-                        <i class="fas fa-eye"></i> View Details
-                    </a>
-                </div>
-            </div>
-
-            <div class="exam-card">
-                <div class="exam-card-header">
-                    <div class="exam-subject-icon cs-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="exam-info">
-                        <div class="exam-title" id="activeExamTitle">Computer Science 101</div>
-                        <div class="exam-subtitle">40 questions • 2.5 hours</div>
-                    </div>
-                </div>
-
-                <div class="exam-details">
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div class="exam-details">
+                        <div class="detail-row">
+                            <div class="detail-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="detail-text">{{ $examDate->format('j M, Y') }} , {{ $startTime->format('g:i A') }}</div>
                         </div>
-                        <div class="detail-text">Today</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-clock"></i>
+                        <div class="detail-row">
+                            <div class="detail-icon"><i class="fas fa-clock"></i></div>
+                            <div class="detail-text">{{ $exam->formatted_duration }}</div>
                         </div>
-                        <div class="detail-text">9:00 AM</div>
                     </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="detail-text">Prof. Anderson</div>
-                    </div>
-                </div>
 
-                <div class="exam-status">
-                    <span class="status-badge status-active pulse-animation">Active Now</span>
-                    <a href="#" class="exam-action action-start" id="startExamBtn">
-                        <i class="fas fa-play"></i> Start Exam
-                    </a>
+                    <div class="exam-status">
+                        <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
+
+                            <a href="{{ route('admin.exam.show', $exam->id) }}" class="exam-action action-view">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+
+                    </div>
                 </div>
-            </div>
+            @empty
+                <p>No upcoming or running exams at the moment.</p>
+            @endforelse
         </div>
-
-
     </div>
 
     <!-- Exam Results Section -->
+{{--
     <div class="section-header">
         <h2 class="section-title">Recent Results</h2>
         <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
@@ -284,6 +250,7 @@
             <div class="result-score">78%</div>
         </div>
     </div>
+--}}
 
     <br>
 

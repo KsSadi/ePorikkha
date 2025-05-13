@@ -3,6 +3,7 @@
 
 @push('style')
     <style>
+
         :root {
             --primary-color: #5a5af3;
             --primary-light: #eeeeff;
@@ -16,162 +17,7 @@
             --border-color: #e5e9f2;
         }
 
-        body {
-            background-color: #f5f7ff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 0;
-            margin: 0;
-            color: var(--text-color);
-            min-height: 100vh;
-        }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header styles */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            border-radius: 10px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            margin-right: 30px;
-        }
-
-        .logo-icon {
-            font-size: 1.8rem;
-            margin-right: 10px;
-            color: var(--primary-color);
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 8px 15px;
-            margin: 0 5px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        .nav-link:hover {
-            background-color: var(--light-bg);
-            color: var(--primary-color);
-        }
-
-        .nav-link.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            font-weight: 600;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .notification-btn {
-            position: relative;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: #777;
-            cursor: pointer;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 18px;
-            height: 18px;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 50%;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .user-role {
-            font-size: 0.75rem;
-            color: #777;
-        }
-
-        .logout-btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background-color: #ff5c5c;
-        }
 
         /* Page Header */
         .page-header {
@@ -586,31 +432,36 @@
 @section('content')
     <div class="page-header">
         <h1 class="page-title">Manage Students</h1>
-        <button class="btn-custom btn-primary-custom" id="addStudentBtn">
-            <i class="fas fa-user-plus"></i>
-            Add New Student
-        </button>
+
+        <a href="{{ route('admin.student.create') }}" >
+            <button class="btn-custom btn-primary-custom" id="addStudentBtn">
+                <i class="fas fa-user-plus"></i>
+                Add New Student
+            </button>
+        </a>
     </div>
 
     <div class="search-filter-container">
-        <div class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Search students...">
-        </div>
-        <div class="filter-buttons">
-            <button class="filter-btn active">
-                <i class="fas fa-list"></i>
-                All
-            </button>
-            <button class="filter-btn">
-                <i class="fas fa-check-circle"></i>
-                Active
-            </button>
-            <button class="filter-btn">
-                <i class="fas fa-times-circle"></i>
-                Inactive
-            </button>
-        </div>
+        <form action="{{ route('admin.manage.student') }}" method="GET" class="d-flex align-items-center">
+            <div class="search-box flex-grow-1">
+                <input type="text" name="search" class="form-control search-input" placeholder="Search students..." value="{{ request('search') }}">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="filter-buttons ms-3">
+                <button type="submit" name="status" value="all" class="btn filter-btn {{ request('status', 'all') == 'all' ? 'active' : '' }}">
+                    <i class="fas fa-list me-1"></i> All
+                </button>
+
+                <button type="submit" name="status" value="1" class="btn filter-btn {{ request('status') == '1' ? 'active' : '' }}">
+                    <i class="fas fa-check-circle me-1"></i> Active
+                </button>
+
+                <button type="submit" name="status" value="0" class="btn filter-btn {{ request('status') == '0' ? 'active' : '' }}">
+                    <i class="fas fa-times-circle me-1"></i> Inactive
+                </button>
+            </div>
+        </form>
     </div>
 
     <div class="students-container">
@@ -618,197 +469,91 @@
             <thead>
             <tr>
                 <th>Student</th>
+                <th>User Name</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Exams Taken</th>
-                <th>Avg. Score</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>
-                    <div class="student-info">
-                        <div class="student-avatar">JD</div>
-                        <div>
-                            <div class="student-name">John Doe</div>
-                            <div class="student-id">ID: STU-2025-001</div>
+            @forelse($users as $user)
+                <tr>
+                    <td>
+                        <div class="student-info">
+                            <div class="student-avatar">{{ substr($user->name, 0, 2) }}</div>
+                            <div>
+                                <div class="student-name">{{ $user->name }}</div>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td>john.doe@example.com</td>
-                <td>+880 1712 345678</td>
-                <td>12</td>
-                <td>85%</td>
-                <td><span class="status-badge status-active">Active</span></td>
-                <td class="action-cell">
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-view" title="View Profile">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-icon btn-edit" title="Edit Student">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon btn-toggle" title="Deactivate Account">
-                            <i class="fas fa-user-slash"></i>
-                        </button>
-                        <button class="btn-icon btn-delete" title="Delete Student">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="student-info">
-                        <div class="student-avatar">SR</div>
-                        <div>
-                            <div class="student-name">Sarah Rahman</div>
-                            <div class="student-id">ID: STU-2025-002</div>
+                    </td>
+                    <td>{{ $user->username }}</td>
+                    <td>{{ $user->email ?? 'N/A' }}</td>
+                    <td>
+                        <span class="status-badge status-{{ $user->status == 1 ? 'active' : 'inactive' }}">
+                            {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                          {{--  <a href="{{ route('admin.student.show', $user->id) }}" class="btn-icon btn-view" title="View Profile">
+                                <i class="fas fa-eye"></i>
+                            </a>--}}
+                            <a href="{{ route('admin.student.edit', $user->id) }}" class="btn-icon btn-edit" title="Edit Student">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn-icon btn-toggle" title="{{ $user->status == 1 ? 'Deactivate' : 'Activate' }} Account"
+                                    onclick="toggleStatus({{ $user->id }}, {{ $user->status }})">
+                                <i class="fas fa-{{ $user->status == 1 ? 'user-slash' : 'user-check' }}"></i>
+                            </button>
+                            <button class="btn-icon btn-delete" title="Delete Student"
+                                    onclick="confirmDelete({{ $user->id }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </div>
-                    </div>
-                </td>
-                <td>sarah.r@example.com</td>
-                <td>+880 1812 678901</td>
-                <td>9</td>
-                <td>92%</td>
-                <td><span class="status-badge status-active">Active</span></td>
-                <td class="action-cell">
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-view" title="View Profile">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-icon btn-edit" title="Edit Student">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon btn-toggle" title="Deactivate Account">
-                            <i class="fas fa-user-slash"></i>
-                        </button>
-                        <button class="btn-icon btn-delete" title="Delete Student">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="student-info">
-                        <div class="student-avatar">AK</div>
-                        <div>
-                            <div class="student-name">Amir Khan</div>
-                            <div class="student-id">ID: STU-2025-003</div>
-                        </div>
-                    </div>
-                </td>
-                <td>amir.k@example.com</td>
-                <td>+880 1912 567890</td>
-                <td>8</td>
-                <td>78%</td>
-                <td><span class="status-badge status-inactive">Inactive</span></td>
-                <td class="action-cell">
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-view" title="View Profile">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-icon btn-edit" title="Edit Student">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon btn-toggle" title="Activate Account">
-                            <i class="fas fa-user-check"></i>
-                        </button>
-                        <button class="btn-icon btn-delete" title="Delete Student">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="student-info">
-                        <div class="student-avatar">RI</div>
-                        <div>
-                            <div class="student-name">Riya Islam</div>
-                            <div class="student-id">ID: STU-2025-004</div>
-                        </div>
-                    </div>
-                </td>
-                <td>riya.islam@example.com</td>
-                <td>+880 1612 345678</td>
-                <td>15</td>
-                <td>89%</td>
-                <td><span class="status-badge status-active">Active</span></td>
-                <td class="action-cell">
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-view" title="View Profile">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-icon btn-edit" title="Edit Student">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon btn-toggle" title="Deactivate Account">
-                            <i class="fas fa-user-slash"></i>
-                        </button>
-                        <button class="btn-icon btn-delete" title="Delete Student">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="student-info">
-                        <div class="student-avatar">JR</div>
-                        <div>
-                            <div class="student-name">Javed Rahman</div>
-                            <div class="student-id">ID: STU-2025-005</div>
-                        </div>
-                    </div>
-                </td>
-                <td>javed@example.com</td>
-                <td>+880 1512 567890</td>
-                <td>11</td>
-                <td>75%</td>
-                <td><span class="status-badge status-active">Active</span></td>
-                <td class="action-cell">
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-view" title="View Profile">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn-icon btn-edit" title="Edit Student">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon btn-toggle" title="Deactivate Account">
-                            <i class="fas fa-user-slash"></i>
-                        </button>
-                        <button class="btn-icon btn-delete" title="Delete Student">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">No students found</td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
     </div>
 
     <div class="pagination-container">
         <div class="pagination-info">
-            Showing 1-5 of 24 students
+            Showing {{ $users->firstItem() ?? 0 }}-{{ $users->lastItem() ?? 0 }} of {{ $users->total() ?? 0 }} students
         </div>
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            </li>
-        </ul>
+        {{ $users->appends(request()->query())->links() }}
     </div>
+
+    <!-- Add these scripts for status toggle and delete confirmation -->
+    <form id="status-form" method="POST" style="display: none;">
+        @csrf
+        @method('PATCH')
+    </form>
+
+    <form id="delete-form" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <script>
+        function toggleStatus(userId, currentStatus) {
+            if (confirm(`Are you sure you want to ${currentStatus == 1 ? 'deactivate' : 'activate'} this student?`)) {
+                const form = document.getElementById('status-form');
+                form.action = `/admin/student/${userId}/toggle-status`;
+                form.submit();
+            }
+        }
+
+        function confirmDelete(userId) {
+            if (confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+                const form = document.getElementById('delete-form');
+                form.action = `{{ url('admin/student/delete') }}/${userId}`;
+                form.submit();
+            }
+        }
+    </script>
 @endsection

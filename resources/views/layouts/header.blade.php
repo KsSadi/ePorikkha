@@ -21,10 +21,10 @@
                     Students
                 </a>
 
-                <a href="{{ route('admin.dashboard') }}"
+               {{-- <a href="{{ route('admin.dashboard') }}"
                    class="nav-link {{ request()->is('admin/leaderboard*') ? 'active' : '' }}">
                     Leaderboard
-                </a>
+                </a>--}}
             </nav>
 
         @endif

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
     ];
 
     /**
@@ -45,4 +46,36 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @return list<string>
+     */
+
+    /**
+     * Get the exam attempts for the user.
+     */
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
+    }
+
+    /**
+     * Get the attempts for this exam.
+     */
+    public function attempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
+    }
+
+    /**
+     * Get the student answers for this question.
+     */
+    public function studentAnswers()
+    {
+        return $this->hasMany(StudentAnswer::class);
+    }
+
+
 }

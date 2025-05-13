@@ -34,6 +34,9 @@ class QuestionOption extends Model
     /**
      * Get the question that owns the option.
      */
+    /**
+     * Get the question that owns the option.
+     */
     public function question()
     {
         return $this->belongsTo(Question::class);

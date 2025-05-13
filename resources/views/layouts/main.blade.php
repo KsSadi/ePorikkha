@@ -11,6 +11,8 @@
 <div class="dashboard-container">
     @include('layouts.header')
 
+    @include('layouts.notification')
+
   @yield('content')
 
 

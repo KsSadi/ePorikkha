@@ -777,6 +777,7 @@
 </section>
 
 <!-- Development Team Section -->
+{{--
 <div class="developer-section">
     <div class="container">
         <h3 class="developer-heading">Our Talented Team</h3>
@@ -813,6 +814,7 @@
         </div>
     </div>
 </div>
+--}}
 
 <!-- Footer -->
 <footer class="footer">
