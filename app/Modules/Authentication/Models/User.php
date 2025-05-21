@@ -54,7 +54,12 @@ class User extends Authenticatable
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(
+            Role::class,
+            'role_user', // Specify pivot table name
+            'user_id',   // Foreign key on pivot table for this model
+            'role_id'    // Foreign key on pivot table for related model
+        );
     }
 
     /**
@@ -62,11 +67,12 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        if (is_string($role)) {
-            return $this->roles->contains('slug', $role);
+        // Change the implementation from using a query to using the collection
+        if (!$this->relationLoaded('roles')) {
+            $this->load('roles');
         }
 
-        return $role->intersect($this->roles)->isNotEmpty();
+        return $this->roles->contains('slug', $role);
     }
 
     /**
@@ -128,4 +134,17 @@ class User extends Authenticatable
     {
         return $this->hasRole('participant');
     }
+
+    public function getRolesDisplay()
+    {
+        $roles = $this->roles()->get();
+        $rolesList = $roles->pluck('slug')->toArray();
+
+        return [
+            'count' => $roles->count(),
+            'roles' => $rolesList,
+            'admin_exists' => in_array('admin', $rolesList)
+        ];
+    }
+
 }
