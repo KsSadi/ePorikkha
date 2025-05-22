@@ -600,12 +600,12 @@
 
     <div class="login-form-container">
         <div class="logo-container">
-            <div class="logo-text">BA Contest</div>
+            <div class="logo-text">ePorikkha</div>
         </div>
 
         <div class="login-header">
             <h2>Welcome !</h2>
-            <p>Sign in to continue to your contest portal</p>
+            <p>Sign in to continue to your exam portal</p>
         </div>
 
         <form method="POST"  id="loginForm" action="{{ route('login') }}">

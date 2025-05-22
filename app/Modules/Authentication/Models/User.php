@@ -84,10 +84,13 @@ class User extends Authenticatable
             $role = Role::where('slug', $role)->firstOrFail();
         }
 
-        $this->roles()->syncWithoutDetaching($role);
+        if ($role instanceof Role) {
+            $this->roles()->syncWithoutDetaching([$role->id]);
+        }
 
         return $this;
     }
+
 
     /**
      * Remove a role from the user.

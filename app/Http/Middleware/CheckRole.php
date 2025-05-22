@@ -27,6 +27,6 @@ class CheckRole
             }
         }
 
-        return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        return redirect()->route('landing-page')->with('error', 'You do not have permission to access this page.');
     }
 }

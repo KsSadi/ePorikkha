@@ -39,6 +39,17 @@ class UserSeeder extends Seeder
         if ($organizerRole) {
             $organizer->assignRole($organizerRole);
         }
+
+        // Create participant
+        $participant = User::create([
+            'name' => 'Participant User',
+            'email' => 'sadi@example.com',
+            'password' => Hash::make('password'),
+        ]);
+        $participantRole = Role::where('slug', 'participant')->first();
+        if ($participantRole) {
+            $participant->assignRole($participantRole);
+        }
     }
 
 }

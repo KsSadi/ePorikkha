@@ -3,12 +3,14 @@
 namespace App\Modules\Dashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController
 {
 
-    public function index(){
+    public function participantIndex(){
 
-        return view('dashboard.index');
+        return view('Dashboard::participant.dashboard');
+
     }
 }

@@ -77,9 +77,9 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->isOrganizer()) {
             return route('organizer.dashboard');
         } elseif ($user->isEvaluator()) {
-            return route('teacher.dashboard');
+            return route('evaluator.dashboard');
         } else {
-            return route('student.dashboard');
+            return route('participant.dashboard');
         }
     }
 }
