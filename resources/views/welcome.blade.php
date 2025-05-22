@@ -1696,7 +1696,195 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 188, 212, 0.2);
         }
+
+        /* Updated Registration Section Styles */
+        .registration-section {
+            padding: 80px 0;
+            background-color: #F8FBFF;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-tabs {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .registration-tab-item {
+            display: flex;
+            align-items: center;
+            padding: 25px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .registration-tab-item.active {
+            background-color: rgba(94, 53, 177, 0.03);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .registration-tab-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 12px;
+            background-color: rgba(255, 87, 34, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-right: 15px;
+        }
+
+        .registration-tab-icon.organizer-icon {
+            background-color: rgba(0, 188, 212, 0.1);
+            color: var(--secondary);
+        }
+
+        .registration-tab-content h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+
+        .registration-tab-content p {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .registration-content {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            position: relative;
+        }
+
+        .registration-panel {
+            display: none;
+        }
+
+        .registration-panel.active {
+            display: block;
+        }
+
+        .registration-steps {
+            margin-bottom: 30px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 20px;
+            box-shadow: 0 5px 15px rgba(94, 53, 177, 0.2);
+        }
+
+        .step-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+
+        .step-info p {
+            font-size: 0.95rem;
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .registration-action {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .participant-btn {
+            background: linear-gradient(135deg, var(--accent), #FF9800);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.2);
+        }
+
+        .participant-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 87, 34, 0.3);
+            background: linear-gradient(135deg, #FF7043, var(--accent));
+            color: white;
+        }
+
+        .organizer-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
+        }
+
+        .organizer-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3);
+            background: linear-gradient(135deg, #00ACC1, var(--secondary));
+            color: white;
+        }
+
+        @media (max-width: 767.98px) {
+            .registration-tab-item {
+                padding: 20px;
+            }
+
+            .registration-content {
+                padding: 30px 20px;
+            }
+
+            .registration-tab-icon {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                font-size: 1.1rem;
+            }
+
+            .registration-tab-content h3 {
+                font-size: 1rem;
+            }
+
+            .registration-tab-content p {
+                font-size: 0.8rem;
+            }
+        }
     </style>
+
 </head>
 <body>
 <!-- Navbar -->
@@ -1781,7 +1969,7 @@
                             <p>Anti-cheating system</p>
                         </div>
                     </div>
-                    <img src="Untitled design.png" alt="ePorikkha Platform" class="img-fluid hero-img">
+                    <img src="https://placebeard.it/600x450" alt="ePorikkha Platform" class="img-fluid hero-img">
                     <div class="hero-badge hero-badge-2">
                         <div class="hero-badge-icon">
                             <i class="fas fa-users"></i>
@@ -1941,215 +2129,6 @@
         </div>
     </div>
 </section>
-
-<style>
-    /* Updated Registration Section Styles */
-    .registration-section {
-        padding: 80px 0;
-        background-color: #F8FBFF;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .registration-tabs {
-        background-color: white;
-        border-radius: 16px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        margin-bottom: 30px;
-        overflow: hidden;
-    }
-
-    .registration-tab-item {
-        display: flex;
-        align-items: center;
-        padding: 25px 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        border-bottom: 3px solid transparent;
-    }
-
-    .registration-tab-item.active {
-        background-color: rgba(94, 53, 177, 0.03);
-        border-bottom: 3px solid var(--primary);
-    }
-
-    .registration-tab-icon {
-        width: 50px;
-        height: 50px;
-        min-width: 50px;
-        border-radius: 12px;
-        background-color: rgba(255, 87, 34, 0.1);
-        color: var(--accent);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        margin-right: 15px;
-    }
-
-    .registration-tab-icon.organizer-icon {
-        background-color: rgba(0, 188, 212, 0.1);
-        color: var(--secondary);
-    }
-
-    .registration-tab-content h3 {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: var(--dark-text);
-    }
-
-    .registration-tab-content p {
-        font-size: 0.9rem;
-        color: var(--light-text);
-        margin-bottom: 0;
-    }
-
-    .registration-content {
-        background-color: white;
-        border-radius: 16px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        padding: 40px;
-        position: relative;
-    }
-
-    .registration-panel {
-        display: none;
-    }
-
-    .registration-panel.active {
-        display: block;
-    }
-
-    .registration-steps {
-        margin-bottom: 30px;
-    }
-
-    .step-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    .step-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        margin-right: 20px;
-        box-shadow: 0 5px 15px rgba(94, 53, 177, 0.2);
-    }
-
-    .step-info h4 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: var(--dark-text);
-    }
-
-    .step-info p {
-        font-size: 0.95rem;
-        color: var(--light-text);
-        margin-bottom: 0;
-    }
-
-    .registration-action {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .participant-btn {
-        background: linear-gradient(135deg, var(--accent), #FF9800);
-        color: white;
-        padding: 12px 30px;
-        border-radius: 30px;
-        font-weight: 600;
-        transition: all 0.3s;
-        border: none;
-        box-shadow: 0 5px 15px rgba(255, 87, 34, 0.2);
-    }
-
-    .participant-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 87, 34, 0.3);
-        background: linear-gradient(135deg, #FF7043, var(--accent));
-        color: white;
-    }
-
-    .organizer-btn {
-        background: linear-gradient(135deg, var(--secondary), var(--primary));
-        color: white;
-        padding: 12px 30px;
-        border-radius: 30px;
-        font-weight: 600;
-        transition: all 0.3s;
-        border: none;
-        box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
-    }
-
-    .organizer-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3);
-        background: linear-gradient(135deg, #00ACC1, var(--secondary));
-        color: white;
-    }
-
-    @media (max-width: 767.98px) {
-        .registration-tab-item {
-            padding: 20px;
-        }
-
-        .registration-content {
-            padding: 30px 20px;
-        }
-
-        .registration-tab-icon {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            font-size: 1.1rem;
-        }
-
-        .registration-tab-content h3 {
-            font-size: 1rem;
-        }
-
-        .registration-tab-content p {
-            font-size: 0.8rem;
-        }
-    }
-</style>
-
-<script>
-    // JavaScript for Registration Tabs
-    document.addEventListener("DOMContentLoaded", function() {
-        const tabItems = document.querySelectorAll('.registration-tab-item');
-        const panels = document.querySelectorAll('.registration-panel');
-
-        tabItems.forEach((tab, index) => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and panels
-                tabItems.forEach(item => item.classList.remove('active'));
-                panels.forEach(panel => panel.classList.remove('active'));
-
-                // Add active class to current tab and panel
-                tab.classList.add('active');
-                panels[index].classList.add('active');
-            });
-        });
-    });
-</script>
 
 <!-- IMPROVED: Features Section -->
 <section class="features-section" id="features">
@@ -2661,6 +2640,25 @@
     videoModal.addEventListener('hidden.bs.modal', function () {
         // Reset the YouTube src when modal is hidden
         videoFrame.setAttribute('src', 'about:blank');
+    });
+</script>
+<script>
+    // JavaScript for Registration Tabs
+    document.addEventListener("DOMContentLoaded", function() {
+        const tabItems = document.querySelectorAll('.registration-tab-item');
+        const panels = document.querySelectorAll('.registration-panel');
+
+        tabItems.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and panels
+                tabItems.forEach(item => item.classList.remove('active'));
+                panels.forEach(panel => panel.classList.remove('active'));
+
+                // Add active class to current tab and panel
+                tab.classList.add('active');
+                panels[index].classList.add('active');
+            });
+        });
     });
 </script>
 </body>
