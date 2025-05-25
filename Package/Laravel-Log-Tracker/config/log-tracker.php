@@ -119,7 +119,7 @@ return [
     | Default: false (Disables log deletion).
     |
     */
-    'allow_delete' => false,
+    'allow_delete' => true,
 
     /*
     |--------------------------------------------------------------------------

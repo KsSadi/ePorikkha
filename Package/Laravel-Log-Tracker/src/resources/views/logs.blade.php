@@ -242,6 +242,8 @@
             .logs-grid {
                 display: grid;
                 gap: 0;
+                padding-bottom: 100px;
+
             }
 
             .logs-header-row {
@@ -279,6 +281,8 @@
                 transition: var(--transition);
                 cursor: pointer;
                 overflow: visible;
+                position: relative;
+                z-index: 1;
             }
 
             .log-card:hover {
@@ -288,6 +292,15 @@
 
             .log-card:last-child {
                 border-bottom: none;
+            }
+            /* While open, the card should float above others */
+            .log-card.active-dropdown {
+                z-index: 1001;
+            }
+
+            /* Add bottom spacing to avoid collision when dropdown expands */
+            .logs-grid {
+                padding-bottom: 150px;
             }
 
             .log-info {
@@ -455,13 +468,14 @@
                 box-shadow: 0 15px 35px rgba(0,0,0,0.2);
                 padding: 0.75rem 0;
                 min-width: 160px;
-                z-index: 9999;
                 opacity: 0;
                 visibility: hidden;
                 transform: translateY(-10px);
                 transition: var(--transition);
                 border: 1px solid rgba(0,0,0,0.1);
                 margin-top: 5px;
+                z-index: 1000;
+
             }
 
             .export-menu.show {
@@ -812,12 +826,12 @@
 
                         <form action="{{ route('log-tracker.delete', ['logName' => $file]) }}"
                               method="POST"
-                              style="display: inline;"
-                              onsubmit="return confirmDeleteForm(event, '{{ $file }}')">
+                              style="display: inline;">
                             @csrf
-                            <button type="submit"
+                            <button type="button"
                                     class="action-btn delete"
-                                    title="Delete">
+                                    title="Delete"
+                                    onclick="confirmDelete(this, '{{ $file }}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -1000,6 +1014,7 @@
                             menu.style.marginTop = '5px';
                             menu.style.marginBottom = '0';
                         });
+                        document.querySelectorAll('.log-card').forEach(card => card.classList.remove('active-dropdown'));
                     }
                 }
 
@@ -1036,23 +1051,29 @@
             // Global functions
             function toggleExportMenu(button) {
                 const menu = button.nextElementSibling;
+                const card = button.closest('.log-card');
                 const isOpen = menu.classList.contains('show');
 
+                // Close all other export menus
                 document.querySelectorAll('.export-menu').forEach(m => m.classList.remove('show'));
+                document.querySelectorAll('.log-card').forEach(c => c.classList.remove('active-dropdown'));
 
                 if (!isOpen) {
                     menu.classList.add('show');
+                    card.classList.add('active-dropdown');
 
                     setTimeout(() => {
                         const rect = menu.getBoundingClientRect();
                         const windowWidth = window.innerWidth;
 
+                        // If right edge overflows, align left instead
                         if (rect.right > windowWidth - 10) {
                             menu.style.right = '0';
                             menu.style.left = 'auto';
                         }
 
-                        if (rect.bottom > window.innerHeight - 10) {
+                        // If bottom edge overflows, show menu upwards
+                        if (rect.bottom > window.innerHeight - 20) {
                             menu.style.top = 'auto';
                             menu.style.bottom = '100%';
                             menu.style.marginTop = '0';
@@ -1061,6 +1082,7 @@
                     }, 10);
                 }
             }
+
 
             function applyFilters() {
                 logManager.performSearch();
@@ -1072,20 +1094,21 @@
                 logManager.performSearch();
             }
 
-            function confirmDeleteForm(event, fileName) {
-                event.preventDefault();
-
+            function confirmDelete(button, fileName) {
+                // Show confirmation dialog
                 if (confirm(`Are you sure you want to delete "${fileName}"?\n\nThis action cannot be undone.`)) {
-                    const button = event.target.closest('button');
+                    // User clicked OK - show loading state
                     const icon = button.querySelector('i');
-                    icon.className = 'fas fa-spinner fa-spin';
+                    if (icon) {
+                        icon.className = 'fas fa-spinner fa-spin';
+                    }
                     button.disabled = true;
 
-                    event.target.closest('form').submit();
-                    return true;
+                    // Submit the form
+                    const form = button.closest('form');
+                    form.submit();
                 }
-
-                return false;
+                // If user clicks Cancel, nothing happens
             }
 
             // Initialize

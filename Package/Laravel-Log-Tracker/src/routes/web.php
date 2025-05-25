@@ -15,12 +15,14 @@ Route::group([
     Route::get('/download/{logName}', [LogTrackerController::class, 'download'])->name('download');
     Route::post('/delete/{logName}', [LogTrackerController::class, 'delete'])->name('delete');
 
-    // NEW EXPORT ROUTES
+    //  EXPORT ROUTES
     Route::get('/export', [LogTrackerController::class, 'exportForm'])->name('export.form');
     Route::post('/export', [LogTrackerController::class, 'export'])->name('export');
     Route::get('/export/{logName}/{format}', [LogTrackerController::class, 'quickExport'])->name('export.quick');
 
-    // Keep this last
     Route::get('/{logName}', [LogTrackerController::class, 'show'])->name('show');
+
+    Route::get('/api/dashboard-refresh', [LogTrackerController::class, 'dashboardRefresh'])->name('api.dashboard.refresh');
+
 });
 

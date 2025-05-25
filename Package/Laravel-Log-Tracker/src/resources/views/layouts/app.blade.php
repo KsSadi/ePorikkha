@@ -9,145 +9,439 @@
     <!-- Font Awesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --dark-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            --shadow-soft: 0 10px 25px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 35px rgba(0,0,0,0.15);
+            --border-radius: 15px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
-        .navbar-brand {
-            font-weight: 700;
+
+        /* Modern Navigation */
+        .modern-navbar {
+            background: var(--primary-gradient);
+            backdrop-filter: blur(20px);
+            border: none;
+            box-shadow: var(--shadow-soft);
+            padding: 1rem 0;
+            position: relative;
+            overflow: hidden;
         }
+
+        .modern-navbar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            animation: float-nav 10s ease-in-out infinite;
+        }
+
+        .modern-navbar::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+            animation: float-nav 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float-nav {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .navbar-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .modern-navbar-brand {
+            color: white !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+        }
+
+        .modern-navbar-brand:hover {
+            color: rgba(255,255,255,0.9) !important;
+            transform: translateY(-2px);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .navbar-toggler {
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .modern-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modern-nav-item {
+            margin: 0;
+        }
+
+        .modern-nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 25px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            background: transparent;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .modern-nav-link:hover {
+            color: white !important;
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .modern-nav-link.active {
+            color: white !important;
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .modern-nav-link i {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Legacy card styles for backward compatibility */
         .card {
             transition: transform 0.3s ease;
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            background: white;
         }
+
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
+
         .card-header {
-            border-radius: 10px 10px 0 0 !important;
+            border-radius: 12px 12px 0 0 !important;
             font-weight: 600;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
+
         .stats-card {
             border-left: 4px solid;
         }
+
         .stats-icon {
             font-size: 2rem;
             opacity: 0.8;
         }
+
         .error-card {
             border-left-color: #dc3545;
         }
+
         .warning-card {
             border-left-color: #ffc107;
         }
+
         .info-card {
             border-left-color: #0d6efd;
         }
+
         .success-card {
             border-left-color: #198754;
         }
+
         .log-content {
-            font-family: "Courier New", monospace;
+            font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
             font-size: 0.875rem;
-            background-color: #212529;
+            background: var(--dark-gradient);
             color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
             height: 65vh;
             overflow-y: auto;
             white-space: pre-wrap;
+            box-shadow: var(--shadow-soft);
         }
+
         .log-line {
             margin: 0;
             padding: 2px 0;
+            transition: var(--transition);
         }
+
+        .log-line:hover {
+            background: rgba(255,255,255,0.05);
+            padding-left: 10px;
+            border-left: 2px solid rgba(255,255,255,0.2);
+        }
+
         .log-error {
-            color: #ff6b6b;
+            color: #ff6b9d;
         }
+
         .log-warning {
             color: #ffd166;
         }
+
         .log-info {
-            color: #63c5da;
+            color: #74b9ff;
         }
+
         .log-debug {
-            color: #90be6d;
+            color: #00cec9;
         }
+
         .log-line .timestamp {
             color: #adb5bd;
             margin-right: 10px;
+            font-weight: 500;
         }
+
         .log-tools {
-            background-color: white;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.05);
         }
+
         .log-meta {
-            border-left: 3px solid #0d6efd;
-            background-color: #f8f9fa;
-            border-radius: 5px;
+            border-left: 3px solid #667eea;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 10px;
+            padding: 1rem;
         }
+
         .log-meta-item {
             display: flex;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
         }
+
         .log-meta-label {
             width: 120px;
             font-weight: 600;
+            color: #374151;
         }
+
         .filter-box {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        #customDateRange input {
-            width: 100%;
-        }
-        .navbar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.7); /* Light color */
-            transition: all 0.3s ease-in-out; /* Smooth hover effect */
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
-            color: #0dc8ac; /* Bootstrap 'info' color (cyan) */
-            background: rgba(255, 255, 255, 0.1); /* Subtle background */
-            border-radius: 5px;
+        /* Clean Minimal Footer */
+        .modern-footer {
+            background: #2d3748;
+            color: white;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        .navbar-brand {
-            transition: color 0.3s ease-in-out;
+        .footer-content {
+            padding: 1.5rem 0;
+            text-align: center;
         }
 
-        .navbar-brand:hover {
-            color: #038975 !important; /* A brighter hover effect */
+        .footer-brand {
+            color: #4facfe;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
+        .footer-link {
+            color: #4facfe;
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
+        .footer-link:hover {
+            color: #00f2fe;
+            text-decoration: none;
+        }
+
+        .footer-text {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modern-navbar {
+                padding: 0.75rem 0;
+            }
+
+            .modern-navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .brand-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .modern-nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modern-nav-menu {
+                flex-direction: column;
+                gap: 0.25rem;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .modern-nav-link {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem;
+            }
+        }
+
+        /* Smooth page transitions */
+        .page-content {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--success-gradient);
+        }
     </style>
     @stack('styles')
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ route('log-tracker.dashboard') }}">
-            <i class="fa-brands fa-searchengin"></i> Log Tracker
+<!-- Modern Navigation -->
+<nav class="navbar navbar-expand-lg modern-navbar">
+    <div class="container navbar-container">
+        <a class="modern-navbar-brand" href="{{ route('log-tracker.dashboard') }}">
+            <div class="brand-icon">
+                <i class="fa-brands fa-searchengin"></i>
+            </div>
+            <span>Log Tracker</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold px-3 {{ request()->routeIs('log-tracker.dashboard') ? 'active' : '' }}"
+            <ul class="navbar-nav ms-auto modern-nav-menu">
+                <li class="nav-item modern-nav-item">
+                    <a class="modern-nav-link {{ request()->routeIs('log-tracker.dashboard') ? 'active' : '' }}"
                        href="{{ route('log-tracker.dashboard') }}">
-                        <i class="fas fa-chart-line me-1"></i> Dashboard
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold px-3 {{ request()->routeIs('log-tracker.index') ? 'active' : '' }}"
+                <li class="nav-item modern-nav-item">
+                    <a class="modern-nav-link {{ request()->routeIs('log-tracker.index') ? 'active' : '' }}"
                        href="{{ route('log-tracker.index') }}">
-                        <i class="fas fa-list me-1"></i> Log Files
+                        <i class="fas fa-list"></i>
+                        <span>Log Files</span>
                     </a>
                 </li>
             </ul>
@@ -156,29 +450,32 @@
 </nav>
 
 <!-- Main Content -->
-<div class="container my-4">
-   @yield('content')
+<div class="container my-4 page-content">
+    @yield('content')
 </div>
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-3 mt-5">
+<!-- Clean Minimal Footer -->
+<footer class="modern-footer">
     <div class="container">
-        <p class="mb-1">
-           <span class="text-info"> <i class="fa-brands fa-searchengin"></i> <strong> LogTracker v1.0</strong></span>
-        <p class="mb-0">
-            © <span id="year"></span> <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="text-success"  target="_blank"> LogTracker</a> – Efficient logging, effortless insights.
-        </p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fa-brands fa-searchengin"></i> LogTracker v2.0
+            </div>
+            <p class="footer-text">
+                © <span id="year"></span>
+                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-link" target="_blank">
+                    LogTracker
+                </a>
+                Efficient logging, effortless insights.
+            </p>
+        </div>
     </div>
 </footer>
-
 
 <!-- JavaScript to Auto-Update Year -->
 <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
-
-
 
 <!-- Bootstrap 5.3.3 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -189,10 +486,65 @@
     const logId = urlParams.get('id');
 
     if (logId) {
-        document.getElementById('logFileName').textContent = logId;
-        document.getElementById('logFileBreadcrumb').textContent = logId;
+        const logFileNameElement = document.getElementById('logFileName');
+        const logFileBreadcrumbElement = document.getElementById('logFileBreadcrumb');
+
+        if (logFileNameElement) logFileNameElement.textContent = logId;
+        if (logFileBreadcrumbElement) logFileBreadcrumbElement.textContent = logId;
         document.title = "Log Viewer - " + logId;
     }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add loading animation for navigation links
+    document.querySelectorAll('.modern-nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.href !== window.location.href) {
+                this.style.opacity = '0.7';
+                this.innerHTML += ' <i class="fas fa-spinner fa-spin ms-2"></i>';
+            }
+        });
+    });
+
+    // Enhance page transitions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add staggered animation to cards if they exist
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('animate-card');
+        });
+    });
+
+    // Add CSS for card animations
+    const style = document.createElement('style');
+    style.textContent = `
+            .animate-card {
+                animation: slideInUp 0.6s ease-out forwards;
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            @keyframes slideInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+    document.head.appendChild(style);
 </script>
 
 @stack('scripts')

@@ -127,6 +127,123 @@ class LogTrackerController extends Controller
         ));
     }
 
+    public function dashboardRefresh()
+    {
+        try {
+            $logFiles = LogTracker::getLogFiles();
+            $summary = ['total' => 0, 'error' => 0, 'warning' => 0, 'info' => 0, 'debug' => 0];
+
+            $dates = [];
+            $logTypesCount = ['error' => 0, 'warning' => 0, 'info' => 0, 'debug' => 0];
+            $recentLogs = []; // Store all log entries
+            $errorCounts = []; // Store error types and their counts
+            $peakHours = array_fill(0, 24, 0); // Track error count per hour
+
+            // Generate last 7 days' dates
+            for ($i = 6; $i >= 0; $i--) {
+                $date = now()->subDays($i)->format('Y-m-d');
+                $dates[$date] = ['error' => 0, 'warning' => 0, 'info' => 0, 'debug' => 0];
+            }
+
+            // Today's total log count
+            $today = now()->format('Y-m-d');
+            $newLogsToday = ['error' => 0, 'warning' => 0, 'info' => 0, 'debug' => 0];
+            $todaysTotalLogs = 0;
+
+            foreach ($logFiles as $logFile) {
+                $logData = LogTracker::getLogEntries($logFile);
+
+                foreach ($logData['entries'] as $entry) {
+                    $summary['total']++;
+
+                    // Store logs into $recentLogs
+                    $recentLogs[] = [
+                        'timestamp' => $entry['timestamp'],
+                        'level' => $entry['level'],
+                        'message' => $entry['message']
+                    ];
+
+                    // Count all-time logs
+                    if (isset($logTypesCount[$entry['level']])) {
+                        $logTypesCount[$entry['level']]++;
+                    }
+
+                    // Extract error types and count them
+                    if ($entry['level'] === 'error') {
+                        $errorType = explode(":", $entry['message'])[0]; // Extract first part of the message
+
+                        if (!isset($errorCounts[$errorType])) {
+                            $errorCounts[$errorType] = 1;
+                        } else {
+                            $errorCounts[$errorType]++;
+                        }
+                    }
+
+                    // Extract date from timestamp
+                    if (isset($entry['timestamp']) && preg_match('/(\d{4}-\d{2}-\d{2})/', $entry['timestamp'], $match)) {
+                        $logDate = $match[1];
+
+                        // Count logs for last 7 days
+                        if (isset($dates[$logDate]) && isset($dates[$logDate][$entry['level']])) {
+                            $dates[$logDate][$entry['level']]++;
+                        }
+
+                        // Count today's logs
+                        if ($logDate === $today) {
+                            $todaysTotalLogs++;
+                            if (isset($newLogsToday[$entry['level']])) {
+                                $newLogsToday[$entry['level']]++;
+                            }
+                        }
+                    }
+
+                    // Extract peak error hours
+                    if ($entry['level'] === 'error' && isset($entry['timestamp']) && preg_match('/(\d{2}):\d{2}:\d{2}/', $entry['timestamp'], $match)) {
+                        $hour = (int)$match[1]; // Extract hour from timestamp
+                        $peakHours[$hour]++; // Increment error count for that hour
+                    }
+                }
+            }
+
+            // Sort error types and get the top 5
+            arsort($errorCounts);
+            $topErrors = array_slice($errorCounts, 0, 5, true);
+
+            // Sort peak error hours and get the top 5
+            arsort($peakHours);
+            $topPeakHours = array_slice($peakHours, 0, 5, true);
+
+            // Ensure $recentLogs is sorted by timestamp
+            usort($recentLogs, function ($a, $b) {
+                return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+            });
+
+            // Get only the last 5 logs
+            $lastFiveLogs = array_slice($recentLogs, 0, 5);
+
+            // Return JSON response for AJAX
+            return response()->json([
+                'success' => true,
+                'summary' => $summary,
+                'dates' => $dates,
+                'logTypesCount' => $logTypesCount,
+                'newLogsToday' => $newLogsToday,
+                'todaysTotalLogs' => $todaysTotalLogs,
+                'lastFiveLogs' => $lastFiveLogs,
+                'topErrors' => $topErrors,
+                'topPeakHours' => $topPeakHours,
+                'timestamp' => now()->toISOString()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to fetch dashboard data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function index()
     {
