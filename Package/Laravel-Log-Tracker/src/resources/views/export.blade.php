@@ -3,21 +3,6 @@
 @section('content')
     @push('styles')
         <style>
-            :root {
-                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-                --shadow-soft: 0 10px 25px rgba(0,0,0,0.1);
-                --border-radius: 15px;
-                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            body {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                min-height: 100vh;
-            }
-
             .export-header {
                 background: var(--primary-gradient);
                 border-radius: var(--border-radius);

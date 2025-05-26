@@ -3,23 +3,6 @@
 @section('content')
     @push('styles')
         <style>
-            :root {
-                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-                --dark-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-                --shadow-soft: 0 10px 25px rgba(0,0,0,0.08);
-                --shadow-hover: 0 15px 35px rgba(0,0,0,0.15);
-                --border-radius: 15px;
-                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            body {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                min-height: 100vh;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            }
 
             /* Modern Breadcrumb */
             .breadcrumb-container {
@@ -147,7 +130,7 @@
                 align-items: center;
                 gap: 0.4rem;
                 backdrop-filter: blur(10px);
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 white-space: nowrap;
                 justify-content: center;
             }

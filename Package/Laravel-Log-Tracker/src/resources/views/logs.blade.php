@@ -3,61 +3,7 @@
 @section('content')
     @push('styles')
         <style>
-            :root {
-                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-                --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-                --shadow-soft: 0 10px 25px rgba(0,0,0,0.08);
-                --shadow-hover: 0 15px 35px rgba(0,0,0,0.12);
-                --border-radius: 15px;
-                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
 
-            body {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                min-height: 100vh;
-            }
-
-            /* Modern Header */
-            .page-header {
-                background: var(--primary-gradient);
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                margin-bottom: 2rem;
-                box-shadow: var(--shadow-soft);
-                color: white;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .page-header::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -10%;
-                width: 200px;
-                height: 200px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-                animation: float 8s ease-in-out infinite;
-            }
-
-            @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-30px) rotate(180deg); }
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-
-            .page-header p {
-                opacity: 0.9;
-                margin-bottom: 0;
-            }
 
             /* Enhanced Filter Section */
             .filters-section {

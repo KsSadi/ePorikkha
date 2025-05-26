@@ -14,6 +14,7 @@
             --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --info-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
             --dark-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
             --shadow-soft: 0 10px 25px rgba(0,0,0,0.08);
             --shadow-hover: 0 15px 35px rgba(0,0,0,0.15);
@@ -170,6 +171,48 @@
             font-size: 0.9rem;
             opacity: 0.9;
         }
+
+
+        /* Modern Header */
+        .page-header {
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
 
         /* Legacy card styles for backward compatibility */
         .card {
@@ -480,6 +523,8 @@
 <!-- Bootstrap 5.3.3 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
+@stack('scripts')
+
 <script>
     // Get log file name from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
@@ -529,24 +574,24 @@
     });
 
     // Add CSS for card animations
-    const style = document.createElement('style');
-    style.textContent = `
-            .animate-card {
-                animation: slideInUp 0.6s ease-out forwards;
-                opacity: 0;
-                transform: translateY(30px);
-            }
+    const cardAnimationStyle = document.createElement('style');
+    cardAnimationStyle.textContent = `
+    .animate-card {
+        animation: slideInUp 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+    document.head.appendChild(cardAnimationStyle);
 
-            @keyframes slideInUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
-    document.head.appendChild(style);
 </script>
 
-@stack('scripts')
+
 </body>
 </html>
