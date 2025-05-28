@@ -1,846 +1,1039 @@
-@extends('log-tracker::layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Log Tracker')</title>
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.2s ease-in-out;
+        }
 
-@section('content')
-    @push('styles')
-        <style>
+        body {
+            background-color: var(--gray-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
 
-            /* Modern Dashboard Header */
-            .dashboard-header {
-                background: var(--primary-gradient);
-                border-radius: var(--border-radius);
-                padding: 2.5rem 2rem;
-                margin-bottom: 2rem;
-                box-shadow: var(--shadow-soft);
-                color: white;
-                position: relative;
-                overflow: hidden;
+        /* Clean Navigation */
+        .navbar {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--gray-900) !important;
+            font-weight: 600;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--gray-600) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin: 0 0.25rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--gray-100);
+        }
+
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: #dbeafe;
+        }
+
+        .navbar-toggler {
+            border: 1px solid var(--gray-300);
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* Enhanced Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 50%, var(--success-color) 100%);
+        }
+
+        .page-header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.025em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header h1 i {
+            color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+
+        .page-header p {
+            color: var(--gray-600);
+            margin-bottom: 0;
+            font-size: 1.125rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .header-stat {
+            background: white;
+            border: 1px solid var(--gray-200);
+            padding: 1.75rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .header-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .header-stat:hover::before {
+            transform: scaleX(1);
+        }
+
+        .header-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+            display: block;
+        }
+
+        .header-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Revolutionary Stats Cards */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-8px);
+        }
+
+        .stat-card-body {
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-info h6 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-info h6::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .stat-info .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            position: relative;
+        }
+
+        .stat-progress {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .stat-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 2s ease-in-out;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .stat-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: subtract;
+        }
+
+        /* Error Card Styling */
+        .error-card::before {
+            background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+        }
+        .error-card .stat-info h6::before { background-color: #dc2626; }
+        .error-card .stat-number {
+            color: #dc2626;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
+        }
+        .error-card .stat-icon {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        .error-card .stat-trend {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        .error-card .stat-progress-bar {
+            background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+        }
+        .error-card .stat-change {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+        }
+
+        /* Warning Card Styling */
+        .warning-card::before {
+            background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
+        }
+        .warning-card .stat-info h6::before { background-color: #d97706; }
+        .warning-card .stat-number {
+            color: #d97706;
+            text-shadow: 0 0 20px rgba(217, 119, 6, 0.2);
+        }
+        .warning-card .stat-icon {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        }
+        .warning-card .stat-trend {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: #fed7aa;
+            color: #d97706;
+        }
+        .warning-card .stat-progress-bar {
+            background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
+        }
+        .warning-card .stat-change {
+            background-color: rgba(217, 119, 6, 0.1);
+            color: #d97706;
+        }
+
+        /* Info Card Styling */
+        .info-card::before {
+            background: linear-gradient(90deg, #0284c7 0%, #0ea5e9 100%);
+        }
+        .info-card .stat-info h6::before { background-color: #0284c7; }
+        .info-card .stat-number {
+            color: #0284c7;
+            text-shadow: 0 0 20px rgba(2, 132, 199, 0.2);
+        }
+        .info-card .stat-icon {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+        }
+        .info-card .stat-trend {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-color: #bae6fd;
+            color: #0284c7;
+        }
+        .info-card .stat-progress-bar {
+            background: linear-gradient(90deg, #0284c7 0%, #0ea5e9 100%);
+        }
+        .info-card .stat-change {
+            background-color: rgba(2, 132, 199, 0.1);
+            color: #0284c7;
+        }
+
+        /* Success Card Styling */
+        .success-card::before {
+            background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+        }
+        .success-card .stat-info h6::before { background-color: #059669; }
+        .success-card .stat-number {
+            color: #059669;
+            text-shadow: 0 0 20px rgba(5, 150, 105, 0.2);
+        }
+        .success-card .stat-icon {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        .success-card .stat-trend {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-color: #bbf7d0;
+            color: #059669;
+        }
+        .success-card .stat-progress-bar {
+            background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+        }
+        .success-card .stat-change {
+            background-color: rgba(5, 150, 105, 0.1);
+            color: #059669;
+        }
+
+        /* Enhanced Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background-color: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .chart-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chart-title i {
+            color: var(--primary-color);
+        }
+
+        .chart-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+
+        .chart-body {
+            padding: 2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Status Indicator */
+        .live-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Enhanced Analysis Section */
+        .analysis-section {
+            background-color: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .analysis-section:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .analysis-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-900);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .analysis-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .analysis-title i {
+            color: var(--primary-color);
+        }
+
+        .live-badge {
+            background-color: var(--success-color);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            letter-spacing: 0.025em;
+        }
+
+        .analysis-body {
+            padding: 2rem;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .analysis-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .analysis-card-header {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .analysis-card-header.error-header {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: var(--danger-color);
+            border-bottom: 1px solid #fecaca;
+        }
+
+        .analysis-card-header.warning-header {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            color: var(--warning-color);
+            border-bottom: 1px solid #fed7aa;
+        }
+
+        .analysis-table {
+            margin: 0;
+        }
+
+        .analysis-table tbody tr {
+            border-bottom: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .analysis-table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .analysis-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .analysis-table td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+
+        .error-type {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .error-count-badge {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .peak-count-badge {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .time-range {
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        /* Enhanced Recent Logs Section */
+        .recent-logs-section {
+            background-color: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .recent-logs-section:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .logs-section-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logs-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logs-section-title i {
+            color: var(--primary-color);
+        }
+
+        .logs-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.025em;
+        }
+
+        .action-btn.primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(37, 99, 235, 0.2);
+        }
+
+        .action-btn.primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px 0 rgba(37, 99, 235, 0.3);
+        }
+
+        .action-btn.success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(5, 150, 105, 0.2);
+        }
+
+        .action-btn.success:hover {
+            background-color: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px 0 rgba(5, 150, 105, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .logs-table {
+            width: 100%;
+            margin: 0;
+        }
+
+        .logs-table thead th {
+            background-color: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logs-table tbody tr {
+            border-bottom: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .logs-table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .logs-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .logs-table tbody td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+
+        .log-timestamp {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .log-message {
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .log-level-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-400);
+        }
+
+        .empty-state h4 {
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: currentColor;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .footer-brand {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
             }
+        }
 
-            .dashboard-header::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -10%;
-                width: 200px;
-                height: 200px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-                animation: float 8s ease-in-out infinite;
-            }
-
-            .dashboard-header::after {
-                content: '';
-                position: absolute;
-                bottom: -30%;
-                left: -15%;
-                width: 150px;
-                height: 150px;
-                background: rgba(255,255,255,0.05);
-                border-radius: 50%;
-                animation: float 6s ease-in-out infinite reverse;
-            }
-
-            @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-30px) rotate(180deg); }
-            }
-
-            .header-content {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: relative;
-                z-index: 2;
-            }
-
-            .header-left h1 {
-                font-size: 2.2rem;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-
-            .header-left p {
-                font-size: 1.1rem;
-                opacity: 0.9;
-                margin-bottom: 0;
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem;
             }
 
             .header-stats {
-                display: flex;
-                gap: 2rem;
-                text-align: center;
+                flex-direction: column;
+                gap: 1rem;
             }
 
-            .header-stat {
-                background: rgba(255,255,255,0.15);
-                padding: 1rem 1.5rem;
-                border-radius: 12px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255,255,255,0.2);
-                transition: var(--transition);
-            }
-
-            .header-stat.updating {
-                background: rgba(255,255,255,0.25);
-                transform: scale(1.05);
-            }
-
-            .header-stat-number {
-                font-size: 1.8rem;
-                font-weight: 700;
-                margin-bottom: 0.25rem;
-            }
-
-            .header-stat-label {
-                font-size: 0.9rem;
-                opacity: 0.9;
-                font-weight: 500;
-            }
-
-            /* Enhanced Stats Cards */
             .stats-overview {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1.5rem;
-                margin-bottom: 2rem;
-            }
-
-            .stat-card {
-                background: white;
-                border-radius: var(--border-radius);
-                padding: 0;
-                box-shadow: var(--shadow-soft);
-                transition: var(--transition);
-                overflow: hidden;
-                border: none;
-                position: relative;
-            }
-
-            .stat-card:hover {
-                transform: translateY(-8px);
-                box-shadow: var(--shadow-hover);
-            }
-
-            .stat-card.updating {
-                animation: pulse-update 0.8s ease-in-out;
-            }
-
-            @keyframes pulse-update {
-                0%, 100% { transform: translateY(-8px) scale(1); }
-                50% { transform: translateY(-8px) scale(1.02); }
-            }
-
-            .stat-card.error-card {
-                background: var(--danger-gradient);
-                color: white;
-            }
-
-            .stat-card.warning-card {
-                background: var(--warning-gradient);
-                color: #8b4513;
-            }
-
-            .stat-card.info-card {
-                background: var(--info-gradient);
-                color: white;
-            }
-
-            .stat-card.success-card {
-                background: var(--success-gradient);
-                color: white;
-            }
-
-            .stat-card-body {
-                padding: 2rem;
-                position: relative;
-            }
-
-            .stat-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                margin-bottom: 1rem;
-            }
-
-            .stat-info h6 {
-                font-size: 0.9rem;
-                font-weight: 600;
-                opacity: 0.8;
-                margin-bottom: 0.5rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .stat-info .stat-number {
-                font-size: 2.5rem;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-                line-height: 1;
-            }
-
-            .stat-trend {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                font-size: 0.9rem;
-                font-weight: 500;
-                opacity: 0.9;
-            }
-
-            .stat-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background: rgba(255,255,255,0.2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-                backdrop-filter: blur(10px);
-            }
-
-            .stat-card::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -20%;
-                width: 100px;
-                height: 100px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-                animation: pulse 4s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-                0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
-                50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
-            }
-
-            /* Charts Section */
-            .charts-section {
-                display: grid;
-                grid-template-columns: 2fr 1fr;
-                gap: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .chart-card {
-                background: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-soft);
-                overflow: hidden;
-                transition: var(--transition);
-                position: relative;
-            }
-
-            .chart-card:hover {
-                transform: translateY(-3px);
-                box-shadow: var(--shadow-hover);
-            }
-
-            .chart-card.updating::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background: var(--success-gradient);
-                animation: loading-bar 1s ease-in-out;
-            }
-
-            @keyframes loading-bar {
-                0% { transform: scaleX(0); transform-origin: left; }
-                100% { transform: scaleX(1); transform-origin: left; }
-            }
-
-            .chart-header {
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-                padding: 1.5rem 2rem;
-                border-bottom: 1px solid #e2e8f0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .chart-title {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: #1f2937;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .chart-badge {
-                background: var(--success-gradient);
-                color: white;
-                padding: 0.4rem 0.8rem;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .chart-body {
-                padding: 2rem;
-                position: relative;
-            }
-
-            /* Live Status Indicator */
-            .live-status {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: var(--success-gradient);
-                color: white;
-                padding: 0.75rem 1.5rem;
-                border-radius: 25px;
-                font-size: 0.85rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                box-shadow: var(--shadow-soft);
-                z-index: 1000;
-                transition: var(--transition);
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-
-            .live-status.active {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            .live-status.updating {
-                background: var(--warning-gradient);
-                color: #8b4513;
-                animation: pulse-live 1s ease-in-out;
-            }
-
-            @keyframes pulse-live {
-                0%, 100% { box-shadow: var(--shadow-soft); }
-                50% { box-shadow: 0 15px 35px rgba(246, 161, 146, 0.4); }
-            }
-
-            .status-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: currentColor;
-                animation: blink 2s infinite;
-            }
-
-            @keyframes blink {
-                0%, 50% { opacity: 1; }
-                51%, 100% { opacity: 0.3; }
-            }
-
-            /* Error Analysis Section */
-            .analysis-section {
-                background: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-soft);
-                margin-bottom: 2rem;
-                overflow: hidden;
-                position: relative;
-            }
-
-            .analysis-section.updating::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background: var(--primary-gradient);
-                animation: loading-bar 1s ease-in-out;
-            }
-
-            .analysis-header {
-                background: var(--primary-gradient);
-                color: white;
-                padding: 1.5rem 2rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .analysis-title {
-                font-size: 1.3rem;
-                font-weight: 600;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-            }
-
-            .live-badge {
-                background: rgba(16, 185, 129, 0.9);
-                color: white;
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                animation: pulse-live-badge 2s ease-in-out infinite;
-            }
-
-            @keyframes pulse-live-badge {
-                0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-                50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            }
-
-            .analysis-body {
-                padding: 2rem;
+                grid-template-columns: 1fr;
             }
 
             .analysis-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
-
-            .analysis-card {
-                background: #f8fafc;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-                transition: var(--transition);
-            }
-
-            .analysis-card.updating {
-                transform: scale(1.02);
-                animation: pulse-analysis 0.8s ease-in-out;
-            }
-
-            @keyframes pulse-analysis {
-                0%, 100% { transform: scale(1.02); }
-                50% { transform: scale(1.04); }
-            }
-
-            .analysis-card-header {
-                padding: 1rem 1.5rem;
-                font-weight: 600;
-                font-size: 1rem;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-            }
-
-            .analysis-card-header.error-header {
-                background: var(--danger-gradient);
-                color: white;
-            }
-
-            .analysis-card-header.warning-header {
-                background: var(--warning-gradient);
-                color: #8b4513;
-            }
-
-            .analysis-table {
-                margin: 0;
-            }
-
-            .analysis-table tbody tr {
-                border-bottom: 1px solid rgba(0,0,0,0.05);
-                transition: var(--transition);
-            }
-
-            .analysis-table tbody tr:hover {
-                background: rgba(102, 126, 234, 0.05);
-            }
-
-            .analysis-table td {
-                padding: 1rem 1.5rem;
-                vertical-align: middle;
-            }
-
-            .error-type {
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
-                font-size: 0.9rem;
-                color: #374151;
-                font-weight: 500;
-            }
-
-            .error-count-badge {
-                background: var(--danger-gradient);
-                color: white;
-                padding: 0.3rem 0.8rem;
-                border-radius: 15px;
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-
-            .time-range {
-                color: #374151;
-                font-weight: 500;
-            }
-
-            .peak-count-badge {
-                background: var(--warning-gradient);
-                color: #8b4513;
-                padding: 0.3rem 0.8rem;
-                border-radius: 15px;
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-
-            /* Recent Logs Section */
-            .recent-logs-section {
-                background: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-soft);
-                overflow: hidden;
-                position: relative;
-            }
-
-            .recent-logs-section.updating::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background: var(--info-gradient);
-                animation: loading-bar 1s ease-in-out;
+                grid-template-columns: 1fr;
             }
 
             .logs-section-header {
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-                padding: 1.5rem 2rem;
-                border-bottom: 1px solid #e2e8f0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .logs-section-title {
-                font-size: 1.3rem;
-                font-weight: 600;
-                color: #1f2937;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
             }
 
             .logs-actions {
-                display: flex;
-                gap: 0.75rem;
-            }
-
-            .action-btn {
-                background: white;
-                border: 2px solid #e5e7eb;
-                color: #374151;
-                padding: 0.6rem 1.2rem;
-                border-radius: 25px;
-                font-weight: 600;
-                text-decoration: none;
-                font-size: 0.9rem;
-                transition: var(--transition);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .action-btn.primary {
-                background: var(--primary-gradient);
-                border-color: transparent;
-                color: white;
-            }
-
-            .action-btn.success {
-                background: var(--success-gradient);
-                border-color: transparent;
-                color: white;
-            }
-
-            .action-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            }
-
-            .logs-table-container {
-                padding: 0;
-            }
-
-            .logs-table {
-                width: 100%;
-                margin: 0;
-            }
-
-            .logs-table thead th {
-                background: #f8fafc;
-                border-bottom: 2px solid #e2e8f0;
-                padding: 1.2rem 1.5rem;
-                font-weight: 600;
-                color: #374151;
-                font-size: 0.9rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .logs-table tbody tr {
-                border-bottom: 1px solid rgba(0,0,0,0.05);
-                transition: var(--transition);
-            }
-
-            .logs-table tbody tr:hover {
-                background: linear-gradient(135deg, #f0f4ff 0%, #e0f2fe 100%);
-            }
-
-            .logs-table tbody tr.new-entry {
-                animation: highlight-new 2s ease-in-out;
-            }
-
-            @keyframes highlight-new {
-                0% { background: rgba(34, 197, 94, 0.2); }
-                100% { background: transparent; }
-            }
-
-            .logs-table tbody td {
-                padding: 1.2rem 1.5rem;
-                vertical-align: middle;
-            }
-
-            .log-timestamp {
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
-                font-size: 0.9rem;
-                color: #6b7280;
-                font-weight: 500;
-            }
-
-            .log-message {
-                color: #374151;
-                font-size: 0.95rem;
-                line-height: 1.5;
-                word-break: break-word;
-            }
-
-            .log-level-badge {
-                padding: 0.4rem 1rem;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                color: white;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
                 justify-content: center;
-                min-width: 100px;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
 
-            /* Empty State */
-            .empty-state {
-                text-align: center;
-                padding: 3rem 2rem;
-                color: #6b7280;
+            .chart-body,
+            .analysis-body {
+                padding: 1rem;
             }
+        }
 
-            .empty-state i {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                opacity: 0.3;
-            }
+        /* Smooth transitions */
+        .page-content {
+            animation: fadeIn 0.3s ease-out;
+        }
 
-            .empty-state h4 {
-                color: #374151;
-                margin-bottom: 0.5rem;
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            /* Loading Spinner */
-            .loading-spinner {
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                border: 2px solid rgba(255,255,255,0.3);
-                border-radius: 50%;
-                border-top-color: currentColor;
-                animation: spin 1s ease-in-out infinite;
-            }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
 
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
 
-            /* Last Updated Indicator */
-            .last-updated {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: rgba(0,0,0,0.7);
-                color: white;
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                backdrop-filter: blur(10px);
-                opacity: 0;
-                transition: var(--transition);
-                z-index: 1000;
-            }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 3px;
+        }
 
-            .last-updated.show {
-                opacity: 1;
-            }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
+</head>
+<body>
+<!-- Clean Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
+            <div class="brand-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <span>Log Tracker</span>
+        </a>
 
-            /* Responsive Design */
-            @media (max-width: 1200px) {
-                .charts-section {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                .header-stats {
-                    gap: 1rem;
-                }
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('log-tracker.dashboard') ? 'active' : '' }}"
+                       href="{{ route('log-tracker.dashboard') }}">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('log-tracker.index') ? 'active' : '' }}"
+                       href="{{ route('log-tracker.index') }}">
+                        <i class="fas fa-list"></i>
+                        Log Files
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-                .header-stat {
-                    padding: 0.8rem 1rem;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .dashboard-header {
-                    padding: 1.5rem;
-                    text-align: center;
-                }
-
-                .header-content {
-                    flex-direction: column;
-                    gap: 1.5rem;
-                }
-
-                .header-stats {
-                    justify-content: center;
-                    flex-wrap: wrap;
-                }
-
-                .stats-overview {
-                    grid-template-columns: 1fr;
-                    gap: 1rem;
-                }
-
-                .analysis-grid {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
-
-                .logs-section-header {
-                    flex-direction: column;
-                    gap: 1rem;
-                    text-align: center;
-                }
-
-                .logs-actions {
-                    justify-content: center;
-                }
-
-                .chart-body {
-                    padding: 1rem;
-                }
-
-                .analysis-body {
-                    padding: 1rem;
-                }
-
-                .live-status {
-                    position: relative;
-                    top: auto;
-                    right: auto;
-                    margin-bottom: 1rem;
-                    display: inline-flex;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .dashboard-header {
-                    padding: 1rem;
-                }
-
-                .header-left h1 {
-                    font-size: 1.8rem;
-                }
-
-                .stat-card-body {
-                    padding: 1.5rem;
-                }
-
-                .stat-info .stat-number {
-                    font-size: 2rem;
-                }
-
-                .logs-table thead th,
-                .logs-table tbody td {
-                    padding: 0.8rem;
-                }
-
-                .action-btn {
-                    padding: 0.5rem 1rem;
-                    font-size: 0.8rem;
-                }
-            }
-
-            /* Chart Container Styling */
-            .chart-container {
-                position: relative;
-                height: 300px;
-                width: 100%;
-            }
-        </style>
-    @endpush
-
-    <!-- Live Status Indicator -->
+<!-- Main Content -->
+<div class="container my-4 page-content">
+    <!-- Status Indicator -->
     <div class="live-status" id="liveStatus">
         <div class="status-dot"></div>
         <span id="statusText">Connected</span>
         <div class="loading-spinner" id="statusSpinner" style="display: none;"></div>
     </div>
 
-    <!-- Last Updated Indicator -->
-    <div class="last-updated" id="lastUpdated">
-        Last updated: <span id="updateTime">just now</span>
-    </div>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>
+            <i class="fas fa-chart-line" style="color: var(--primary-color);"></i>
+            Analytics Dashboard
+        </h1>
+        <p>Monitor, analyze, and track your application logs in real-time</p>
 
-    <!-- Modern Dashboard Header -->
-    <div class="dashboard-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h1>
-                    <i class="fas fa-chart-line"></i>
-                    Analytics Dashboard
-                </h1>
-                <p>Monitor, analyze, and track your application logs in real-time</p>
+        <div class="header-stats">
+            <div class="header-stat" id="headerTotalLogs">
+                <div class="header-stat-number">{{ number_format($summary['total']) }}</div>
+                <div class="header-stat-label">Total Logs</div>
             </div>
-            <div class="header-stats">
-                <div class="header-stat" id="headerTotalLogs">
-                    <div class="header-stat-number">{{ number_format($summary['total']) }}</div>
-                    <div class="header-stat-label">Total Logs</div>
-                </div>
-                <div class="header-stat" id="headerTodayLogs">
-                    <div class="header-stat-number">{{ number_format($todaysTotalLogs) }}</div>
-                    <div class="header-stat-label">New Today</div>
-                </div>
-                <div class="header-stat" id="headerErrorLogs">
-                    <div class="header-stat-number">{{ number_format(isset($logTypesCount['error']) ? $logTypesCount['error'] : 0) }}</div>
-                    <div class="header-stat-label">Total Errors</div>
-                </div>
+            <div class="header-stat" id="headerTodayLogs">
+                <div class="header-stat-number">{{ number_format($todaysTotalLogs) }}</div>
+                <div class="header-stat-label">New Today</div>
+            </div>
+            <div class="header-stat" id="headerErrorLogs">
+                <div class="header-stat-number">{{ number_format(isset($logTypesCount['error']) ? $logTypesCount['error'] : 0) }}</div>
+                <div class="header-stat-label">Total Errors</div>
             </div>
         </div>
     </div>
 
-    <!-- Enhanced Stats Cards -->
+    <!-- Stats Cards -->
     <div class="stats-overview">
         <div class="stat-card error-card" id="errorCard">
             <div class="stat-card-body">
@@ -848,13 +1041,19 @@
                     <div class="stat-info">
                         <h6>Error Logs</h6>
                         <div class="stat-number" id="errorCount">{{ number_format(isset($logTypesCount['error']) ? $logTypesCount['error'] : 0) }}</div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="errorToday">{{ number_format(isset($newLogsToday['error']) ? $newLogsToday['error'] : 0) }} new today</span>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" style="width: {{ $summary['total'] > 0 ? (($logTypesCount['error'] ?? 0) / $summary['total'] * 100) : 0 }}%"></div>
                         </div>
                     </div>
                     <div class="stat-icon">
                         <i class="{{ $logStyles['error']['icon'] }}"></i>
+                    </div>
+                </div>
+                <div class="stat-trend">
+                    <span>Today's Activity</span>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="errorToday">{{ number_format(isset($newLogsToday['error']) ? $newLogsToday['error'] : 0) }}</span>
                     </div>
                 </div>
             </div>
@@ -866,13 +1065,19 @@
                     <div class="stat-info">
                         <h6>Warning Logs</h6>
                         <div class="stat-number" id="warningCount">{{ number_format(isset($logTypesCount['warning']) ? $logTypesCount['warning'] : 0) }}</div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="warningToday">{{ number_format(isset($newLogsToday['warning']) ? $newLogsToday['warning'] : 0) }} new today</span>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" style="width: {{ $summary['total'] > 0 ? (($logTypesCount['warning'] ?? 0) / $summary['total'] * 100) : 0 }}%"></div>
                         </div>
                     </div>
                     <div class="stat-icon">
                         <i class="{{ $logStyles['warning']['icon'] }}"></i>
+                    </div>
+                </div>
+                <div class="stat-trend">
+                    <span>Today's Activity</span>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="warningToday">{{ number_format(isset($newLogsToday['warning']) ? $newLogsToday['warning'] : 0) }}</span>
                     </div>
                 </div>
             </div>
@@ -884,13 +1089,19 @@
                     <div class="stat-info">
                         <h6>Info Logs</h6>
                         <div class="stat-number" id="infoCount">{{ number_format(isset($logTypesCount['info']) ? $logTypesCount['info'] : 0) }}</div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="infoToday">{{ number_format(isset($newLogsToday['info']) ? $newLogsToday['info'] : 0) }} new today</span>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" style="width: {{ $summary['total'] > 0 ? (($logTypesCount['info'] ?? 0) / $summary['total'] * 100) : 0 }}%"></div>
                         </div>
                     </div>
                     <div class="stat-icon">
                         <i class="{{ $logStyles['info']['icon'] }}"></i>
+                    </div>
+                </div>
+                <div class="stat-trend">
+                    <span>Today's Activity</span>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="infoToday">{{ number_format(isset($newLogsToday['info']) ? $newLogsToday['info'] : 0) }}</span>
                     </div>
                 </div>
             </div>
@@ -902,20 +1113,26 @@
                     <div class="stat-info">
                         <h6>Total Logs</h6>
                         <div class="stat-number" id="totalCount">{{ number_format($summary['total']) }}</div>
-                        <div class="stat-trend">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="totalToday">{{ number_format($todaysTotalLogs) }} new today</span>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" style="width: 100%"></div>
                         </div>
                     </div>
                     <div class="stat-icon">
                         <i class="{{ $logStyles['total']['icon'] }}"></i>
                     </div>
                 </div>
+                <div class="stat-trend">
+                    <span>Today's Activity</span>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="totalToday">{{ number_format($todaysTotalLogs) }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Enhanced Charts Section -->
+    <!-- Charts Section -->
     <div class="charts-section">
         <div class="chart-card" id="activityChartCard">
             <div class="chart-header">
@@ -948,7 +1165,7 @@
         </div>
     </div>
 
-    <!-- Enhanced Error Analysis Section -->
+    <!-- Analysis Section -->
     <div class="analysis-section" id="analysisSection">
         <div class="analysis-header">
             <h5 class="analysis-title">
@@ -974,8 +1191,8 @@
                             @forelse($topErrors as $error => $count)
                                 <tr>
                                     <td>
-                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                            <i class="fas fa-bug" style="color: #ef4444;"></i>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-bug" style="color: var(--danger-color);"></i>
                                             <span class="error-type">{{ $error }}</span>
                                         </div>
                                     </td>
@@ -1009,12 +1226,12 @@
                             @forelse($topPeakHours as $hour => $count)
                                 <tr>
                                     <td>
-                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                            <i class="fas fa-clock" style="color: #f59e0b;"></i>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-clock" style="color: var(--warning-color);"></i>
                                             <span class="time-range">
-                                                    {{ \Carbon\Carbon::createFromTime($hour)->format('h:i A') }} -
-                                                    {{ \Carbon\Carbon::createFromTime($hour + 1)->format('h:i A') }}
-                                                </span>
+                                                {{ \Carbon\Carbon::createFromTime($hour)->format('h:i A') }} -
+                                                {{ \Carbon\Carbon::createFromTime($hour + 1)->format('h:i A') }}
+                                            </span>
                                         </div>
                                     </td>
                                     <td style="text-align: right;">
@@ -1038,7 +1255,7 @@
         </div>
     </div>
 
-    <!-- Enhanced Recent Logs Section -->
+    <!-- Recent Logs Section -->
     <div class="recent-logs-section" id="recentLogsSection">
         <div class="logs-section-header">
             <h5 class="logs-section-title">
@@ -1046,7 +1263,7 @@
                 Recent Activity
             </h5>
             <div class="logs-actions">
-                <a href="{{route('log-tracker.export.form')}}" class="action-btn primary">
+                <a href="#" class="action-btn primary">
                     <i class="fas fa-download"></i>
                     Export All
                 </a>
@@ -1062,7 +1279,7 @@
                 <tr>
                     <th style="width: 200px;">Timestamp</th>
                     <th>Message</th>
-                    <th style="width: 140px;">Level</th>
+                    <th style="width: 120px;">Level</th>
                 </tr>
                 </thead>
                 <tbody id="recentLogsTable">
@@ -1096,629 +1313,223 @@
             </table>
         </div>
     </div>
+</div>
 
-    @push('scripts')
-        <!-- Chart.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="mb-0">
+                © <span id="year"></span>
+                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
+                    Log Tracker
+                </a>
+                - Efficient logging, effortless insights.
+            </p>
+        </div>
+    </div>
+</footer>
 
-        <script>
-            // Global variables for real-time updates
-            let activityChart, typesChart;
-            let updateInterval;
-            let isUpdating = false;
-            let lastUpdateTime = new Date();
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
-            // Enhanced Chart Configuration
-            Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
-            Chart.defaults.font.size = 12;
-            Chart.defaults.color = '#374151';
+<script>
+    // Set current year
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-            // Initialize Dashboard
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeCharts();
-                startLiveUpdates();
-                showLiveStatus();
-            });
+    // Global variables for real-time updates
+    let activityChart, typesChart;
+    let updateInterval;
+    let isUpdating = false;
 
-            // Initialize Charts
-            function initializeCharts() {
-                // Log Types Data
-                let logLabels = ['Error', 'Warning', 'Info', 'Debug'];
-                let logData = {!! json_encode(array_values($logTypesCount)) !!};
+    // Chart Configuration
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = '#6b7280';
 
-                // Enhanced Doughnut Chart
-                const typesCtx = document.getElementById('logTypesChart').getContext('2d');
-                typesChart = new Chart(typesCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: logLabels,
-                        datasets: [{
-                            data: logData,
-                            backgroundColor: [
-                                '#ff6b9d',
-                                '#f6a192',
-                                '#74b9ff',
-                                '#00cec9'
-                            ],
-                            borderWidth: 0,
-                            hoverOffset: 15
-                        }]
+    // Initialize Dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeCharts();
+        startLiveUpdates();
+    });
+
+    // Initialize Charts
+    function initializeCharts() {
+        // Log Types Data
+        let logLabels = ['Error', 'Warning', 'Info', 'Debug'];
+        let logData = {!! json_encode(array_values($logTypesCount)) !!};
+
+        // Doughnut Chart
+        const typesCtx = document.getElementById('logTypesChart').getContext('2d');
+        typesChart = new Chart(typesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: logLabels,
+                datasets: [{
+                    data: logData,
+                    backgroundColor: [
+                        '#dc2626',
+                        '#d97706',
+                        '#0284c7',
+                        '#059669'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true,
+                            font: { size: 12, weight: '500' }
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '60%',
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 20,
-                                    usePointStyle: true,
-                                    font: {
-                                        size: 12,
-                                        weight: '600'
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                titleFont: { size: 14, weight: '600' },
-                                bodyFont: { size: 13 },
-                                cornerRadius: 8,
-                                displayColors: false
-                            }
-                        },
-                        animation: {
-                            animateRotate: true,
-                            duration: 1000
-                        }
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: { size: 14, weight: '600' },
+                        bodyFont: { size: 13 },
+                        cornerRadius: 6
                     }
-                });
+                }
+            }
+        });
 
-                // Activity Chart Data
-                let logDates = {!! json_encode(array_keys($dates)) !!};
-                let errorData = {!! json_encode(array_column($dates, 'error')) !!};
-                let warningData = {!! json_encode(array_column($dates, 'warning')) !!};
-                let infoData = {!! json_encode(array_column($dates, 'info')) !!};
+        // Activity Chart Data
+        let logDates = {!! json_encode(array_keys($dates)) !!};
+        let errorData = {!! json_encode(array_column($dates, 'error')) !!};
+        let warningData = {!! json_encode(array_column($dates, 'warning')) !!};
+        let infoData = {!! json_encode(array_column($dates, 'info')) !!};
 
-                // Enhanced Line Chart
-                const activityCtx = document.getElementById('logActivityChart').getContext('2d');
-                activityChart = new Chart(activityCtx, {
-                    type: 'line',
-                    data: {
-                        labels: logDates.map(date => {
-                            const d = new Date(date);
-                            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                        }),
-                        datasets: [
-                            {
-                                label: 'Errors',
-                                data: errorData,
-                                borderColor: '#ff6b9d',
-                                backgroundColor: 'rgba(255, 107, 157, 0.1)',
-                                borderWidth: 3,
-                                tension: 0.4,
-                                fill: true,
-                                pointBackgroundColor: '#ff6b9d',
-                                pointBorderColor: '#ffffff',
-                                pointBorderWidth: 2,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            },
-                            {
-                                label: 'Warnings',
-                                data: warningData,
-                                borderColor: '#f6a192',
-                                backgroundColor: 'rgba(246, 161, 146, 0.1)',
-                                borderWidth: 3,
-                                tension: 0.4,
-                                fill: true,
-                                pointBackgroundColor: '#f6a192',
-                                pointBorderColor: '#ffffff',
-                                pointBorderWidth: 2,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            },
-                            {
-                                label: 'Info',
-                                data: infoData,
-                                borderColor: '#74b9ff',
-                                backgroundColor: 'rgba(116, 185, 255, 0.1)',
-                                borderWidth: 3,
-                                tension: 0.4,
-                                fill: true,
-                                pointBackgroundColor: '#74b9ff',
-                                pointBorderColor: '#ffffff',
-                                pointBorderWidth: 2,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            }
-                        ]
+        // Line Chart
+        const activityCtx = document.getElementById('logActivityChart').getContext('2d');
+        activityChart = new Chart(activityCtx, {
+            type: 'line',
+            data: {
+                labels: logDates.map(date => {
+                    const d = new Date(date);
+                    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }),
+                datasets: [
+                    {
+                        label: 'Errors',
+                        data: errorData,
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#dc2626',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    padding: 20,
-                                    font: {
-                                        size: 12,
-                                        weight: '600'
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                titleFont: { size: 14, weight: '600' },
-                                bodyFont: { size: 13 },
-                                cornerRadius: 8,
-                                displayColors: true,
-                                usePointStyle: true
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 11,
-                                        weight: '500'
-                                    }
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.05)',
-                                    borderDash: [2, 2]
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 11,
-                                        weight: '500'
-                                    }
-                                }
-                            }
-                        },
-                        elements: {
-                            point: {
-                                hoverBackgroundColor: '#ffffff'
-                            }
-                        },
-                        animation: {
-                            duration: 1500,
-                            easing: 'easeInOutQuart'
+                    {
+                        label: 'Warnings',
+                        data: warningData,
+                        borderColor: '#d97706',
+                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#d97706',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Info',
+                        data: infoData,
+                        borderColor: '#0284c7',
+                        backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#0284c7',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: { size: 12, weight: '500' }
                         }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: { size: 14, weight: '600' },
+                        bodyFont: { size: 13 },
+                        cornerRadius: 6
                     }
-                });
-            }
-
-            // Show Live Status
-            function showLiveStatus() {
-                const liveStatus = document.getElementById('liveStatus');
-                setTimeout(() => {
-                    liveStatus.classList.add('active');
-                }, 500);
-            }
-
-            // Start Live Updates
-            function startLiveUpdates() {
-                // Initial update after 2 seconds
-                setTimeout(() => {
-                    fetchDashboardData();
-                }, 2000);
-
-                // Set up interval for every 30 seconds
-                updateInterval = setInterval(() => {
-                    fetchDashboardData();
-                }, 30000);
-
-                console.log('🚀 Live updates started! Refreshing every 30 seconds...');
-            }
-
-            // Fetch Dashboard Data
-            async function fetchDashboardData() {
-                if (isUpdating) return;
-
-                isUpdating = true;
-                showUpdatingState();
-
-                try {
-                    const response = await fetch('/log-tracker/api/dashboard-refresh', {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f3f4f6' },
+                        ticks: { font: { size: 11 } }
                     }
-
-                    const data = await response.json();
-
-                    // Update all dashboard sections
-                    updateHeaderStats(data.summary, data.todaysTotalLogs, data.logTypesCount);
-                    updateStatsCards(data.logTypesCount, data.newLogsToday, data.summary, data.todaysTotalLogs);
-                    updateCharts(data.dates, data.logTypesCount);
-                    updateAnalysisSection(data.topErrors, data.topPeakHours);
-                    updateRecentLogs(data.lastFiveLogs);
-
-                    lastUpdateTime = new Date();
-                    showSuccessState();
-                    showLastUpdated();
-
-                    console.log('✅ Dashboard updated successfully!', data);
-
-                } catch (error) {
-                    console.error('❌ Failed to fetch dashboard data:', error);
-                    showErrorState();
-                } finally {
-                    isUpdating = false;
-                    hideUpdatingState();
                 }
             }
+        });
+    }
 
-            // Update Header Stats
-            function updateHeaderStats(summary, todaysTotalLogs, logTypesCount) {
-                const headerTotal = document.getElementById('headerTotalLogs');
-                const headerToday = document.getElementById('headerTodayLogs');
-                const headerErrors = document.getElementById('headerErrorLogs');
+    // Start Live Updates
+    function startLiveUpdates() {
+        // Mock live updates for demo
+        setInterval(() => {
+            updateStatus();
+        }, 5000);
+    }
 
-                headerTotal.classList.add('updating');
-                headerToday.classList.add('updating');
-                headerErrors.classList.add('updating');
+    function updateStatus() {
+        const statusText = document.getElementById('statusText');
+        const spinner = document.getElementById('statusSpinner');
 
-                setTimeout(() => {
-                    headerTotal.querySelector('.header-stat-number').textContent = numberFormat(summary.total);
-                    headerToday.querySelector('.header-stat-number').textContent = numberFormat(todaysTotalLogs);
-                    headerErrors.querySelector('.header-stat-number').textContent = numberFormat(logTypesCount.error || 0);
+        statusText.textContent = 'Updating...';
+        spinner.style.display = 'inline-block';
 
-                    setTimeout(() => {
-                        headerTotal.classList.remove('updating');
-                        headerToday.classList.remove('updating');
-                        headerErrors.classList.remove('updating');
-                    }, 800);
-                }, 200);
-            }
+        setTimeout(() => {
+            statusText.textContent = 'Connected';
+            spinner.style.display = 'none';
+        }, 1000);
+    }
 
-            // Update Stats Cards
-            function updateStatsCards(logTypesCount, newLogsToday, summary, todaysTotalLogs) {
-                const cards = ['error', 'warning', 'info'];
-
-                cards.forEach(level => {
-                    const card = document.getElementById(`${level}Card`);
-                    const countElement = document.getElementById(`${level}Count`);
-                    const todayElement = document.getElementById(`${level}Today`);
-
-                    card.classList.add('updating');
-
-                    setTimeout(() => {
-                        countElement.textContent = numberFormat(logTypesCount[level] || 0);
-                        todayElement.textContent = `${numberFormat(newLogsToday[level] || 0)} new today`;
-
-                        setTimeout(() => {
-                            card.classList.remove('updating');
-                        }, 800);
-                    }, 200);
-                });
-
-                // Update total card
-                const totalCard = document.getElementById('totalCard');
-                const totalCount = document.getElementById('totalCount');
-                const totalToday = document.getElementById('totalToday');
-
-                totalCard.classList.add('updating');
-
-                setTimeout(() => {
-                    totalCount.textContent = numberFormat(summary.total);
-                    totalToday.textContent = `${numberFormat(todaysTotalLogs)} new today`;
-
-                    setTimeout(() => {
-                        totalCard.classList.remove('updating');
-                    }, 800);
-                }, 200);
-            }
-
-            // Update Charts
-            function updateCharts(dates, logTypesCount) {
-                const activityCard = document.getElementById('activityChartCard');
-                const typesCard = document.getElementById('typesChartCard');
-
-                activityCard.classList.add('updating');
-                typesCard.classList.add('updating');
-
-                // Update Activity Chart
-                if (activityChart && dates) {
-                    const errorData = Object.values(dates).map(date => date.error || 0);
-                    const warningData = Object.values(dates).map(date => date.warning || 0);
-                    const infoData = Object.values(dates).map(date => date.info || 0);
-
-                    activityChart.data.datasets[0].data = errorData;
-                    activityChart.data.datasets[1].data = warningData;
-                    activityChart.data.datasets[2].data = infoData;
-                    activityChart.update('active');
-                }
-
-                // Update Types Chart
-                if (typesChart && logTypesCount) {
-                    const newData = [
-                        logTypesCount.error || 0,
-                        logTypesCount.warning || 0,
-                        logTypesCount.info || 0,
-                        logTypesCount.debug || 0
-                    ];
-
-                    typesChart.data.datasets[0].data = newData;
-                    typesChart.update('active');
-                }
-
-                setTimeout(() => {
-                    activityCard.classList.remove('updating');
-                    typesCard.classList.remove('updating');
-                }, 1000);
-            }
-
-            // Update Analysis Section
-            function updateAnalysisSection(topErrors, topPeakHours) {
-                const analysisSection = document.getElementById('analysisSection');
-                const topErrorsCard = document.getElementById('topErrorsCard');
-                const peakHoursCard = document.getElementById('peakHoursCard');
-
-                analysisSection.classList.add('updating');
-                topErrorsCard.classList.add('updating');
-                peakHoursCard.classList.add('updating');
-
-                setTimeout(() => {
-                    // Update Top Errors Table
-                    updateTopErrorsTable(topErrors);
-
-                    // Update Peak Hours Table
-                    updatePeakHoursTable(topPeakHours);
-
-                    setTimeout(() => {
-                        analysisSection.classList.remove('updating');
-                        topErrorsCard.classList.remove('updating');
-                        peakHoursCard.classList.remove('updating');
-                    }, 800);
-                }, 200);
-            }
-
-            // Update Top Errors Table
-            function updateTopErrorsTable(topErrors) {
-                const tbody = document.getElementById('topErrorsTable');
-
-                if (!topErrors || Object.keys(topErrors).length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="2" class="empty-state">
-                                <i class="fas fa-smile"></i>
-                                <h4>No Errors Found</h4>
-                                <p>Your application is running smoothly!</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                let html = '';
-                Object.entries(topErrors).slice(0, 5).forEach(([error, count]) => {
-                    html += `
-                        <tr>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <i class="fas fa-bug" style="color: #ef4444;"></i>
-                                    <span class="error-type">${error}</span>
-                                </div>
-                            </td>
-                            <td style="text-align: right;">
-                                <span class="error-count-badge">${count}</span>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                tbody.innerHTML = html;
-            }
-
-            // Update Peak Hours Table
-            function updatePeakHoursTable(topPeakHours) {
-                const tbody = document.getElementById('peakHoursTable');
-
-                if (!topPeakHours || Object.keys(topPeakHours).length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="2" class="empty-state">
-                                <i class="fas fa-chart-line"></i>
-                                <h4>No Peak Hours</h4>
-                                <p>Error distribution is consistent.</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                let html = '';
-                Object.entries(topPeakHours).slice(0, 5).forEach(([hour, count]) => {
-                    const startHour = String(hour).padStart(2, '0') + ':00';
-                    const endHour = String((parseInt(hour) + 1) % 24).padStart(2, '0') + ':00';
-
-                    html += `
-                        <tr>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <i class="fas fa-clock" style="color: #f59e0b;"></i>
-                                    <span class="time-range">${startHour} - ${endHour}</span>
-                                </div>
-                            </td>
-                            <td style="text-align: right;">
-                                <span class="peak-count-badge">${count} errors</span>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                tbody.innerHTML = html;
-            }
-
-            // Update Recent Logs
-            function updateRecentLogs(recentLogs) {
-                const section = document.getElementById('recentLogsSection');
-                const tbody = document.getElementById('recentLogsTable');
-
-                section.classList.add('updating');
-
-                setTimeout(() => {
-                    if (!recentLogs || recentLogs.length === 0) {
-                        tbody.innerHTML = `
-                            <tr>
-                                <td colspan="3" class="empty-state">
-                                    <i class="fas fa-inbox"></i>
-                                    <h4>No Recent Logs</h4>
-                                    <p>No log entries found in the system.</p>
-                                </td>
-                            </tr>
-                        `;
-                    } else {
-                        let html = '';
-                        recentLogs.slice(0, 5).forEach((log, index) => {
-                            const levelConfig = getLogLevelConfig(log.level);
-                            html += `
-                                <tr class="new-entry">
-                                    <td>
-                                        <div class="log-timestamp">${formatTimestamp(log.timestamp)}</div>
-                                    </td>
-                                    <td>
-                                        <div class="log-message">${log.message}</div>
-                                    </td>
-                                    <td>
-                                        <div class="log-level-badge" style="background-color: ${levelConfig.color};">
-                                            <i class="${levelConfig.icon}"></i>
-                                            ${log.level.charAt(0).toUpperCase() + log.level.slice(1)}
-                                        </div>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                        tbody.innerHTML = html;
-                    }
-
-                    setTimeout(() => {
-                        section.classList.remove('updating');
-                    }, 800);
-                }, 200);
-            }
-
-            // Helper Functions
-            function numberFormat(num) {
-                return new Intl.NumberFormat().format(num || 0);
-            }
-
-            function formatTimestamp(timestamp) {
-                const date = new Date(timestamp);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    second: '2-digit'
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
                 });
             }
-
-            function getLogLevelConfig(level) {
-                const configs = {
-                    error: { color: '#ef4444', icon: 'fas fa-exclamation-circle' },
-                    warning: { color: '#f59e0b', icon: 'fas fa-exclamation-triangle' },
-                    info: { color: '#3b82f6', icon: 'fas fa-info-circle' },
-                    debug: { color: '#6b7280', icon: 'fas fa-bug' }
-                };
-                return configs[level.toLowerCase()] || { color: '#6c757d', icon: 'fas fa-circle' };
-            }
-
-            // Status Management
-            function showUpdatingState() {
-                const status = document.getElementById('liveStatus');
-                const statusText = document.getElementById('statusText');
-                const spinner = document.getElementById('statusSpinner');
-
-                status.classList.add('updating');
-                statusText.textContent = 'Updating...';
-                spinner.style.display = 'inline-block';
-            }
-
-            function hideUpdatingState() {
-                const status = document.getElementById('liveStatus');
-                const statusText = document.getElementById('statusText');
-                const spinner = document.getElementById('statusSpinner');
-
-                setTimeout(() => {
-                    status.classList.remove('updating');
-                    statusText.textContent = 'Connected';
-                    spinner.style.display = 'none';
-                }, 1000);
-            }
-
-            function showSuccessState() {
-                const status = document.getElementById('liveStatus');
-                status.classList.remove('updating');
-            }
-
-            function showErrorState() {
-                const status = document.getElementById('liveStatus');
-                const statusText = document.getElementById('statusText');
-
-                status.classList.remove('updating');
-                status.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
-                statusText.textContent = 'Connection Error';
-
-                setTimeout(() => {
-                    status.style.background = 'var(--success-gradient)';
-                    statusText.textContent = 'Connected';
-                }, 3000);
-            }
-
-            function showLastUpdated() {
-                const lastUpdated = document.getElementById('lastUpdated');
-                const updateTime = document.getElementById('updateTime');
-
-                updateTime.textContent = lastUpdateTime.toLocaleTimeString();
-                lastUpdated.classList.add('show');
-
-                setTimeout(() => {
-                    lastUpdated.classList.remove('show');
-                }, 3000);
-            }
-
-            // Cleanup on page unload
-            window.addEventListener('beforeunload', function() {
-                if (updateInterval) {
-                    clearInterval(updateInterval);
-                }
-            });
-
-            // Handle visibility change (pause updates when tab is not active)
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    if (updateInterval) {
-                        clearInterval(updateInterval);
-                    }
-                } else {
-                    startLiveUpdates();
-                }
-            });
-
-        </script>
-    @endpush
-
-@endsection
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,803 +1,957 @@
-@extends('log-tracker::layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Log Details - Log Tracker')</title>
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.2s ease-in-out;
+        }
 
-@section('content')
-    @push('styles')
-        <style>
+        body {
+            background-color: var(--gray-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
 
-            /* Modern Breadcrumb */
-            .breadcrumb-container {
-                background: rgba(255,255,255,0.9);
-                backdrop-filter: blur(10px);
-                border-radius: 50px;
-                padding: 0.75rem 1.5rem;
-                margin-bottom: 2rem;
-                border: 1px solid rgba(255,255,255,0.2);
-                box-shadow: var(--shadow-soft);
-            }
+        /* Clean Navigation */
+        .navbar {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+        }
 
-            .breadcrumb {
-                margin-bottom: 0;
-                background: none;
-                padding: 0;
-            }
+        .navbar-brand {
+            color: var(--gray-900) !important;
+            font-weight: 600;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-            .breadcrumb-item a {
-                color: #667eea;
-                text-decoration: none;
-                font-weight: 500;
-                transition: var(--transition);
-            }
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
 
-            .breadcrumb-item a:hover {
-                color: #4f46e5;
-            }
+        .navbar-nav .nav-link {
+            color: var(--gray-600) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin: 0 0.25rem;
+        }
 
-            .breadcrumb-item.active {
-                color: #2d3748;
-                font-weight: 600;
-            }
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--gray-100);
+        }
 
-            /* Enhanced Header */
-            .page-header {
-                background: var(--primary-gradient);
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                margin-bottom: 2rem;
-                box-shadow: var(--shadow-soft);
-                color: white;
-                position: relative;
-                overflow: visible;
-            }
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: #dbeafe;
+        }
 
-            .page-header::before {
-                content: '';
-                position: absolute;
-                top: -30%;
-                right: -15%;
-                width: 150px;
-                height: 150px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-                animation: float 6s ease-in-out infinite;
-            }
+        .navbar-toggler {
+            border: 1px solid var(--gray-300);
+            padding: 0.25rem 0.5rem;
+        }
 
-            @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-20px) rotate(180deg); }
-            }
+        /* Modern Breadcrumb */
+        .breadcrumb-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
 
-            .header-content {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
+        .breadcrumb {
+            margin-bottom: 0;
+            background: none;
+            padding: 0;
+        }
 
-            .header-left {
-                flex: 1;
-                min-width: 300px;
-            }
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
 
-            .header-title {
-                font-size: 1.75rem;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-            }
+        .breadcrumb-item a:hover {
+            color: #1d4ed8;
+        }
 
-            .header-subtitle {
-                opacity: 0.9;
-                font-size: 1rem;
-                margin-bottom: 0.5rem;
-            }
+        .breadcrumb-item.active {
+            color: var(--gray-700);
+            font-weight: 600;
+        }
 
-            .header-meta {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-                font-size: 0.9rem;
-                opacity: 0.9;
-            }
+        /* Enhanced Header */
+        .page-header {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
 
-            .meta-item {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+        }
 
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title i {
+            color: var(--primary-color);
+        }
+
+        .header-subtitle {
+            color: var(--gray-600);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gray-100);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .meta-item i {
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .action-btn {
+            background: white;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .action-btn.success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .action-btn.success:hover {
+            background-color: #047857;
+            color: white;
+        }
+
+        .action-btn.warning {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+            color: white;
+        }
+
+        .action-btn.warning:hover {
+            background-color: #b45309;
+            color: white;
+        }
+
+        .action-btn.danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        .action-btn.danger:hover {
+            background-color: #b91c1c;
+            color: white;
+        }
+
+        /* Export Dropdown */
+        .export-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            min-width: 140px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+        }
+
+        .export-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .export-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 16px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-left: 1px solid var(--gray-200);
+            border-top: 1px solid var(--gray-200);
+            transform: rotate(45deg);
+        }
+
+        .export-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .export-menu a:hover {
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .export-menu a i {
+            width: 16px;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        .filters-header {
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filters-title {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filters-title i {
+            color: var(--primary-color);
+        }
+
+        .total-entries {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .collapse-btn {
+            background: white;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-600);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .collapse-btn:hover {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .filters-body {
+            padding: 1.5rem;
+        }
+
+        .filters-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .level-switches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .level-switch {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 0.875rem;
+            min-width: 160px;
+            justify-content: space-between;
+        }
+
+        .level-switch:hover {
+            background-color: var(--gray-100);
+            border-color: var(--gray-300);
+            transform: translateY(-1px);
+        }
+
+        .level-switch.active {
+            background-color: #dbeafe;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .level-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        .level-name {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .level-count {
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .switch-toggle {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: var(--gray-300);
+            border-radius: 20px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .switch-toggle.active {
+            background-color: var(--primary-color);
+        }
+
+        .switch-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .switch-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .content-header {
+            background-color: var(--gray-50);
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .content-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .search-bar {
+            padding: 1.5rem;
+            background-color: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .search-bar-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .search-bar-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        /* Log Table */
+        .log-container {
+            position: relative;
+            max-height: 70vh;
+            overflow: auto;
+            background: var(--gray-900);
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .log-table th {
+            background-color: var(--gray-800);
+            color: var(--gray-200);
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .log-row {
+            border-bottom: 1px solid var(--gray-700);
+            transition: var(--transition);
+        }
+
+        .log-row:hover {
+            background-color: var(--gray-800);
+        }
+
+        .log-row td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            color: var(--gray-200);
+        }
+
+        .log-level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+            min-width: 90px;
+            justify-content: center;
+        }
+
+        .timestamp {
+            color: var(--gray-400);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .log-message {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            word-break: break-word;
+            color: var(--gray-100);
+        }
+
+        .stack-btn {
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stack-btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .stack-trace-row {
+            background-color: var(--gray-800) !important;
+        }
+
+        .stack-trace-row td {
+            padding: 0 !important;
+        }
+
+        .stack-trace {
+            background-color: var(--gray-900);
+            margin: 1rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--gray-300);
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-x: auto;
+            border: 1px solid var(--gray-700);
+        }
+
+        .no-data-row {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-500);
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+
+        .no-data-row h4 {
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .no-data-row p {
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .footer-brand {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
             .header-actions {
-                display: flex;
                 gap: 0.5rem;
-                flex-wrap: wrap;
-                align-items: center;
-                overflow: visible;
-                position: relative;
             }
 
             .action-btn {
-                background: rgba(255,255,255,0.2);
-                border: 2px solid rgba(255,255,255,0.3);
-                color: white;
                 padding: 0.6rem 1rem;
-                border-radius: 25px;
-                font-weight: 600;
-                text-decoration: none;
-                transition: var(--transition);
-                display: flex;
-                align-items: center;
-                gap: 0.4rem;
-                backdrop-filter: blur(10px);
-                font-size: 0.9rem;
-                white-space: nowrap;
-                justify-content: center;
-            }
-
-            .action-btn:hover {
-                background: rgba(255,255,255,0.3);
-                border-color: rgba(255,255,255,0.5);
-                color: white;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            }
-
-            .action-btn.success:hover {
-                background: #10b981;
-                border-color: #10b981;
-            }
-
-            .action-btn.warning:hover {
-                background: #f59e0b;
-                border-color: #f59e0b;
-            }
-
-            .action-btn.danger:hover {
-                background: #dc3545;
-                border-color: #dc3545;
-            }
-
-            /* Export Dropdown Styles */
-            .export-dropdown {
-                position: relative;
-                display: inline-block;
-                overflow: visible;
-            }
-
-            .export-menu {
-                position: absolute;
-                top: calc(100% + 8px);
-                right: 0;
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                min-width: 140px;
-                z-index: 9999;
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-10px);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                backdrop-filter: blur(10px);
-                max-height: 300px;
-                overflow: visible;
-            }
-
-            .export-menu.show {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            .export-menu::before {
-                content: '';
-                position: absolute;
-                top: -6px;
-                right: 16px;
-                width: 12px;
-                height: 12px;
-                background: white;
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-bottom: none;
-                border-right: none;
-                transform: rotate(45deg);
-                z-index: -1;
-            }
-
-            .export-menu a {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                padding: 0.75rem 1rem;
-                color: #374151;
-                text-decoration: none;
-                font-weight: 500;
-                font-size: 0.9rem;
-                transition: all 0.2s ease;
-                border-radius: 8px;
-                margin: 0.25rem;
-            }
-
-            .export-menu a:first-child {
-                margin-top: 0.5rem;
-            }
-
-            .export-menu a:last-child {
-                margin-bottom: 0.5rem;
-            }
-
-            .export-menu a:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(4px);
-            }
-
-            .export-menu a i {
-                width: 16px;
-                font-size: 0.9rem;
-                opacity: 0.8;
-            }
-
-            .export-menu a:hover i {
-                opacity: 1;
-            }
-
-            /* Main Layout */
-            .main-layout {
-                display: flex;
-                flex-direction: column;
-                gap: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            /* Enhanced Filters Section with Counts */
-            .filters-section {
-                background: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-soft);
-                margin-bottom: 1.5rem;
-            }
-
-            .filters-header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 12px 12px 0 0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .filters-title {
-                font-weight: 600;
-                color: white;
-                margin: 0;
-                font-size: 1rem;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .total-entries {
-                background: rgba(255,255,255,0.2);
-                padding: 0.4rem 0.8rem;
-                border-radius: 15px;
-                font-size: 0.85rem;
-                font-weight: 600;
-            }
-
-            .collapse-btn {
-                background: rgba(255,255,255,0.2);
-                border: 2px solid rgba(255,255,255,0.3);
-                color: white;
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: var(--transition);
-            }
-
-            .collapse-btn:hover {
-                background: rgba(255,255,255,0.3);
-                border-color: rgba(255,255,255,0.5);
-            }
-
-            .filters-body {
-                padding: 1.5rem;
-            }
-
-            .filters-content {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 1.5rem;
-                flex-wrap: wrap;
+                font-size: 0.8rem;
             }
 
             .level-switches {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 1rem;
-                justify-content: center;
+                gap: 0.75rem;
             }
 
             .level-switch {
-                display: flex;
-                align-items: center;
-                gap: 0.8rem;
-                padding: 0.8rem 1.2rem;
-                background: #f8fafc;
-                border-radius: 25px;
-                transition: var(--transition);
-                cursor: pointer;
-                border: 2px solid #e2e8f0;
-                font-size: 0.9rem;
                 min-width: 140px;
-                justify-content: space-between;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem;
             }
 
-            .level-switch:hover {
-                background: #f1f5f9;
-                border-color: #cbd5e1;
-                transform: translateY(-1px);
-            }
-
-            .level-switch.active {
-                background: rgba(102, 126, 234, 0.1);
-                border-color: rgba(102, 126, 234, 0.4);
-                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-            }
-
-            .level-info {
-                display: flex;
-                align-items: center;
-                gap: 0.6rem;
-            }
-
-            .level-icon {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 0.7rem;
-            }
-
-            .level-name {
-                font-weight: 600;
-                color: #374151;
-                font-size: 0.85rem;
-            }
-
-            .level-count {
-                background: #667eea;
-                color: white;
-                padding: 0.2rem 0.6rem;
-                border-radius: 12px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                min-width: 25px;
-                text-align: center;
-            }
-
-            .switch-toggle {
-                position: relative;
-                width: 36px;
-                height: 18px;
-                background: #cbd5e1;
-                border-radius: 18px;
-                transition: var(--transition);
-                cursor: pointer;
-                margin-left: 0.5rem;
-            }
-
-            .switch-toggle.active {
-                background: #667eea;
-            }
-
-            .switch-toggle::after {
-                content: '';
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 14px;
-                height: 14px;
-                background: white;
-                border-radius: 50%;
-                transition: var(--transition);
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            }
-
-            .switch-toggle.active::after {
-                transform: translateX(18px);
-            }
-
-            /* Main Content */
-            .content-card {
-                background: white;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-soft);
-                overflow: hidden;
-                display: flex;
+            .header-content {
                 flex-direction: column;
-                width: 100%;
+                align-items: stretch;
+                gap: 1.5rem;
             }
 
-            .content-header {
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-                padding: 1.5rem 2rem;
-                border-bottom: 1px solid #e2e8f0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            .header-left {
+                min-width: auto;
             }
 
-            .content-title {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: #1f2937;
-                margin: 0;
+            .header-title {
+                font-size: 1.5rem;
             }
 
-            .content-badge {
-                background: var(--success-gradient);
-                color: white;
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-weight: 600;
-                font-size: 0.85rem;
+            .header-meta {
+                justify-content: flex-start;
+                gap: 1rem;
             }
 
-            .search-bar {
-                padding: 1.5rem 2rem;
-                background: #f8fafc;
-                border-bottom: 1px solid #e2e8f0;
-                position: relative;
-            }
-
-            .search-bar-input {
-                width: 100%;
-                padding: 1rem 1.5rem 1rem 3rem;
-                border: 2px solid #e5e7eb;
-                border-radius: 50px;
-                font-size: 1rem;
-                transition: var(--transition);
-                background: white;
-            }
-
-            .search-bar-input:focus {
-                outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            }
-
-            .search-bar .search-icon {
-                position: absolute;
-                left: 1.5rem;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #9ca3af;
-                font-size: 1.1rem;
-                z-index: 10;
-                pointer-events: none;
-            }
-
-            /* Log Table */
-            .log-container {
-                position: relative;
-                max-height: 110vh;
-                overflow: auto;
-                background: var(--dark-gradient);
-            }
-
-            .log-table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            .log-table th {
-                background: rgba(255, 255, 255, 0.08);
-                color: #cbd5e1;
-                font-weight: 600;
-                padding: 1rem 1.5rem;
-                text-align: left;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                font-size: 0.85rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .log-row {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                transition: var(--transition);
-            }
-
-            .log-row:hover {
-                background: rgba(255, 255, 255, 0.02);
-            }
-
-            .log-row td {
-                padding: 1.25rem 1.5rem;
-                vertical-align: middle;
-                color: #e2e8f0;
-            }
-
-            .log-level-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-weight: 600;
-                font-size: 0.75rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                color: white;
-                min-width: 80px;
+            .header-actions {
                 justify-content: center;
+                flex-wrap: wrap;
             }
 
-            .timestamp {
-                color: #94a3b8;
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
-                font-size: 0.85rem;
-                white-space: nowrap;
+            .filters-body {
+                padding: 1rem;
+            }
+
+            .level-switches {
+                gap: 0.5rem;
+            }
+
+            .level-switch {
+                min-width: 120px;
+                padding: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .log-table th,
+            .log-row td {
+                padding: 0.75rem;
+            }
+
+            .log-table th:nth-child(2),
+            .log-row td:nth-child(2) {
+                display: none;
             }
 
             .log-message {
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
-                font-size: 0.9rem;
-                line-height: 1.5;
-                word-break: break-word;
-                color: #f1f5f9;
-            }
-
-            .stack-btn {
-                background: var(--success-gradient);
-                border: none;
-                color: white;
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: var(--transition);
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .stack-btn:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            }
-
-            .stack-trace-row {
-                background: #1e293b !important;
-            }
-
-            .stack-trace-row td {
-                padding: 0 !important;
-            }
-
-            .stack-trace {
-                background: #0f172a;
-                margin: 1rem;
-                padding: 1.5rem;
-                border-radius: 10px;
-                font-family: 'JetBrains Mono', 'Fira Code', monospace;
                 font-size: 0.8rem;
-                line-height: 1.6;
-                color: #cbd5e1;
-                white-space: pre-wrap;
-                word-break: break-word;
-                overflow-x: hidden;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .breadcrumb-container {
+                padding: 0.5rem 1rem;
             }
 
-            .no-data-row {
-                text-align: center;
-                padding: 3rem 2rem;
-                color: #64748b;
-                font-style: italic;
+            .page-header {
+                padding: 1rem;
             }
 
-            .no-data-icon {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                opacity: 0.5;
+            .header-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
             }
 
-            /* Responsive Design */
-            @media (max-width: 1200px) {
-                .level-switches {
-                    gap: 0.75rem;
-                }
-
-                .level-switch {
-                    min-width: 120px;
-                    padding: 0.6rem 1rem;
-                }
+            .action-btn span {
+                display: none;
             }
 
-            @media (max-width: 1024px) {
-                .header-actions {
-                    gap: 0.4rem;
-                }
-
-                .action-btn {
-                    padding: 0.5rem 0.8rem;
-                    font-size: 0.8rem;
-                }
+            .action-btn {
+                min-width: 44px;
+                padding: 0.75rem;
+                justify-content: center;
             }
 
-            @media (max-width: 768px) {
-                .page-header {
-                    padding: 1.5rem;
-                }
-
-                .header-content {
-                    flex-direction: column;
-                    align-items: stretch;
-                    gap: 1.5rem;
-                }
-
-                .header-left {
-                    min-width: auto;
-                }
-
-                .header-title {
-                    font-size: 1.5rem;
-                }
-
-                .header-actions {
-                    justify-content: center;
-                    flex-wrap: wrap;
-                }
-
-                .action-btn {
-                    flex: 1;
-                    min-width: 80px;
-                    max-width: 120px;
-                }
-
-                .filters-body {
-                    padding: 1rem;
-                }
-
-                .level-switches {
-                    gap: 0.5rem;
-                }
-
-                .level-switch {
-                    min-width: 100px;
-                    padding: 0.5rem 0.8rem;
-                    font-size: 0.8rem;
-                }
-
-                .log-table th,
-                .log-row td {
-                    padding: 0.75rem;
-                }
-
-                .log-table th:nth-child(2),
-                .log-row td:nth-child(2) {
-                    display: none;
-                }
-
-                .log-message {
-                    font-size: 0.8rem;
-                }
+            .level-switches {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            @media (max-width: 480px) {
-                .breadcrumb-container {
-                    padding: 0.5rem 1rem;
-                    border-radius: 25px;
-                }
-
-                .page-header {
-                    padding: 1rem;
-                }
-
-                .header-meta {
-                    flex-direction: column;
-                    gap: 0.5rem;
-                    align-items: flex-start;
-                }
-
-                .action-btn span {
-                    display: none;
-                }
-
-                .action-btn {
-                    min-width: 50px;
-                    padding: 0.6rem;
-                }
-
-                .level-switches {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-
-                .level-switch {
-                    justify-content: space-between;
-                    min-width: auto;
-                }
-
-                /* Export menu responsive */
-                .export-menu {
-                    right: -10px;
-                    min-width: 120px;
-                }
-
-                .export-menu::before {
-                    right: 20px;
-                }
-
-                .export-menu a {
-                    padding: 0.6rem 0.8rem;
-                    font-size: 0.8rem;
-                }
+            .level-switch {
+                min-width: auto;
+                justify-content: space-between;
             }
 
-            /* Custom Scrollbar */
-            .log-container::-webkit-scrollbar {
-                width: 8px;
+            .export-menu {
+                right: -10px;
+                min-width: 120px;
             }
 
-            .log-container::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.1);
+            .export-menu::before {
+                right: 20px;
             }
+        }
 
-            .log-container::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.3);
-                border-radius: 4px;
-            }
+        /* Custom Scrollbar */
+        .log-container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-            .log-container::-webkit-scrollbar-thumb:hover {
-                background: rgba(255, 255, 255, 0.5);
-            }
+        .log-container::-webkit-scrollbar-track {
+            background: var(--gray-800);
+        }
 
-            /* Loading States */
-            .loading {
-                opacity: 0.6;
-                pointer-events: none;
-            }
+        .log-container::-webkit-scrollbar-thumb {
+            background: var(--gray-600);
+            border-radius: 4px;
+        }
 
-            .spinner {
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                border: 2px solid rgba(255,255,255,0.3);
-                border-radius: 50%;
-                border-top-color: #ffffff;
-                animation: spin 1s ease-in-out infinite;
-            }
+        .log-container::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
 
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-        </style>
-    @endpush
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
+        .page-content {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+<!-- Clean Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        @if(Route::has('log-tracker.dashboard'))
+            <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
+                <div class="brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Log Tracker</span>
+            </a>
+        @else
+            <a class="navbar-brand" href="#">
+                <div class="brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Log Tracker</span>
+            </a>
+        @endif
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    @if(Route::has('log-tracker.dashboard'))
+                        <a class="nav-link" href="{{ route('log-tracker.dashboard') }}">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    @else
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    @endif
+                </li>
+                <li class="nav-item">
+                    @if(Route::has('log-tracker.index'))
+                        <a class="nav-link" href="{{ route('log-tracker.index') }}">
+                            <i class="fas fa-list"></i>
+                            Log Files
+                        </a>
+                    @else
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-list"></i>
+                            Log Files
+                        </a>
+                    @endif
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-4 page-content">
     <!-- Modern Breadcrumb -->
     <div class="breadcrumb-container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('log-tracker.dashboard')}}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{route('log-tracker.index')}}">Log Files</a></li>
-                <li class="breadcrumb-item active">{{ $logName }}</li>
+                @if(Route::has('log-tracker.dashboard'))
+                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
+                @else
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                @endif
+                @if(Route::has('log-tracker.index'))
+                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
+                @else
+                    <li class="breadcrumb-item"><a href="#">Log Files</a></li>
+                @endif
+                <li class="breadcrumb-item active">{{ $logName ?? 'Log Details' }}</li>
             </ol>
         </nav>
     </div>
@@ -808,24 +962,31 @@
             <div class="header-left">
                 <h1 class="header-title">
                     <i class="fas fa-file-code"></i>
-                    {{ $logName }}
+                    {{ $logName ?? 'Log File' }}
                 </h1>
                 <p class="header-subtitle">
                     Analyze and explore log entries with advanced filtering and export options
                 </p>
                 <div class="header-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-hdd"></i>
-                        <span>{{ round(filesize(storage_path('logs/' . $logName)) / 1024, 2) }} KB</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-calendar"></i>
-                        <span>{{ date('M d, Y', filemtime(storage_path('logs/' . $logName))) }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-clock"></i>
-                        <span>{{ date('h:i A', filemtime(storage_path('logs/' . $logName))) }}</span>
-                    </div>
+                    @if(isset($logName) && file_exists(storage_path('logs/' . $logName)))
+                        <div class="meta-item">
+                            <i class="fas fa-hdd"></i>
+                            <span>{{ round(filesize(storage_path('logs/' . $logName)) / 1024, 2) }} KB</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ date('M d, Y', filemtime(storage_path('logs/' . $logName))) }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ date('h:i A', filemtime(storage_path('logs/' . $logName))) }}</span>
+                        </div>
+                    @else
+                        <div class="meta-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>File information unavailable</span>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -835,10 +996,17 @@
                     <span>Back</span>
                 </a>
 
-                <a href="{{ route('log-tracker.download', ['logName' => $logName]) }}" class="action-btn success">
-                    <i class="fas fa-download"></i>
-                    <span>Download</span>
-                </a>
+                @if(Route::has('log-tracker.download') && isset($logName))
+                    <a href="{{ route('log-tracker.download', ['logName' => $logName]) }}" class="action-btn success">
+                        <i class="fas fa-download"></i>
+                        <span>Download</span>
+                    </a>
+                @else
+                    <a href="#" class="action-btn success">
+                        <i class="fas fa-download"></i>
+                        <span>Download</span>
+                    </a>
+                @endif
 
                 <div class="export-dropdown">
                     <button class="action-btn warning" onclick="toggleExportMenu(event)">
@@ -847,312 +1015,405 @@
                         <i class="fas fa-chevron-down" style="margin-left: 0.25rem; font-size: 0.7rem;"></i>
                     </button>
                     <div class="export-menu" id="exportMenu">
-                        <a href="{{ route('log-tracker.export.quick', [$logName, 'csv']) }}">
-                            <i class="fas fa-table"></i>CSV
-                        </a>
-                        <a href="{{ route('log-tracker.export.quick', [$logName, 'json']) }}">
-                            <i class="fas fa-code"></i>JSON
-                        </a>
-                        <a href="{{ route('log-tracker.export.quick', [$logName, 'excel']) }}">
-                            <i class="fas fa-file-excel"></i>Excel
-                        </a>
-                        <a href="{{ route('log-tracker.export.quick', [$logName, 'pdf']) }}">
-                            <i class="fas fa-file-pdf"></i>PDF
-                        </a>
+                        @if(Route::has('log-tracker.export.quick') && isset($logName))
+                            <a href="{{ route('log-tracker.export.quick', [$logName, 'csv']) }}">
+                                <i class="fas fa-table"></i>CSV
+                            </a>
+                            <a href="{{ route('log-tracker.export.quick', [$logName, 'json']) }}">
+                                <i class="fas fa-code"></i>JSON
+                            </a>
+                            <a href="{{ route('log-tracker.export.quick', [$logName, 'excel']) }}">
+                                <i class="fas fa-file-excel"></i>Excel
+                            </a>
+                            <a href="{{ route('log-tracker.export.quick', [$logName, 'pdf']) }}">
+                                <i class="fas fa-file-pdf"></i>PDF
+                            </a>
+                        @else
+                            <a href="#">
+                                <i class="fas fa-table"></i>CSV
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-code"></i>JSON
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-file-excel"></i>Excel
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-file-pdf"></i>PDF
+                            </a>
+                        @endif
                     </div>
                 </div>
 
-                <form action="{{ route('log-tracker.delete', ['logName' => $logName]) }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="action-btn danger" onclick="return confirm('Are you sure you want to delete this log file?')">
-                        <i class="fas fa-trash"></i>
-                        <span>Delete</span>
-                    </button>
-                </form>
+                @if(Route::has('log-tracker.delete') && config('log-tracker.allow_delete', false) && isset($logName))
+                    <form action="{{ route('log-tracker.delete', ['logName' => $logName]) }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="action-btn danger" onclick="return confirm('Are you sure you want to delete this log file?')">
+                            <i class="fas fa-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-        <!-- Enhanced Filters Section with Counts -->
-        <div class="filters-section">
-            <div class="filters-header">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <h5 class="filters-title">
-                        <i class="fas fa-filter"></i>
-                        Smart Filters
-                    </h5>
-                    <div class="total-entries">
-                        {{ number_format(count($entries)) }} Total Entries
-                    </div>
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="filters-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <h5 class="filters-title">
+                    <i class="fas fa-filter"></i>
+                    Smart Filters
+                </h5>
+                <div class="total-entries">
+                    {{ number_format(count($entries ?? [])) }} Total Entries
                 </div>
-                <button class="collapse-btn" onclick="toggleFilters()">
-                    <i class="fas fa-chevron-up" id="collapseIcon"></i>
-                </button>
             </div>
-            <div class="filters-body" id="filtersBody">
-                <div class="filters-content">
-                    <div class="level-switches">
-                        @foreach($logLevels as $level => $config)
-                            <div class="level-switch active log-filter" data-level="{{ $level }}">
-                                <div class="level-info">
-                                    <div class="level-icon" style="background-color: {{ $config['color'] }};">
-                                        <i class="{{ $config['icon'] }}"></i>
-                                    </div>
-                                    <span class="level-name">{{ ucfirst($level) }}</span>
+            <button class="collapse-btn" onclick="toggleFilters()">
+                <i class="fas fa-chevron-up" id="collapseIcon"></i>
+            </button>
+        </div>
+        <div class="filters-body" id="filtersBody">
+            <div class="filters-content">
+                <div class="level-switches">
+                    @forelse($logLevels ?? [] as $level => $config)
+                        <div class="level-switch active log-filter" data-level="{{ $level }}">
+                            <div class="level-info">
+                                <div class="level-icon" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+                                    <i class="{{ $config['icon'] ?? 'fas fa-circle' }}"></i>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <div class="level-count" style="background-color: {{ $config['color'] }};">
-                                        {{ $counts[$level] ?? 0 }}
-                                    </div>
-                                    <div class="switch-toggle active"></div>
-                                </div>
-                                <input type="checkbox" class="d-none level-checkbox" value="{{ $level }}" checked>
+                                <span class="level-name">{{ ucfirst($level) }}</span>
                             </div>
-                        @endforeach
-                    </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="level-count" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+                                    {{ isset($counts[$level]) ? $counts[$level] : 0 }}
+                                </div>
+                                <div class="switch-toggle active"></div>
+                            </div>
+                            <input type="checkbox" class="d-none level-checkbox" value="{{ $level }}" checked>
+                        </div>
+                    @empty
+                        <div class="level-switch active log-filter" data-level="error">
+                            <div class="level-info">
+                                <div class="level-icon" style="background-color: #dc2626;">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <span class="level-name">Error</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="level-count" style="background-color: #dc2626;">0</div>
+                                <div class="switch-toggle active"></div>
+                            </div>
+                            <input type="checkbox" class="d-none level-checkbox" value="error" checked>
+                        </div>
+                        <div class="level-switch active log-filter" data-level="warning">
+                            <div class="level-info">
+                                <div class="level-icon" style="background-color: #d97706;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <span class="level-name">Warning</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="level-count" style="background-color: #d97706;">0</div>
+                                <div class="switch-toggle active"></div>
+                            </div>
+                            <input type="checkbox" class="d-none level-checkbox" value="warning" checked>
+                        </div>
+                        <div class="level-switch active log-filter" data-level="info">
+                            <div class="level-info">
+                                <div class="level-icon" style="background-color: #0284c7;">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <span class="level-name">Info</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="level-count" style="background-color: #0284c7;">0</div>
+                                <div class="switch-toggle active"></div>
+                            </div>
+                            <input type="checkbox" class="d-none level-checkbox" value="info" checked>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="content-card">
-            <div class="content-header">
-                <h5 class="content-title">Log Entries</h5>
-                <div class="content-badge" id="entriesCount">{{ number_format(count($entries)) }} entries</div>
+    <!-- Main Content -->
+    <div class="content-card">
+        <div class="content-header">
+            <h5 class="content-title">Log Entries</h5>
+            <div class="content-badge" id="entriesCount">{{ number_format(count($entries ?? [])) }} entries</div>
+        </div>
+
+        <div class="search-bar">
+            <div style="position: relative;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-bar-input log-search" placeholder="Search through log messages, timestamps, and more..." id="mainSearchInput">
             </div>
+        </div>
 
-            <div class="search-bar">
-                <div style="position: relative;">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-bar-input log-search" placeholder="Search through log messages, timestamps, and more..." id="mainSearchInput">
-                </div>
-            </div>
-
-            <div class="log-container">
-                <table class="log-table">
-                    <thead>
-                    <tr>
-                        <th style="width: 120px;">Level</th>
-                        <th style="width: 180px;">Timestamp</th>
-                        <th>Message</th>
-                        <th style="width: 100px;">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody id="logTableBody">
-                    @foreach ($entries as $index => $log)
-                        <tr class="log-row" data-level="{{ strtolower($log['level']) }}" data-index="{{ $index }}">
-                            <td>
-                                <div class="log-level-badge" style="background-color: {{ $log['color'] }};">
-                                    <i class="{{ $log['icon'] }}"></i>
-                                    {{ strtoupper($log['level']) }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="timestamp">{{ $log['timestamp'] }}</div>
-                            </td>
-                            <td>
-                                <div class="log-message">{{ $log['message'] }}</div>
-                            </td>
-                            <td>
-                                @if (!empty($log['stack']))
-                                    <button class="stack-btn" onclick="toggleStackTrace({{ $index }})">
-                                        <i class="fas fa-code"></i>
-                                        <span>Stack</span>
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                        @if (!empty($log['stack']))
-                            <tr id="stacktrace-{{ $index }}" class="stack-trace-row d-none">
-                                <td colspan="4">
-                                    <pre class="stack-trace">{{ $log['stack'] }}</pre>
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-
-                    <!-- No Data Row -->
-                    <tr id="noDataRow" class="no-data-row" style="display: none;">
-                        <td colspan="4">
-                            <div class="no-data-icon">
-                                <i class="fas fa-search-minus"></i>
+        <div class="log-container">
+            <table class="log-table">
+                <thead>
+                <tr>
+                    <th style="width: 120px;">Level</th>
+                    <th style="width: 180px;">Timestamp</th>
+                    <th>Message</th>
+                    <th style="width: 100px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="logTableBody">
+                @forelse($entries ?? [] as $index => $log)
+                    <tr class="log-row" data-level="{{ strtolower($log['level'] ?? 'info') }}" data-index="{{ $index }}">
+                        <td>
+                            <div class="log-level-badge" style="background-color: {{ $log['color'] ?? '#6b7280' }};">
+                                <i class="{{ $log['icon'] ?? 'fas fa-circle' }}"></i>
+                                {{ strtoupper($log['level'] ?? 'INFO') }}
                             </div>
-                            <h4>No matching logs found</h4>
-                            <p>Try adjusting your search criteria or filters</p>
+                        </td>
+                        <td>
+                            <div class="timestamp">{{ $log['timestamp'] ?? 'N/A' }}</div>
+                        </td>
+                        <td>
+                            <div class="log-message">{{ $log['message'] ?? 'No message' }}</div>
+                        </td>
+                        <td>
+                            @if (!empty($log['stack']))
+                                <button class="stack-btn" onclick="toggleStackTrace({{ $index }})">
+                                    <i class="fas fa-code"></i>
+                                    <span>Stack</span>
+                                </button>
+                            @endif
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-            </div>
+                    @if (!empty($log['stack']))
+                        <tr id="stacktrace-{{ $index }}" class="stack-trace-row d-none">
+                            <td colspan="4">
+                                <pre class="stack-trace">{{ $log['stack'] }}</pre>
+                            </td>
+                        </tr>
+                    @endif
+                @empty
+                    <tr class="no-data-row">
+                        <td colspan="4">
+                            <div class="no-data-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h4>No Log Entries Found</h4>
+                            <p>This log file appears to be empty or has no readable entries.</p>
+                        </td>
+                    </tr>
+                @endforelse
+
+                <!-- No Data Row for Search Results -->
+                <tr id="noDataRow" class="no-data-row" style="display: none;">
+                    <td colspan="4">
+                        <div class="no-data-icon">
+                            <i class="fas fa-search-minus"></i>
+                        </div>
+                        <h4>No matching logs found</h4>
+                        <p>Try adjusting your search criteria or filters</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    @push('scripts')
-        <script>
-            // Simple and working filter function
-            function filterLogs() {
-                const activeLevels = Array.from(document.querySelectorAll('.level-checkbox:checked')).map(cb => cb.value);
-                const searchTerm = document.getElementById('mainSearchInput').value.toLowerCase();
-                const logRows = document.querySelectorAll('.log-row');
-                let visibleCount = 0;
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="mb-0">
+                © <span id="year">{{ date('Y') }}</span>
+                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
+                    Log Tracker
+                </a>
+                - Efficient logging, effortless insights.
+            </p>
+        </div>
+    </div>
+</footer>
 
-                logRows.forEach(row => {
-                    const level = row.getAttribute('data-level');
-                    const text = row.textContent.toLowerCase();
-                    let showRow = activeLevels.includes(level);
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-                    if (searchTerm && showRow) {
-                        showRow = text.includes(searchTerm);
-                    }
+<script>
+    // Simple and working filter function
+    function filterLogs() {
+        const activeLevels = Array.from(document.querySelectorAll('.level-checkbox:checked')).map(cb => cb.value);
+        const searchTerm = document.getElementById('mainSearchInput').value.toLowerCase();
+        const logRows = document.querySelectorAll('.log-row');
+        let visibleCount = 0;
 
-                    const stackRow = document.getElementById(`stacktrace-${row.dataset.index}`);
+        logRows.forEach(row => {
+            const level = row.getAttribute('data-level');
+            const text = row.textContent.toLowerCase();
+            let showRow = activeLevels.includes(level);
 
-                    if (showRow) {
-                        row.style.display = '';
-                        visibleCount++;
+            if (searchTerm && showRow) {
+                showRow = text.includes(searchTerm);
+            }
 
-                        if (stackRow) {
-                            if (!stackRow.classList.contains('d-none')) {
-                                stackRow.style.display = '';
-                            } else {
-                                stackRow.style.display = 'none';
-                            }
-                        }
+            const stackRow = document.getElementById(`stacktrace-${row.dataset.index}`);
+
+            if (showRow) {
+                row.style.display = '';
+                visibleCount++;
+
+                if (stackRow) {
+                    if (!stackRow.classList.contains('d-none')) {
+                        stackRow.style.display = '';
                     } else {
-                        row.style.display = 'none';
-                        if (stackRow) {
-                            stackRow.style.display = 'none';
-                        }
+                        stackRow.style.display = 'none';
                     }
-                });
-
-                const badge = document.getElementById('entriesCount');
-                badge.textContent = `${visibleCount.toLocaleString()} ${visibleCount === 1 ? 'entry' : 'entries'}`;
-
-                const noDataRow = document.getElementById('noDataRow');
-                noDataRow.style.display = (visibleCount === 0) ? '' : 'none';
-            }
-
-            function toggleLevel(levelSwitch) {
-                const checkbox = levelSwitch.querySelector('.level-checkbox');
-                const toggle = levelSwitch.querySelector('.switch-toggle');
-
-                checkbox.checked = !checkbox.checked;
-
-                if (checkbox.checked) {
-                    levelSwitch.classList.add('active');
-                    toggle.classList.add('active');
-                } else {
-                    levelSwitch.classList.remove('active');
-                    toggle.classList.remove('active');
                 }
-
-                filterLogs();
-            }
-
-            function toggleStackTrace(index) {
-                const stackRow = document.getElementById(`stacktrace-${index}`);
-                const mainRow = document.querySelector(`[data-index="${index}"]`);
-
-                if (!stackRow || !mainRow || mainRow.style.display === 'none') {
-                    return;
-                }
-
-                stackRow.classList.toggle('d-none');
-
-                if (stackRow.classList.contains('d-none')) {
+            } else {
+                row.style.display = 'none';
+                if (stackRow) {
                     stackRow.style.display = 'none';
-                } else {
-                    stackRow.style.display = '';
                 }
             }
+        });
 
-            function toggleFilters() {
-                const body = document.getElementById('filtersBody');
-                const icon = document.getElementById('collapseIcon');
+        const badge = document.getElementById('entriesCount');
+        badge.textContent = `${visibleCount.toLocaleString()} ${visibleCount === 1 ? 'entry' : 'entries'}`;
 
-                if (body.style.display === 'none') {
-                    body.style.display = 'block';
-                    icon.className = 'fas fa-chevron-up';
-                } else {
-                    body.style.display = 'none';
-                    icon.className = 'fas fa-chevron-down';
-                }
+        const noDataRow = document.getElementById('noDataRow');
+        const originalNoData = document.querySelector('.no-data-row:not(#noDataRow)');
+
+        // Only show no data row if we have entries to filter but none are visible
+        if (logRows.length > 0 && visibleCount === 0) {
+            noDataRow.style.display = '';
+            if (originalNoData) originalNoData.style.display = 'none';
+        } else {
+            noDataRow.style.display = 'none';
+            if (originalNoData && logRows.length === 0) {
+                originalNoData.style.display = '';
+            } else if (originalNoData) {
+                originalNoData.style.display = 'none';
+            }
+        }
+    }
+
+    function toggleLevel(levelSwitch) {
+        const checkbox = levelSwitch.querySelector('.level-checkbox');
+        const toggle = levelSwitch.querySelector('.switch-toggle');
+
+        checkbox.checked = !checkbox.checked;
+
+        if (checkbox.checked) {
+            levelSwitch.classList.add('active');
+            toggle.classList.add('active');
+        } else {
+            levelSwitch.classList.remove('active');
+            toggle.classList.remove('active');
+        }
+
+        filterLogs();
+    }
+
+    function toggleStackTrace(index) {
+        const stackRow = document.getElementById(`stacktrace-${index}`);
+        const mainRow = document.querySelector(`[data-index="${index}"]`);
+
+        if (!stackRow || !mainRow || mainRow.style.display === 'none') {
+            return;
+        }
+
+        stackRow.classList.toggle('d-none');
+
+        if (stackRow.classList.contains('d-none')) {
+            stackRow.style.display = 'none';
+        } else {
+            stackRow.style.display = '';
+        }
+    }
+
+    function toggleFilters() {
+        const body = document.getElementById('filtersBody');
+        const icon = document.getElementById('collapseIcon');
+
+        if (body.style.display === 'none') {
+            body.style.display = 'block';
+            icon.className = 'fas fa-chevron-up';
+        } else {
+            body.style.display = 'none';
+            icon.className = 'fas fa-chevron-down';
+        }
+    }
+
+    function toggleExportMenu(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('exportMenu');
+        const button = event.currentTarget;
+
+        if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            return;
+        }
+
+        // Position the menu
+        const rect = button.getBoundingClientRect();
+        const menuWidth = 140;
+        const viewportWidth = window.innerWidth;
+
+        // Reset positioning
+        menu.style.right = '0';
+        menu.style.left = 'auto';
+
+        // Check if menu would go off screen
+        if (rect.right < menuWidth) {
+            menu.style.right = 'auto';
+            menu.style.left = '0';
+        }
+
+        menu.classList.add('show');
+    }
+
+    // Close export menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const exportDropdown = document.querySelector('.export-dropdown');
+        const exportMenu = document.getElementById('exportMenu');
+
+        if (exportMenu && !exportDropdown.contains(event.target)) {
+            exportMenu.classList.remove('show');
+        }
+    });
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.level-switch').forEach(levelSwitch => {
+            levelSwitch.addEventListener('click', function() {
+                toggleLevel(this);
+            });
+        });
+
+        const mainSearchInput = document.getElementById('mainSearchInput');
+        mainSearchInput.addEventListener('input', function() {
+            filterLogs();
+        });
+
+        document.getElementById('noDataRow').style.display = 'none';
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('mainSearchInput').focus();
             }
 
-            function toggleExportMenu(event) {
-                event.stopPropagation();
-                const menu = document.getElementById('exportMenu');
-                const button = event.currentTarget;
-
-                if (menu.classList.contains('show')) {
-                    menu.classList.remove('show');
-                    return;
-                }
-
-                // Position the menu
-                const rect = button.getBoundingClientRect();
-                const menuWidth = 140;
-                const viewportWidth = window.innerWidth;
-
-                // Reset positioning
-                menu.style.right = '0';
-                menu.style.left = 'auto';
-
-                // Check if menu would go off screen
-                if (rect.right < menuWidth) {
-                    // Not enough space on the right, align to left edge of button
-                    menu.style.right = 'auto';
-                    menu.style.left = '0';
-                }
-
-                menu.classList.add('show');
-            }
-
-            // Close export menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const exportDropdown = document.querySelector('.export-dropdown');
+            if (e.key === 'Escape') {
+                mainSearchInput.value = '';
+                filterLogs();
                 const exportMenu = document.getElementById('exportMenu');
-
-                if (exportMenu && !exportDropdown.contains(event.target)) {
+                if (exportMenu) {
                     exportMenu.classList.remove('show');
                 }
-            });
-
-            // Initialize when DOM is ready
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('.level-switch').forEach(levelSwitch => {
-                    levelSwitch.addEventListener('click', function() {
-                        toggleLevel(this);
-                    });
-                });
-
-                const mainSearchInput = document.getElementById('mainSearchInput');
-                mainSearchInput.addEventListener('input', function() {
-                    filterLogs();
-                });
-
-                document.getElementById('noDataRow').style.display = 'none';
-
-                document.addEventListener('keydown', function(e) {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-                        e.preventDefault();
-                        document.getElementById('mainSearchInput').focus();
-                    }
-
-                    if (e.key === 'Escape') {
-                        mainSearchInput.value = '';
-                        filterLogs();
-                        // Also close export menu on Escape
-                        const exportMenu = document.getElementById('exportMenu');
-                        if (exportMenu) {
-                            exportMenu.classList.remove('show');
-                        }
-                    }
-                });
-            });
-        </script>
-    @endpush
-@endsection
+            }
+        });
+    });
+</script>
+</body>
+</html>

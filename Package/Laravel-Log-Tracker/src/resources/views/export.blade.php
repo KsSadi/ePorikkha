@@ -1,696 +1,836 @@
-@extends('log-tracker::layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Logs - Log Tracker</title>
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.2s ease-in-out;
+        }
 
-@section('content')
-    @push('styles')
-        <style>
-            .export-header {
-                background: var(--primary-gradient);
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                margin-bottom: 2rem;
-                box-shadow: var(--shadow-soft);
-                color: white;
-                position: relative;
-                overflow: hidden;
+        body {
+            background-color: var(--gray-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Clean Navigation */
+        .navbar {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--gray-900) !important;
+            font-weight: 600;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--gray-600) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin: 0 0.25rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--gray-100);
+        }
+
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: #dbeafe;
+        }
+
+        .navbar-toggler {
+            border: 1px solid var(--gray-300);
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* Modern Breadcrumb */
+        .breadcrumb-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .breadcrumb {
+            margin-bottom: 0;
+            background: none;
+            padding: 0;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-item a:hover {
+            color: #1d4ed8;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        /* Enhanced Header */
+        .page-header {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--info-color) 100%);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title i {
+            color: var(--primary-color);
+        }
+
+        .header-subtitle {
+            color: var(--gray-600);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            color: var(--gray-200);
+            opacity: 0.5;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .content-header {
+            background-color: var(--gray-50);
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .content-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-title i {
+            color: var(--primary-color);
+        }
+
+        .content-body {
+            padding: 1.5rem;
+        }
+
+        /* Format Selection */
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .format-card {
+            position: relative;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .format-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .format-card.selected {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .format-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--gray-500);
+            transition: var(--transition);
+        }
+
+        .format-card:hover .icon,
+        .format-card.selected .icon {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .format-card h6 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+
+        .format-card small {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Filters Panel */
+        .filters-panel {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .filter-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+        }
+
+        .filter-title {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            gap: 0.5rem;
+        }
+
+        .filter-title i {
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+            font-size: 0.875rem;
+            background: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Level Badges */
+        .level-badges {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .level-badge {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .level-badge input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .level-badge .badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+            opacity: 0.7;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            gap: 0.5rem;
+        }
+
+        .level-badge input[type="checkbox"]:checked + .badge {
+            opacity: 1;
+            transform: scale(1.02);
+            box-shadow: var(--shadow);
+        }
+
+        /* Files Panel */
+        .files-panel {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .files-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background-color: var(--gray-50);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .select-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-outline-primary {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .files-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+        }
+
+        .file-item.selected {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .file-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 1rem;
+            accent-color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+            word-break: break-all;
+            font-size: 0.875rem;
+        }
+
+        .file-size {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Export Actions */
+        .export-actions {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .export-info {
+            display: flex;
+            align-items: center;
+            color: var(--gray-600);
+            flex: 1;
+            min-width: 250px;
+            gap: 0.5rem;
+        }
+
+        .export-info i {
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .export-btn {
+            background: var(--primary-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 180px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .export-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .export-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .footer-brand {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Custom Scrollbar */
+        .files-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .files-list::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 4px;
+        }
+
+        .files-list::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 4px;
+        }
+
+        .files-list::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-content {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 320px 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem;
             }
 
-            .export-header::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                right: -20%;
-                width: 100px;
-                height: 100px;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50%;
-                animation: float 6s ease-in-out infinite;
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1.5rem;
             }
 
-            @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-20px) rotate(180deg); }
+            .header-left {
+                min-width: auto;
             }
 
-            .format-selection {
-                background: white;
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                margin-bottom: 2rem;
-                box-shadow: var(--shadow-soft);
-                border: 0;
+            .header-title {
+                font-size: 1.5rem;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
 
             .format-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 1.5rem;
-                margin-top: 1.5rem;
-            }
-
-            .format-card {
-                position: relative;
-                background: white;
-                border: 2px solid #e9ecef;
-                border-radius: var(--border-radius);
-                padding: 2rem 1.5rem;
-                text-align: center;
-                cursor: pointer;
-                transition: var(--transition);
-                overflow: hidden;
-            }
-
-            .format-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-                transition: left 0.6s;
-            }
-
-            .format-card:hover::before {
-                left: 100%;
-            }
-
-            .format-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-                border-color: #667eea;
-            }
-
-            .format-card.selected {
-                background: var(--primary-gradient);
-                color: white;
-                border-color: #667eea;
-                transform: translateY(-5px);
-                box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-            }
-
-            .format-card .icon {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                display: block;
-                opacity: 0.8;
-                transition: var(--transition);
-            }
-
-            .format-card:hover .icon,
-            .format-card.selected .icon {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-
-            .format-card h6 {
-                font-size: 1.1rem;
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-            }
-
-            .format-card small {
-                opacity: 0.8;
-                font-size: 0.85rem;
-            }
-
-            .main-content {
-                display: grid;
-                grid-template-columns: 350px 1fr;
-                gap: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .filters-panel {
-                background: white;
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                height: fit-content;
-                box-shadow: var(--shadow-soft);
-                position: sticky;
-                top: 2rem;
-            }
-
-            .filter-section {
-                margin-bottom: 2rem;
-                padding-bottom: 1.5rem;
-                border-bottom: 1px solid #f0f0f0;
-            }
-
-            .filter-section:last-child {
-                border-bottom: none;
-                margin-bottom: 0;
-            }
-
-            .filter-title {
-                display: flex;
-                align-items: center;
-                font-weight: 600;
-                color: #2d3748;
-                margin-bottom: 1rem;
-                font-size: 1.1rem;
-            }
-
-            .filter-title i {
-                margin-right: 0.5rem;
-                color: #667eea;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
             }
 
             .date-inputs {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
                 gap: 1rem;
             }
 
-            .date-input-group {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .date-input-group label {
-                font-size: 0.9rem;
-                color: #4a5568;
-                margin-bottom: 0.5rem;
-                font-weight: 500;
-            }
-
-            .form-control {
-                border: 2px solid #e9ecef;
-                border-radius: 10px;
-                padding: 0.75rem 1rem;
-                transition: var(--transition);
-                font-size: 0.9rem;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .form-control:focus {
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                outline: none;
-            }
-
-            /* 🔧 FIXED: Level badges responsive layout */
             .level-badges {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.75rem;
-            }
-
-            .level-badge {
-                position: relative;
-                cursor: pointer;
-            }
-
-            .level-badge input[type="checkbox"] {
-                position: absolute;
-                opacity: 0;
-                cursor: pointer;
-            }
-
-            .level-badge .badge {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0.6rem;
-                border-radius: 8px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                transition: var(--transition);
-                width: 100%;
-                opacity: 0.6;
-                cursor: pointer;
-                text-align: center;
-                white-space: nowrap;
-            }
-
-            .level-badge input[type="checkbox"]:checked + .badge {
-                opacity: 1;
-                transform: scale(1.05);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            }
-
-            .files-panel {
-                background: white;
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                box-shadow: var(--shadow-soft);
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
 
             .files-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1.5rem;
-                padding-bottom: 1rem;
-                border-bottom: 2px solid #f0f0f0;
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
-
-            .files-list {
-                max-height: 400px;
-                overflow-y: auto;
-                padding-right: 1rem;
-            }
-
-            .file-item {
-                display: flex;
-                align-items: center;
-                padding: 1rem;
-                margin-bottom: 0.75rem;
-                background: #f8f9fa;
-                border-radius: 10px;
-                transition: var(--transition);
-                border: 2px solid transparent;
-                cursor: pointer;
-            }
-
-            .file-item:hover {
-                background: #e3f2fd;
-                border-color: #2196f3;
-            }
-
-            .file-item.selected {
-                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-                border-color: #2196f3;
-            }
-
-            .file-checkbox {
-                width: 20px;
-                height: 20px;
-                margin-right: 1rem;
-                accent-color: #667eea;
-                flex-shrink: 0;
-            }
-
-            .file-info {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .file-name {
-                font-weight: 600;
-                color: #2d3748;
-                margin-bottom: 0.25rem;
-                word-break: break-all;
-            }
-
-            .file-size {
-                font-size: 0.8rem;
-                color: #718096;
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
             }
 
             .export-actions {
-                background: white;
-                border-radius: var(--border-radius);
-                padding: 2rem;
-                box-shadow: var(--shadow-soft);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 1rem;
+                flex-direction: column;
+                text-align: center;
             }
 
             .export-info {
-                display: flex;
-                align-items: center;
-                color: #4a5568;
-                flex: 1;
-                min-width: 250px;
-            }
-
-            .export-info i {
-                margin-right: 0.5rem;
-                color: #667eea;
-                flex-shrink: 0;
+                justify-content: center;
+                min-width: auto;
+                margin-bottom: 1rem;
             }
 
             .export-btn {
-                background: var(--primary-gradient);
-                border: none;
-                padding: 1rem 2rem;
-                border-radius: 50px;
-                color: white;
-                font-weight: 600;
-                font-size: 1rem;
-                cursor: pointer;
-                transition: var(--transition);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                min-width: 180px;
-                justify-content: center;
-                flex-shrink: 0;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: 1rem;
             }
 
-            .export-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            .header-title {
+                font-size: 1.3rem;
             }
 
-            .export-btn:disabled {
-                opacity: 0.7;
-                cursor: not-allowed;
-                transform: none;
+            .content-body {
+                padding: 1rem;
             }
 
-            .select-buttons {
-                display: flex;
-                gap: 0.5rem;
-                flex-wrap: wrap;
+            .filter-section {
+                padding: 1rem;
             }
 
-            .btn-outline-custom {
-                border: 2px solid #667eea;
-                color: #667eea;
-                background: transparent;
+            .format-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .format-card {
+                padding: 1rem;
+            }
+
+            .format-card .icon {
+                font-size: 2rem;
+            }
+
+            .breadcrumb-container {
                 padding: 0.5rem 1rem;
-                border-radius: 25px;
-                font-size: 0.85rem;
-                font-weight: 500;
-                cursor: pointer;
-                transition: var(--transition);
-                white-space: nowrap;
             }
+        }
 
-            .btn-outline-custom:hover {
-                background: #667eea;
-                color: white;
-                transform: translateY(-1px);
-            }
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
 
-            .breadcrumb-modern {
-                background: rgba(255,255,255,0.9);
-                backdrop-filter: blur(10px);
-                border-radius: 50px;
-                padding: 0.75rem 1.5rem;
-                margin-bottom: 2rem;
-                border: 1px solid rgba(255,255,255,0.2);
-            }
+        .notification.success {
+            background: var(--success-color);
+        }
 
-            .breadcrumb-modern .breadcrumb {
-                margin-bottom: 0;
-                background: none;
-                padding: 0;
-            }
+        .notification.warning {
+            background: var(--warning-color);
+        }
 
-            .breadcrumb-modern .breadcrumb-item a {
-                color: #667eea;
-                text-decoration: none;
-                font-weight: 500;
-            }
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<!-- Clean Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        @if(Route::has('log-tracker.dashboard'))
+            <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
+                <div class="brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Log Tracker</span>
+            </a>
+        @else
+            <a class="navbar-brand" href="#">
+                <div class="brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Log Tracker</span>
+            </a>
+        @endif
 
-            .breadcrumb-modern .breadcrumb-item.active {
-                color: #2d3748;
-                font-weight: 600;
-            }
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            /* 🔧 ENHANCED RESPONSIVE DESIGN */
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    @if(Route::has('log-tracker.dashboard'))
+                        <a class="nav-link" href="{{ route('log-tracker.dashboard') }}">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    @else
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    @endif
+                </li>
+                <li class="nav-item">
+                    @if(Route::has('log-tracker.index'))
+                        <a class="nav-link" href="{{ route('log-tracker.index') }}">
+                            <i class="fas fa-list"></i>
+                            Log Files
+                        </a>
+                    @else
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-list"></i>
+                            Log Files
+                        </a>
+                    @endif
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-            /* Large tablets and small desktops */
-            @media (max-width: 1200px) {
-                .main-content {
-                    grid-template-columns: 320px 1fr;
-                    gap: 1.5rem;
-                }
-
-                .filters-panel {
-                    padding: 1.5rem;
-                }
-            }
-
-            /* Tablets */
-            @media (max-width: 1024px) {
-                .main-content {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
-
-                .filters-panel {
-                    position: static;
-                    order: 2;
-                }
-
-                .files-panel {
-                    order: 1;
-                }
-
-                .format-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
-
-            /* Large phones and small tablets */
-            @media (max-width: 768px) {
-                .export-header {
-                    padding: 1.5rem;
-                    text-align: center;
-                }
-
-                .export-header .row {
-                    text-align: center;
-                }
-
-                .format-selection {
-                    padding: 1.5rem;
-                }
-
-                .format-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 1rem;
-                }
-
-                .format-card {
-                    padding: 1.5rem 1rem;
-                }
-
-                .format-card .icon {
-                    font-size: 2.5rem;
-                }
-
-                /* 🔧 FIXED: Date inputs stack on mobile */
-                .date-inputs {
-                    grid-template-columns: 1fr;
-                    gap: 1rem;
-                }
-
-                /* 🔧 FIXED: Level badges stack on mobile */
-                .level-badges {
-                    grid-template-columns: 1fr;
-                    gap: 0.5rem;
-                }
-
-                .level-badge .badge {
-                    font-size: 0.75rem;
-                    padding: 0.5rem;
-                }
-
-                .filters-panel {
-                    padding: 1.5rem;
-                }
-
-                .files-panel {
-                    padding: 1.5rem;
-                }
-
-                .files-header {
-                    flex-direction: column;
-                    align-items: stretch;
-                    text-align: center;
-                }
-
-                .select-buttons {
-                    justify-content: center;
-                }
-
-                .export-actions {
-                    flex-direction: column;
-                    text-align: center;
-                    padding: 1.5rem;
-                }
-
-                .export-info {
-                    justify-content: center;
-                    min-width: auto;
-                    margin-bottom: 1rem;
-                }
-
-                .export-btn {
-                    width: 100%;
-                    max-width: 300px;
-                }
-            }
-
-            /* Small phones */
-            @media (max-width: 480px) {
-                .export-header {
-                    padding: 1rem;
-                }
-
-                .export-header h1 {
-                    font-size: 1.5rem;
-                }
-
-                .format-selection,
-                .filters-panel,
-                .files-panel,
-                .export-actions {
-                    padding: 1rem;
-                }
-
-                .format-grid {
-                    grid-template-columns: 1fr;
-                    gap: 0.75rem;
-                }
-
-                .format-card {
-                    padding: 1rem;
-                }
-
-                /* 🔧 FIXED: Better spacing for small screens */
-                .filter-section {
-                    margin-bottom: 1.5rem;
-                    padding-bottom: 1rem;
-                }
-
-                .filter-title {
-                    font-size: 1rem;
-                }
-
-                .form-control {
-                    padding: 0.6rem 0.8rem;
-                    font-size: 0.85rem;
-                }
-
-                .level-badge .badge {
-                    padding: 0.4rem;
-                    font-size: 0.7rem;
-                }
-
-                .file-item {
-                    padding: 0.8rem;
-                    margin-bottom: 0.5rem;
-                }
-
-                .file-name {
-                    font-size: 0.9rem;
-                }
-
-                .file-size {
-                    font-size: 0.75rem;
-                }
-
-                .breadcrumb-modern {
-                    padding: 0.5rem 1rem;
-                    margin-bottom: 1rem;
-                }
-
-                .btn-outline-custom {
-                    padding: 0.4rem 0.8rem;
-                    font-size: 0.8rem;
-                }
-            }
-
-            /* Extra small screens */
-            @media (max-width: 360px) {
-                .export-header h1 {
-                    font-size: 1.3rem;
-                }
-
-                .format-card .icon {
-                    font-size: 2rem;
-                }
-
-                .format-card h6 {
-                    font-size: 1rem;
-                }
-
-                .level-badge .badge {
-                    padding: 0.3rem;
-                    font-size: 0.65rem;
-                }
-            }
-
-            /* Custom Scrollbar */
-            .files-list::-webkit-scrollbar {
-                width: 6px;
-            }
-
-            .files-list::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-
-            .files-list::-webkit-scrollbar-thumb {
-                background: #667eea;
-                border-radius: 10px;
-            }
-
-            .files-list::-webkit-scrollbar-thumb:hover {
-                background: #5a67d8;
-            }
-
-            /* 🔧 ADDITIONAL FIXES */
-
-            /* Ensure inputs don't overflow on any screen */
-            * {
-                box-sizing: border-box;
-            }
-
-            /* Better text wrapping */
-            .export-info span {
-                word-break: break-word;
-                line-height: 1.4;
-            }
-
-            /* Ensure buttons are always readable */
-            .btn-outline-custom {
-                min-height: 38px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            /* Improve touch targets on mobile */
-            @media (max-width: 768px) {
-                .format-card,
-                .file-item,
-                .level-badge,
-                .btn-outline-custom,
-                .export-btn {
-                    min-height: 44px;
-                }
-
-                .file-checkbox {
-                    width: 24px;
-                    height: 24px;
-                }
-            }
-        </style>
-    @endpush
-
+<!-- Main Content -->
+<div class="container my-4 page-content">
     <!-- Modern Breadcrumb -->
-    <div class="breadcrumb-modern">
+    <div class="breadcrumb-container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('log-tracker.dashboard')}}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{route('log-tracker.index')}}">Log Files</a></li>
+                @if(Route::has('log-tracker.dashboard'))
+                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
+                @else
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                @endif
+                @if(Route::has('log-tracker.index'))
+                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
+                @else
+                    <li class="breadcrumb-item"><a href="#">Log Files</a></li>
+                @endif
                 <li class="breadcrumb-item active">Export</li>
             </ol>
         </nav>
     </div>
 
     <!-- Enhanced Header -->
-    <div class="export-header">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="mb-2"><i class="fas fa-download me-3"></i>Export Your Logs</h1>
-                <p class="mb-0 opacity-90">Generate professional reports in multiple formats with advanced filtering options</p>
+    <div class="page-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">
+                    <i class="fas fa-download"></i>
+                    Export Your Logs
+                </h1>
+                <p class="header-subtitle">
+                    Generate professional reports in multiple formats with advanced filtering options
+                </p>
             </div>
-            <div class="col-md-4 text-end">
-                <div style="font-size: 4rem; opacity: 0.2;">
-                    <i class="fas fa-chart-line"></i>
-                </div>
+            <div class="header-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
         </div>
     </div>
@@ -699,48 +839,47 @@
         @csrf
 
         <!-- Format Selection -->
-        <div class="format-selection">
-            <div class="filter-title">
-                <i class="fas fa-file-alt"></i>
-                Choose Export Format
+        <div class="content-card">
+            <div class="content-header">
+                <h5 class="content-title">
+                    <i class="fas fa-file-alt"></i>
+                    Choose Export Format
+                </h5>
             </div>
-            <div class="format-grid">
-                <div class="format-card" data-format="csv">
-                    <input type="radio" name="format" value="csv" id="csv" style="display: none;">
-                    <i class="fas fa-table icon"></i>
-                    <h6>CSV</h6>
-                    <small>Excel compatible format</small>
-                </div>
-                <div class="format-card" data-format="json">
-                    <input type="radio" name="format" value="json" id="json" style="display: none;">
-                    <i class="fas fa-code icon"></i>
-                    <h6>JSON</h6>
-                    <small>API friendly structure</small>
-                </div>
-                <div class="format-card" data-format="excel">
-                    <input type="radio" name="format" value="excel" id="excel" style="display: none;">
-                    <i class="fas fa-file-excel icon"></i>
-                    <h6>Excel</h6>
-                    <small>Native Excel format</small>
-                </div>
-                <div class="format-card" data-format="pdf">
-                    <input type="radio" name="format" value="pdf" id="pdf" style="display: none;">
-                    <i class="fas fa-file-pdf icon"></i>
-                    <h6>PDF</h6>
-                    <small>Print ready reports</small>
+            <div class="content-body">
+                <div class="format-grid">
+                    <div class="format-card" data-format="csv">
+                        <input type="radio" name="format" value="csv" id="csv" style="display: none;">
+                        <i class="fas fa-table icon"></i>
+                        <h6>CSV</h6>
+                        <small>Excel compatible format</small>
+                    </div>
+                    <div class="format-card" data-format="json">
+                        <input type="radio" name="format" value="json" id="json" style="display: none;">
+                        <i class="fas fa-code icon"></i>
+                        <h6>JSON</h6>
+                        <small>API friendly structure</small>
+                    </div>
+                    <div class="format-card" data-format="excel">
+                        <input type="radio" name="format" value="excel" id="excel" style="display: none;">
+                        <i class="fas fa-file-excel icon"></i>
+                        <h6>Excel</h6>
+                        <small>Native Excel format</small>
+                    </div>
+                    <div class="format-card" data-format="pdf">
+                        <input type="radio" name="format" value="pdf" id="pdf" style="display: none;">
+                        <i class="fas fa-file-pdf icon"></i>
+                        <h6>PDF</h6>
+                        <small>Print ready reports</small>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="main-content">
+        <!-- Main Grid Layout -->
+        <div class="main-grid">
             <!-- Filters Panel -->
             <div class="filters-panel">
-                <div class="filter-title">
-                    <i class="fas fa-filter"></i>
-                    Filters
-                </div>
-
                 <!-- Date Range -->
                 <div class="filter-section">
                     <div class="filter-title">
@@ -766,13 +905,14 @@
                         Log Levels
                     </div>
                     <div class="level-badges">
-                        @foreach(config('log-tracker.log_levels') as $level => $config)
+                        @foreach(config('log-tracker.log_levels', []) as $level => $config)
                             @if($level !== 'total')
                                 <label class="level-badge">
                                     <input type="checkbox" name="levels[]" value="{{ $level }}" checked>
-                                    <span class="badge" style="background-color: {{ $config['color'] }};">
-                                    <i class="{{ $config['icon'] }} me-1"></i>{{ ucfirst($level) }}
-                                </span>
+                                    <span class="badge" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+                                        <i class="{{ $config['icon'] ?? 'fas fa-circle' }}"></i>
+                                        {{ ucfirst($level) }}
+                                    </span>
                                 </label>
                             @endif
                         @endforeach
@@ -792,26 +932,38 @@
             <!-- Files Panel -->
             <div class="files-panel">
                 <div class="files-header">
-                    <div class="filter-title">
+                    <h5 class="content-title">
                         <i class="fas fa-list"></i>
                         Select Log Files
-                    </div>
+                    </h5>
                     <div class="select-buttons">
-                        <button type="button" class="btn-outline-custom" onclick="selectAll()">Select All</button>
-                        <button type="button" class="btn-outline-custom" onclick="deselectAll()">Deselect All</button>
+                        <button type="button" class="btn-outline-primary" onclick="selectAll()">Select All</button>
+                        <button type="button" class="btn-outline-primary" onclick="deselectAll()">Deselect All</button>
                     </div>
                 </div>
 
                 <div class="files-list">
-                    @foreach($logFiles as $file)
+                    @forelse($logFiles ?? [] as $file)
                         <div class="file-item" onclick="toggleFile(this)">
                             <input type="checkbox" name="log_files[]" value="{{ $file }}" class="file-checkbox" checked>
                             <div class="file-info">
                                 <div class="file-name">{{ $file }}</div>
-                                <div class="file-size">{{ round(filesize(storage_path('logs/' . $file)) / 1024, 2) }} KB</div>
+                                @if(file_exists(storage_path('logs/' . $file)))
+                                    <div class="file-size">{{ round(filesize(storage_path('logs/' . $file)) / 1024, 2) }} KB</div>
+                                @else
+                                    <div class="file-size">0 KB</div>
+                                @endif
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="text-center py-4">
+                            <div class="text-muted">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <h5>No Log Files Found</h5>
+                                <p>There are no log files available for export.</p>
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -828,155 +980,183 @@
             </button>
         </div>
     </form>
+</div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Format card selection
-                document.querySelectorAll('.format-card').forEach(card => {
-                    card.addEventListener('click', function() {
-                        // Remove selected class from all cards
-                        document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p class="mb-0">
+                © <span id="year">{{ date('Y') }}</span>
+                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
+                    Log Tracker
+                </a>
+                - Efficient logging, effortless insights.
+            </p>
+        </div>
+    </div>
+</footer>
 
-                        // Add selected class to clicked card
-                        this.classList.add('selected');
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-                        // Set the radio button
-                        const format = this.dataset.format;
-                        document.getElementById(format).checked = true;
-                    });
-                });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Format card selection
+        document.querySelectorAll('.format-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
 
-                // File selection
-                document.querySelectorAll('.file-item').forEach(item => {
-                    const checkbox = item.querySelector('.file-checkbox');
+                // Add selected class to clicked card
+                this.classList.add('selected');
 
-                    // Set initial state
-                    if (checkbox.checked) {
-                        item.classList.add('selected');
-                    }
-
-                    checkbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            item.classList.add('selected');
-                        } else {
-                            item.classList.remove('selected');
-                        }
-                    });
-                });
-
-                // Form submission with enhanced loading
-                const exportForm = document.getElementById('exportForm');
-                const exportBtn = document.getElementById('exportBtn');
-                const originalBtnContent = exportBtn.innerHTML;
-
-                exportForm.addEventListener('submit', function(e) {
-                    // Validate format selection
-                    const format = document.querySelector('input[name="format"]:checked');
-                    if (!format) {
-                        e.preventDefault();
-                        showNotification('Please select an export format', 'warning');
-                        return false;
-                    }
-
-                    // Validate file selection
-                    const files = document.querySelectorAll('input[name="log_files[]"]:checked');
-                    if (files.length === 0) {
-                        e.preventDefault();
-                        showNotification('Please select at least one log file', 'warning');
-                        return false;
-                    }
-
-                    // Start export process
-                    startExportProcess(format.value);
-                });
-
-                function startExportProcess(format) {
-                    const steps = [
-                        'Preparing export...',
-                        'Processing log files...',
-                        `Generating ${format.toUpperCase()} file...`,
-                        'Starting download...'
-                    ];
-
-                    let currentStep = 0;
-                    exportBtn.disabled = true;
-                    exportBtn.style.background = 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)';
-
-                    function updateStep() {
-                        if (currentStep < steps.length) {
-                            exportBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>${steps[currentStep]}</span>`;
-                            currentStep++;
-                            setTimeout(updateStep, 1000);
-                        } else {
-                            setTimeout(() => {
-                                exportBtn.innerHTML = originalBtnContent;
-                                exportBtn.disabled = false;
-                                exportBtn.style.background = '';
-                                showNotification('Export completed successfully!', 'success');
-                            }, 1000);
-                        }
-                    }
-
-                    updateStep();
-                }
-
-                function showNotification(message, type) {
-                    const notification = document.createElement('div');
-                    notification.className = `alert alert-${type} position-fixed`;
-                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);';
-                    notification.innerHTML = `
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
-                            <span>${message}</span>
-                        </div>
-                    `;
-
-                    document.body.appendChild(notification);
-
-                    // Animate in
-                    setTimeout(() => {
-                        notification.style.transform = 'translateX(0)';
-                        notification.style.opacity = '1';
-                    }, 100);
-
-                    // Remove after 4 seconds
-                    setTimeout(() => {
-                        notification.style.transform = 'translateX(100%)';
-                        notification.style.opacity = '0';
-                        setTimeout(() => {
-                            if (notification.parentNode) {
-                                notification.parentNode.removeChild(notification);
-                            }
-                        }, 300);
-                    }, 4000);
-                }
+                // Set the radio button
+                const format = this.dataset.format;
+                document.getElementById(format).checked = true;
             });
+        });
 
-            function selectAll() {
-                document.querySelectorAll('.file-checkbox').forEach(cb => {
-                    cb.checked = true;
-                    cb.closest('.file-item').classList.add('selected');
-                });
+        // File selection
+        document.querySelectorAll('.file-item').forEach(item => {
+            const checkbox = item.querySelector('.file-checkbox');
+
+            // Set initial state
+            if (checkbox && checkbox.checked) {
+                item.classList.add('selected');
             }
 
-            function deselectAll() {
-                document.querySelectorAll('.file-checkbox').forEach(cb => {
-                    cb.checked = false;
-                    cb.closest('.file-item').classList.remove('selected');
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        item.classList.add('selected');
+                    } else {
+                        item.classList.remove('selected');
+                    }
                 });
             }
+        });
 
-            function toggleFile(item) {
-                const checkbox = item.querySelector('.file-checkbox');
-                checkbox.checked = !checkbox.checked;
+        // Form submission with enhanced loading
+        const exportForm = document.getElementById('exportForm');
+        const exportBtn = document.getElementById('exportBtn');
+        const originalBtnContent = exportBtn.innerHTML;
 
-                if (checkbox.checked) {
-                    item.classList.add('selected');
+        if (exportForm && exportBtn) {
+            exportForm.addEventListener('submit', function(e) {
+                // Validate format selection
+                const format = document.querySelector('input[name="format"]:checked');
+                if (!format) {
+                    e.preventDefault();
+                    showNotification('Please select an export format', 'warning');
+                    return false;
+                }
+
+                // Validate file selection
+                const files = document.querySelectorAll('input[name="log_files[]"]:checked');
+                if (files.length === 0) {
+                    e.preventDefault();
+                    showNotification('Please select at least one log file', 'warning');
+                    return false;
+                }
+
+                // Start export process
+                startExportProcess(format.value);
+            });
+        }
+
+        function startExportProcess(format) {
+            const steps = [
+                'Preparing export...',
+                'Processing log files...',
+                `Generating ${format.toUpperCase()} file...`,
+                'Starting download...'
+            ];
+
+            let currentStep = 0;
+            exportBtn.disabled = true;
+            exportBtn.style.background = '#6b7280';
+
+            function updateStep() {
+                if (currentStep < steps.length) {
+                    exportBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>${steps[currentStep]}</span>`;
+                    currentStep++;
+                    setTimeout(updateStep, 1000);
                 } else {
-                    item.classList.remove('selected');
+                    setTimeout(() => {
+                        exportBtn.innerHTML = originalBtnContent;
+                        exportBtn.disabled = false;
+                        exportBtn.style.background = '';
+                        showNotification('Export completed successfully!', 'success');
+                    }, 1000);
                 }
             }
-        </script>
-    @endpush
-@endsection
+
+            updateStep();
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Make showNotification globally available
+        window.showNotification = showNotification;
+    });
+
+    function selectAll() {
+        document.querySelectorAll('.file-checkbox').forEach(cb => {
+            cb.checked = true;
+            const item = cb.closest('.file-item');
+            if (item) {
+                item.classList.add('selected');
+            }
+        });
+    }
+
+    function deselectAll() {
+        document.querySelectorAll('.file-checkbox').forEach(cb => {
+            cb.checked = false;
+            const item = cb.closest('.file-item');
+            if (item) {
+                item.classList.remove('selected');
+            }
+        });
+    }
+
+    function toggleFile(item) {
+        const checkbox = item.querySelector('.file-checkbox');
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+
+            if (checkbox.checked) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        }
+    }
+</script>
+</body>
+</html>
