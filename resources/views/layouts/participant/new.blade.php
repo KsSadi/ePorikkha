@@ -10,9 +10,7 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* ========================================
@@ -25,6 +23,7 @@
             --ap-primary-light: #eeeeff;
             --ap-primary-dark: #4a4ae8;
             --ap-secondary: #ff7373;
+            --ap-accent: #10b981;
 
             /* UI Colors */
             --ap-success: #4caf50;
@@ -132,75 +131,41 @@
             box-shadow: var(--shadow);
         }
 
+        /* Enhanced Logo Design */
         .navbar-brand {
             font-weight: 800;
             font-size: 1.75rem;
-            color: var(--ap-primary) !important;
             text-decoration: none;
-            position: relative;
             display: flex;
             align-items: center;
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--ap-radius);
-            transition: all 0.3s ease;
-            letter-spacing: -0.03em;
+            gap: 0.5rem;
         }
 
-        .navbar-brand .logo-icon {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .navbar-brand i {
             background: linear-gradient(135deg, var(--ap-primary), var(--ap-primary-dark));
-            border-radius: 12px;
-            margin-right: 0.75rem;
-            box-shadow: 0 4px 10px rgba(90, 90, 243, 0.25);
-            transition: all 0.3s ease;
-            z-index: 2;
-        }
-
-        .navbar-brand:hover .logo-icon {
-            transform: rotate(5deg) scale(1.05);
-            box-shadow: 0 6px 15px rgba(90, 90, 243, 0.35);
-        }
-
-        .navbar-brand .logo-icon i {
-            font-size: 1.4rem;
-            color: white;
-        }
-
-        .navbar-brand .logo-text {
-            position: relative;
-            z-index: 2;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar-brand .logo-text .e-part {
-            color: var(--ap-secondary);
-            font-weight: 800;
-            position: relative;
-            text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
-            font-size: 1.85rem;
-            letter-spacing: -0.03em;
-            transform: skewX(-5deg);
-            display: inline-block;
-            margin-right: -0.1rem;
-        }
-
-        .navbar-brand .logo-text .porikkha-part {
-            background: linear-gradient(45deg, var(--ap-primary), var(--ap-primary-dark));
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 800;
-            text-shadow: 0px 1px 1px rgba(0,0,0,0.05);
-            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--ap-accent);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .navbar-brand:hover .logo-text .e-letter {
+            color: var(--ap-primary-dark);
+        }
+
+        .navbar-brand:hover .logo-text .porikkha-text {
+            color: #059669;
         }
 
         .nav-link {
@@ -366,34 +331,13 @@
             gap: 0.75rem;
             padding: 0.5rem 1rem;
             border-radius: var(--ap-radius);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .user-dropdown::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            opacity: 0;
-            transform: scale(0.5);
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            transition: all 0.2s ease;
         }
 
         .user-dropdown:hover {
             background: var(--ap-primary-light);
             border-color: var(--ap-primary);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(90, 90, 243, 0.1);
-        }
-
-        .user-dropdown:hover::after {
-            opacity: 0.3;
-            transform: scale(1);
         }
 
         .user-avatar {
@@ -408,29 +352,6 @@
             font-weight: 700;
             font-size: 1.1rem;
             box-shadow: var(--ap-shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .user-avatar::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 150%;
-            height: 40%;
-            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.3), rgba(255,255,255,0));
-            transform: rotate(45deg) translateX(-100px);
-            transition: all 0.6s ease;
-        }
-
-        .user-dropdown:hover .user-avatar {
-            transform: scale(1.05);
-        }
-
-        .user-dropdown:hover .user-avatar::before {
-            transform: rotate(45deg) translateX(200px);
         }
 
         /* ========================================
@@ -829,7 +750,7 @@
         }
 
         .ap-grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .ap-grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .ap-grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
         .ap-grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
         /* Quick Actions */
@@ -891,77 +812,244 @@
             line-height: 1.6;
         }
 
-        /* Exam Cards */
+        /* ========================================
+           ENHANCED EXAM CARDS
+           ======================================== */
+
         .ap-exam-card {
             background: var(--ap-bg-primary);
-            border-radius: var(--ap-radius);
-            box-shadow: var(--ap-shadow);
-            transition: all 0.3s ease;
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             overflow: hidden;
-            padding: var(--ap-space-lg);
-            border: 2px solid transparent;
+            border: 1px solid var(--ap-border);
+            position: relative;
+        }
+
+        .ap-exam-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--ap-accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .ap-exam-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--ap-shadow-lg);
-            border-color: var(--ap-primary-light);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .ap-exam-card:hover::before {
+            opacity: 1;
+        }
+
+        .ap-exam-card-header {
+            padding: 1.5rem 1.5rem 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(248, 250, 252, 0.8));
+            position: relative;
+        }
+
+        .ap-exam-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--ap-border), transparent);
         }
 
         .ap-exam-header {
             display: flex;
-            align-items: center;
-            gap: var(--ap-space-sm);
-            margin-bottom: var(--ap-space-md);
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .ap-exam-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: var(--ap-radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: var(--ap-shadow-sm);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
         }
 
-        .ap-exam-icon.math { background: #e3f2fd; color: var(--ap-info); }
-        .ap-exam-icon.science { background: #e8f5e9; color: var(--ap-success); }
-        .ap-exam-icon.english { background: #fff8e1; color: var(--ap-warning); }
-        .ap-exam-icon.cs { background: var(--ap-primary-light); color: var(--ap-primary); }
+        .ap-exam-card:hover .ap-exam-icon {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ap-exam-icon.math {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: var(--ap-info);
+            border: 2px solid rgba(33, 150, 243, 0.2);
+        }
+        .ap-exam-icon.science {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: var(--ap-success);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+        .ap-exam-icon.english {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            color: var(--ap-warning);
+            border: 2px solid rgba(255, 152, 0, 0.2);
+        }
+        .ap-exam-icon.cs {
+            background: linear-gradient(135deg, var(--ap-primary-light), #d1c4e9);
+            color: var(--ap-primary);
+            border: 2px solid rgba(90, 90, 243, 0.2);
+        }
+
+        .ap-exam-info {
+            flex: 1;
+            min-width: 0;
+        }
 
         .ap-exam-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--ap-text-primary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
         }
 
         .ap-exam-subtitle {
             color: var(--ap-text-secondary);
             font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ap-exam-subtitle .separator {
+            width: 4px;
+            height: 4px;
+            background: var(--ap-text-muted);
+            border-radius: 50%;
+        }
+
+        .ap-exam-body {
+            padding: 0 1.5rem 1.5rem;
         }
 
         .ap-exam-details {
-            margin-bottom: var(--ap-space-md);
+            margin-bottom: 1.5rem;
         }
 
         .ap-detail-row {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--ap-bg-light);
+            border-radius: var(--ap-radius);
+            transition: all 0.2s ease;
+        }
+
+        .ap-detail-row:hover {
+            background: var(--ap-primary-light);
+            transform: translateX(4px);
         }
 
         .ap-detail-icon {
-            color: var(--ap-text-secondary);
+            color: var(--ap-primary);
             width: 16px;
+            font-weight: 600;
         }
 
         .ap-detail-text {
             font-size: 0.875rem;
             color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        .ap-exam-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ap-exam-footer .ap-badge {
+            margin-bottom: 0;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        .ap-exam-footer .ap-btn {
+            flex: 1;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            border-radius: var(--ap-radius);
+            min-width: 120px;
+        }
+
+        .ap-exam-footer .ap-btn-outline {
+            border-width: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .ap-exam-footer .ap-btn-outline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(90, 90, 243, 0.2);
+        }
+
+        .ap-exam-footer .ap-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(90, 90, 243, 0.3);
+        }
+
+        /* Enhanced Status Indicators */
+        .ap-exam-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .ap-exam-status.active {
+            background: var(--ap-success);
+            animation: pulse 2s infinite;
+        }
+
+        .ap-exam-status.upcoming {
+            background: var(--ap-warning);
+        }
+
+        .ap-exam-status.completed {
+            background: var(--ap-text-muted);
+        }
+
+        /* Progress Bar */
+        .ap-exam-progress {
+            margin: 1rem 0;
+            background: var(--ap-bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 8px;
+        }
+
+        .ap-exam-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ap-primary), var(--ap-accent));
+            border-radius: 8px;
+            transition: width 0.3s ease;
         }
 
         /* Countdown Section */
@@ -1023,22 +1111,22 @@
         }
 
         .ap-badge-warning {
-            background: #fff8e1;
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
             color: var(--ap-warning);
-            border: 2px solid var(--ap-warning);
+            border: 2px solid rgba(255, 152, 0, 0.3);
         }
 
         .ap-badge-success {
-            background: #e8f5e9;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
             color: var(--ap-success);
-            border: 2px solid var(--ap-success);
+            border: 2px solid rgba(76, 175, 80, 0.3);
             animation: pulse 2s infinite;
         }
 
         .ap-badge-info {
-            background: #e3f2fd;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             color: var(--ap-info);
-            border: 2px solid var(--ap-info);
+            border: 2px solid rgba(33, 150, 243, 0.3);
         }
 
         /* ========================================
@@ -1111,6 +1199,34 @@
             .ap-countdown-display {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .ap-exam-card-header,
+            .ap-exam-body {
+                padding: 1rem;
+            }
+
+            .ap-exam-header {
+                gap: 0.75rem;
+            }
+
+            .ap-exam-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
+            }
+
+            .ap-exam-title {
+                font-size: 1.125rem;
+            }
+
+            .ap-exam-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ap-exam-footer .ap-btn {
+                width: 100%;
+            }
         }
 
         /* ========================================
@@ -1135,41 +1251,13 @@
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
+                opacity: 1;
             }
             50% {
                 transform: scale(1.05);
+                opacity: 0.8;
             }
         }
-
-        @keyframes dropdownFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes menuItemFadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .dropdown-item:nth-child(1) { animation: menuItemFadeIn 0.3s ease-out 0.05s both; }
-        .dropdown-item:nth-child(2) { animation: menuItemFadeIn 0.3s ease-out 0.1s both; }
-        .dropdown-item:nth-child(3) { animation: menuItemFadeIn 0.3s ease-out 0.15s both; }
-        .dropdown-item:nth-child(4) { animation: menuItemFadeIn 0.3s ease-out 0.2s both; }
-        .dropdown-item:nth-child(5) { animation: menuItemFadeIn 0.3s ease-out 0.25s both; }
-        .dropdown-item:nth-child(6) { animation: menuItemFadeIn 0.3s ease-out 0.3s both; }
-        .dropdown-item:nth-child(7) { animation: menuItemFadeIn 0.3s ease-out 0.35s both; }
 
         /* ========================================
            Footer
@@ -1187,524 +1275,43 @@
         .footer-logo {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--ap-primary);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            transition: all 0.3s ease;
-            letter-spacing: -0.02em;
-            cursor: pointer;
-        }
-
-        .footer-logo:hover {
-            transform: translateY(-2px);
-        }
-
-        .footer-logo .logo-icon {
-            position: relative;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--ap-primary), var(--ap-primary-dark));
-            border-radius: 10px;
-            margin-right: 0.75rem;
-            box-shadow: 0 3px 8px rgba(90, 90, 243, 0.25);
-            transition: all 0.3s ease;
+            gap: 0.5rem;
         }
 
-        .footer-logo:hover .logo-icon {
-            transform: rotate(5deg) scale(1.05);
-            box-shadow: 0 5px 12px rgba(90, 90, 243, 0.35);
-        }
-
-        .footer-logo .logo-icon i {
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        .footer-logo .logo-text {
-            display: flex;
-            align-items: center;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: -0.03em;
-            position: relative;
-        }
-
-        .footer-logo .logo-text .e-part {
-            color: var(--ap-secondary);
-            font-weight: 800;
-            transform: skewX(-5deg);
-            display: inline-block;
-            margin-right: -0.1rem;
-            text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
-        }
-
-        .footer-logo .logo-text .porikkha-part {
+        .footer-logo i {
             background: linear-gradient(45deg, var(--ap-primary), var(--ap-primary-dark));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            text-shadow: 0px 1px 1px rgba(0,0,0,0.05);
+            color: transparent;
         }
 
-        .footer-logo .logo-text::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(to right, var(--ap-secondary) 15%, var(--ap-primary) 15%, var(--ap-primary-dark));
-            border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-            opacity: 0.7;
-        }
-
-        .footer-logo:hover .logo-text::after {
-            width: 100%;
-        }
-
-        /* Enhanced User Dropdown Menu */
-        .dropdown-menu {
-            border: 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border-radius: var(--ap-radius);
-            overflow: hidden;
-            padding: 0;
-            min-width: 260px;
-            animation: dropdownFadeIn 0.3s ease-out;
-            border: 1px solid var(--ap-border);
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.98);
-        }
-
-        @keyframes dropdownFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes menuItemFadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .dropdown-item:nth-child(1) { animation: menuItemFadeIn 0.3s ease-out 0.05s both; }
-        .dropdown-item:nth-child(2) { animation: menuItemFadeIn 0.3s ease-out 0.1s both; }
-        .dropdown-item:nth-child(3) { animation: menuItemFadeIn 0.3s ease-out 0.15s both; }
-        .dropdown-item:nth-child(4) { animation: menuItemFadeIn 0.3s ease-out 0.2s both; }
-        .dropdown-item:nth-child(5) { animation: menuItemFadeIn 0.3s ease-out 0.25s both; }
-        .dropdown-item:nth-child(6) { animation: menuItemFadeIn 0.3s ease-out 0.3s both; }
-        .dropdown-item:nth-child(7) { animation: menuItemFadeIn 0.3s ease-out 0.35s both; }
-
-        .dropdown-menu-header {
-            background: linear-gradient(135deg, var(--ap-primary-light), #f8f9ff);
-            padding: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid var(--ap-border);
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-menu-header:hover {
-            background: linear-gradient(135deg, #f0f0ff, #f8f9ff);
-        }
-
-        .dropdown-menu-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--ap-primary), var(--ap-secondary));
-            box-shadow: 0px 2px 10px rgba(90, 90, 243, 0.3);
-        }
-
-        .dropdown-menu-header::after {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
-            opacity: 0.6;
-        }
-
-        .dropdown-menu-header .user-avatar {
-            width: 55px;
-            height: 55px;
-            box-shadow: 0 6px 18px rgba(90, 90, 243, 0.25);
-            position: relative;
-            z-index: 1;
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, var(--ap-primary), var(--ap-primary-dark));
-        }
-
-        .dropdown-menu-header:hover .user-avatar {
-            transform: scale(1.05) rotate(3deg);
-        }
-
-        .dropdown-menu-header .user-avatar::after {
-            content: '';
-            position: absolute;
-            right: 0px;
-            bottom: 0px;
-            width: 14px;
-            height: 14px;
-            background: var(--ap-success);
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-            animation: pulseStatus 2s infinite;
-        }
-
-        @keyframes pulseStatus {
-            0% {
-                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-            }
-        }
-
-        .dropdown-menu-header .user-info {
-            flex: 1;
-        }
-
-        .dropdown-menu-header .user-name {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: var(--ap-text-primary);
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.01em;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .dropdown-menu-header .user-role {
-            font-size: 0.8rem;
-            color: var(--ap-text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .dropdown-menu-header .user-role-badge {
-            background: linear-gradient(135deg, var(--ap-primary-light), #f0f0ff);
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
+        .footer-logo .e-letter {
             color: var(--ap-primary);
-            border: 1px solid var(--ap-primary-light);
-            box-shadow: 0 2px 5px rgba(90, 90, 243, 0.1);
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
+            font-weight: 900;
         }
 
-        .py-2 {
-            padding: 0.5rem 0;
+        .footer-logo .porikkha-text {
+            color: var(--ap-accent);
+            font-weight: 700;
         }
 
-        .dropdown-item {
-            padding: 0.85rem 1.35rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #64748B;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            margin: 0 0.5rem;
-            border-radius: 8px;
-            letter-spacing: 0.01em;
-        }
-
-        .dropdown-item i {
-            font-size: 0.9rem;
-            width: 24px;
-            text-align: center;
-            margin-right: 0.85rem;
-            position: relative;
-            z-index: 1;
-            transition: all 0.2s ease;
-            color: #64748B;
-        }
-
-        .dropdown-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 0;
-            background: linear-gradient(90deg, var(--ap-primary-light) 0%, rgba(238, 238, 255, 0.2) 100%);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 8px;
-        }
-
-        .dropdown-item:hover {
-            color: #4F46E5; /* Stronger purple color for better visibility */
-            transform: translateX(3px);
-            font-weight: 600;
-            background-color: rgba(238, 238, 255, 0.7); /* Stronger background color */
-        }
-
-        .dropdown-item:hover::before {
-            width: 100%;
-            background: linear-gradient(90deg, rgba(79, 70, 229, 0.2) 0%, rgba(79, 70, 229, 0.05) 100%);
-        }
-
-        .dropdown-item:hover i {
-            transform: translateX(2px) scale(1.1);
-            color: #4F46E5; /* Stronger purple color for icons */
-        }
-
-        /* Enhanced dropdown item hover effect */
-        .dropdown-item::after {
-            content: '';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%) scale(0);
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--ap-primary);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-item:hover::after {
-            transform: translateY(-50%) scale(1);
-            opacity: 1;
-        }
-
-        .dropdown-divider {
-            margin: 0.5rem 1.5rem;
-            opacity: 0.1;
-            border-top-color: var(--ap-border);
-        }
-
-        .dropdown-item.text-danger {
-            color: #EF4444;
-        }
-
-        .dropdown-item.text-danger:hover {
-            color: #DC2626;
-            background-color: rgba(239, 68, 68, 0.1);
-            font-weight: 600;
-        }
-
-        .dropdown-item.text-danger:hover::before {
-            background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
-        }
-
-        .dropdown-item.text-danger:hover i {
-            color: #DC2626;
-        }
-
-        .badge.bg-danger {
-            background: linear-gradient(135deg, #ff5353, #ff7373) !important;
-            box-shadow: 0 2px 5px rgba(244, 67, 54, 0.2);
-            padding: 0.25em 0.5em;
-            font-weight: 600;
-            position: relative;
-            transform-origin: center;
-            animation: badgePulse 2s infinite;
-        }
-
-        @keyframes badgePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .dropdown-item.active-session {
-            color: #22C55E;
-            font-weight: 500;
-            background: transparent;
-        }
-
-        .dropdown-item.active-session i {
-            color: #22C55E;
-            animation: pulse 2s infinite;
-            font-size: 0.7rem;
-            margin-top: 2px;
-        }
-
-        .dropdown-item.active-session:hover {
-            color: #16A34A;
-            background-color: rgba(34, 197, 94, 0.1);
-            font-weight: 600;
-        }
-
-        .dropdown-item.active-session:hover i {
-            color: #16A34A;
-        }
-
-        .dropdown-item.active-session:hover::before {
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .dropdown-menu-footer {
-            padding: 0.9rem 1.25rem;
-            text-align: center;
-            font-size: 0.78rem;
-            color: var(--ap-text-muted);
-            background: linear-gradient(to bottom, var(--ap-bg-light), #f5f8fc);
-            border-top: 1px solid var(--ap-border);
-            font-weight: 500;
-        }
-
-        .dropdown-menu-footer::before {
-            content: '\f017';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 400;
-            margin-right: 0.5rem;
-            opacity: 0.7;
-        }
-
-        /* Custom styles for specific menu items */
-        .dropdown-item.profile-item i {
-            color: #64748B;
-        }
-
-        .dropdown-item.profile-item:hover {
-            color: #334155;
-            background-color: rgba(100, 116, 139, 0.1);
-        }
-
-        .dropdown-item.profile-item:hover i {
-            color: #334155;
-        }
-
-        .dropdown-item.profile-item:hover::before {
-            background: linear-gradient(90deg, rgba(100, 116, 139, 0.15) 0%, rgba(100, 116, 139, 0.05) 100%);
-        }
-
-        .dropdown-item.settings-item i {
-            color: #64748B;
-        }
-
-        .dropdown-item.settings-item:hover {
-            color: #334155;
-            background-color: rgba(100, 116, 139, 0.1);
-        }
-
-        .dropdown-item.settings-item:hover i {
-            color: #334155;
-        }
-
-        .dropdown-item.settings-item:hover::before {
-            background: linear-gradient(90deg, rgba(100, 116, 139, 0.15) 0%, rgba(100, 116, 139, 0.05) 100%);
-        }
-
-        .dropdown-item.notifications-item i {
-            color: #64748B;
-        }
-
-        .dropdown-item.notifications-item:hover {
-            color: #334155;
-            background-color: rgba(100, 116, 139, 0.1);
-        }
-
-        .dropdown-item.notifications-item:hover i {
-            color: #334155;
-        }
-
-        .dropdown-item.notifications-item:hover::before {
-            background: linear-gradient(90deg, rgba(100, 116, 139, 0.15) 0%, rgba(100, 116, 139, 0.05) 100%);
-        }
-
-        .dropdown-item.help-item i {
-            color: #64748B;
-        }
-
-        .dropdown-item.help-item:hover {
-            color: #334155;
-            background-color: rgba(100, 116, 139, 0.1);
-        }
-
-        .dropdown-item.help-item:hover i {
-            color: #334155;
-        }
-
-        .dropdown-item.help-item:hover::before {
-            background: linear-gradient(90deg, rgba(100, 116, 139, 0.15) 0%, rgba(100, 116, 139, 0.05) 100%);
-        }
-
-        .dropdown-item.system-item i {
-            color: #6366F1;
-        }
-
-        .dropdown-item.system-item:hover {
-            color: #4338CA;
-            background-color: rgba(99, 102, 241, 0.1);
-            font-weight: 600;
-        }
-
-        .dropdown-item.system-item:hover i {
-            color: #4338CA;
-        }
-
-        .dropdown-item.system-item:hover::before {
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
-        }
-
-        .dropdown-item.active-session {
-            color: var(--ap-success);
-            font-weight: 500;
-            background: transparent;
-        }
     </style>
 </head>
 <body>
 
-<!-- Efficient Navigation -->
+<!-- Enhanced Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <div class="logo-icon">
-                <i class="fas fa-graduation-cap"></i>
+            <i class="fas fa-graduation-cap"></i>
+            <div class="logo-text">
+                <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
             </div>
-            <span class="logo-text">
-                    <span class="e-part">e</span><span class="porikkha-part">Porikkha</span>
-                </span>
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -1771,61 +1378,19 @@
                 </div>
 
                 <div class="dropdown">
-                    <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="user-avatar"><i class="fas fa-user-shield" style="font-size: 1rem;"></i></div>
+                    <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar">A</div>
                         <div class="d-none d-md-block text-start">
                             <div class="fw-bold" style="font-size: 0.875rem;">Admin</div>
                             <div class="text-muted" style="font-size: 0.75rem;">Administrator</div>
                         </div>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <div class="dropdown-menu-header">
-                            <div class="user-avatar"><i class="fas fa-user-shield" style="font-size: 1rem;"></i></div>
-                            <div class="user-info">
-                                <div class="user-name">Admin User</div>
-                                <div class="user-role">
-                                    <span>Administrator</span>
-                                    <span class="user-role-badge">Super Admin</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="py-2">
-                            <a class="dropdown-item active-session" href="#">
-                                <i class="fas fa-circle"></i>
-                                Active Session
-                            </a>
-                            <a class="dropdown-item profile-item" href="#">
-                                <i class="fas fa-user"></i>
-                                My Profile
-                            </a>
-                            <a class="dropdown-item settings-item" href="#">
-                                <i class="fas fa-cog"></i>
-                                Account Settings
-                            </a>
-                            <a class="dropdown-item notifications-item" href="#">
-                                <i class="fas fa-bell"></i>
-                                Notifications <span class="badge bg-danger rounded-pill ms-2" style="font-size: 0.65rem;">3</span>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a class="dropdown-item help-item" href="#">
-                                <i class="fas fa-question-circle"></i>
-                                Help Center
-                            </a>
-                            <a class="dropdown-item system-item" href="#">
-                                <i class="fas fa-sliders"></i>
-                                System Preferences
-                            </a>
-                            <a class="dropdown-item text-danger" href="#">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Logout
-                            </a>
-                        </div>
-
-                        <div class="dropdown-menu-footer">
-                            Last login: Today at 10:23 AM
-                        </div>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1958,7 +1523,7 @@
         </div>
     </div>
 
-    <!-- Upcoming Exams Section -->
+    <!-- Enhanced Upcoming Exams Section -->
     <div class="ap-section">
         <div class="ap-section-header">
             <h2 class="ap-section-title">Upcoming Exams</h2>
@@ -1969,102 +1534,159 @@
 
         <div class="ap-grid ap-grid-3">
             <div class="ap-exam-card ap-fade-in">
-                <div class="ap-exam-header">
-                    <div class="ap-exam-icon math">
-                        <i class="fas fa-square-root-alt"></i>
-                    </div>
-                    <div>
-                        <div class="ap-exam-title">Advanced Mathematics</div>
-                        <div class="ap-exam-subtitle">30 questions • 2 hours</div>
-                    </div>
-                </div>
-
-                <div class="ap-exam-details">
-                    <div class="ap-detail-row">
-                        <i class="fas fa-calendar-alt ap-detail-icon"></i>
-                        <span class="ap-detail-text">May 10, 2025</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-clock ap-detail-icon"></i>
-                        <span class="ap-detail-text">10:00 AM</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-user-tie ap-detail-icon"></i>
-                        <span class="ap-detail-text">Prof. Johnson</span>
+                <div class="ap-exam-status upcoming"></div>
+                <div class="ap-exam-card-header">
+                    <div class="ap-exam-header">
+                        <div class="ap-exam-icon math">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <div class="ap-exam-info">
+                            <div class="ap-exam-title">Advanced Mathematics</div>
+                            <div class="ap-exam-subtitle">
+                                <span>30 questions</span>
+                                <div class="separator"></div>
+                                <span>2 hours</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="ap-badge ap-badge-warning">Starts in 3 days</div>
-                <button class="ap-btn ap-btn-outline w-100">
-                    <i class="fas fa-eye"></i>
-                    View Details
-                </button>
+                <div class="ap-exam-body">
+                    <div class="ap-exam-details">
+                        <div class="ap-detail-row">
+                            <i class="fas fa-calendar-alt ap-detail-icon"></i>
+                            <span class="ap-detail-text">June 10, 2025</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-clock ap-detail-icon"></i>
+                            <span class="ap-detail-text">10:00 AM - 12:00 PM</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-user-tie ap-detail-icon"></i>
+                            <span class="ap-detail-text">Prof. Johnson</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-users ap-detail-icon"></i>
+                            <span class="ap-detail-text">42 Students Enrolled</span>
+                        </div>
+                    </div>
+
+                    <div class="ap-exam-progress">
+                        <div class="ap-exam-progress-bar" style="width: 65%;"></div>
+                    </div>
+
+                    <div class="ap-exam-footer">
+                        <div class="ap-badge ap-badge-warning">Starts in 13 days</div>
+                        <button class="ap-btn ap-btn-outline">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="ap-exam-card ap-fade-in">
-                <div class="ap-exam-header">
-                    <div class="ap-exam-icon science">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <div>
-                        <div class="ap-exam-title">Basic Science</div>
-                        <div class="ap-exam-subtitle">25 questions • 1.5 hours</div>
-                    </div>
-                </div>
-
-                <div class="ap-exam-details">
-                    <div class="ap-detail-row">
-                        <i class="fas fa-calendar-alt ap-detail-icon"></i>
-                        <span class="ap-detail-text">May 15, 2025</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-clock ap-detail-icon"></i>
-                        <span class="ap-detail-text">2:00 PM</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-user-tie ap-detail-icon"></i>
-                        <span class="ap-detail-text">Dr. Williams</span>
+                <div class="ap-exam-status upcoming"></div>
+                <div class="ap-exam-card-header">
+                    <div class="ap-exam-header">
+                        <div class="ap-exam-icon science">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="ap-exam-info">
+                            <div class="ap-exam-title">Basic Science</div>
+                            <div class="ap-exam-subtitle">
+                                <span>25 questions</span>
+                                <div class="separator"></div>
+                                <span>1.5 hours</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="ap-badge ap-badge-warning">Starts in 8 days</div>
-                <button class="ap-btn ap-btn-outline w-100">
-                    <i class="fas fa-eye"></i>
-                    View Details
-                </button>
+                <div class="ap-exam-body">
+                    <div class="ap-exam-details">
+                        <div class="ap-detail-row">
+                            <i class="fas fa-calendar-alt ap-detail-icon"></i>
+                            <span class="ap-detail-text">June 15, 2025</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-clock ap-detail-icon"></i>
+                            <span class="ap-detail-text">2:00 PM - 3:30 PM</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-user-tie ap-detail-icon"></i>
+                            <span class="ap-detail-text">Dr. Williams</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-users ap-detail-icon"></i>
+                            <span class="ap-detail-text">38 Students Enrolled</span>
+                        </div>
+                    </div>
+
+                    <div class="ap-exam-progress">
+                        <div class="ap-exam-progress-bar" style="width: 45%;"></div>
+                    </div>
+
+                    <div class="ap-exam-footer">
+                        <div class="ap-badge ap-badge-warning">Starts in 18 days</div>
+                        <button class="ap-btn ap-btn-outline">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="ap-exam-card ap-fade-in">
-                <div class="ap-exam-header">
-                    <div class="ap-exam-icon cs">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div>
-                        <div class="ap-exam-title">Computer Science 101</div>
-                        <div class="ap-exam-subtitle">40 questions • 2.5 hours</div>
-                    </div>
-                </div>
-
-                <div class="ap-exam-details">
-                    <div class="ap-detail-row">
-                        <i class="fas fa-calendar-alt ap-detail-icon"></i>
-                        <span class="ap-detail-text">Today</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-clock ap-detail-icon"></i>
-                        <span class="ap-detail-text">9:00 AM</span>
-                    </div>
-                    <div class="ap-detail-row">
-                        <i class="fas fa-user-tie ap-detail-icon"></i>
-                        <span class="ap-detail-text">Prof. Anderson</span>
+                <div class="ap-exam-status active"></div>
+                <div class="ap-exam-card-header">
+                    <div class="ap-exam-header">
+                        <div class="ap-exam-icon cs">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="ap-exam-info">
+                            <div class="ap-exam-title">Computer Science 101</div>
+                            <div class="ap-exam-subtitle">
+                                <span>40 questions</span>
+                                <div class="separator"></div>
+                                <span>2.5 hours</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="ap-badge ap-badge-success">Active Now</div>
-                <button class="ap-btn ap-btn-primary w-100">
-                    <i class="fas fa-play"></i>
-                    Monitor Exam
-                </button>
+                <div class="ap-exam-body">
+                    <div class="ap-exam-details">
+                        <div class="ap-detail-row">
+                            <i class="fas fa-calendar-alt ap-detail-icon"></i>
+                            <span class="ap-detail-text">Today - May 28, 2025</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-clock ap-detail-icon"></i>
+                            <span class="ap-detail-text">9:00 AM - 11:30 AM</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-user-tie ap-detail-icon"></i>
+                            <span class="ap-detail-text">Prof. Anderson</span>
+                        </div>
+                        <div class="ap-detail-row">
+                            <i class="fas fa-users ap-detail-icon"></i>
+                            <span class="ap-detail-text">56 Students Active</span>
+                        </div>
+                    </div>
+
+                    <div class="ap-exam-progress">
+                        <div class="ap-exam-progress-bar" style="width: 85%;"></div>
+                    </div>
+
+                    <div class="ap-exam-footer">
+                        <div class="ap-badge ap-badge-success">Live Now</div>
+                        <button class="ap-btn ap-btn-primary">
+                            <i class="fas fa-eye"></i>
+                            Monitor Exam
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2076,7 +1698,7 @@
             <p class="text-muted mb-4">Get ready for the upcoming mathematics examination</p>
             <div class="ap-countdown-display">
                 <div class="ap-countdown-item">
-                    <div class="ap-countdown-value" id="days">03</div>
+                    <div class="ap-countdown-value" id="days">13</div>
                     <div class="ap-countdown-label">Days</div>
                 </div>
                 <div class="ap-countdown-item">
@@ -2172,13 +1794,15 @@
     </div>
 </div>
 
-<!-- Footer -->
+<!-- Enhanced Footer -->
 <footer class="footer">
     <div class="ap-container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
             <div class="footer-logo mb-2 mb-md-0">
                 <i class="fas fa-graduation-cap"></i>
-                ePorikkha
+                <div>
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
             </div>
             <div style="color: var(--text-muted); font-size: 0.875rem;">
                 © 2025 ePorikkha. All rights reserved.
