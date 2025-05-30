@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Results & Leaderboard</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        /* ========================================
+           NEW CSS FOR RESULTS & LEADERBOARD PAGE
+           ======================================== */
+
+        /* Results Header Section */
+        .results-header-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .results-header-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+        }
+
+        .results-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .results-main-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .results-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .results-stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .results-stat-item:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon.exams {
+            background: linear-gradient(135deg, var(--ap-info), #3b82f6);
+        }
+
+        .stat-icon.average {
+            background: linear-gradient(135deg, var(--ap-success), #22c55e);
+        }
+
+        .stat-icon.rank {
+            background: linear-gradient(135deg, var(--bd-gold), #eab308);
+        }
+
+        .stat-icon.contests {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        /* Tabs Navigation */
+        .results-nav-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .results-nav-tabs {
+            display: flex;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .results-nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .results-nav-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .results-nav-tab i {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .results-nav-tab:hover {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+        }
+
+        .results-nav-tab.active {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+        }
+
+        .results-nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        /* Content Container */
+        .results-content {
+            min-height: 500px;
+        }
+
+        .results-tab-pane {
+            display: none;
+        }
+
+        .results-tab-pane.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.12);
+        }
+
+        .content-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            position: relative;
+        }
+
+        .content-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: var(--ap-radius);
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .content-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Individual Result Display */
+        .result-item {
+            background: rgba(5, 150, 105, 0.03);
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-item:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.15);
+        }
+
+        .result-item.excellent {
+            border-color: var(--ap-success);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .result-item.good {
+            border-color: var(--ap-info);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .result-item.average {
+            border-color: var(--ap-warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .result-item.poor {
+            border-color: var(--ap-secondary);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+        }
+
+        .result-score {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            min-width: 120px;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: var(--ap-radius);
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--ap-text-secondary);
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: var(--ap-text-primary);
+        }
+
+        .grade-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 2px solid;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .grade-a-plus {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: var(--ap-success);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .grade-a {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--ap-info);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .grade-b {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: var(--ap-warning);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .grade-c {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: var(--ap-secondary);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--ap-border);
+            vertical-align: middle;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(255, 255, 255, 0.9));
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .leaderboard-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background: var(--ap-primary-light);
+            transform: scale(1.01);
+        }
+
+        .leaderboard-table tbody tr.current-user {
+            background: rgba(5, 150, 105, 0.1);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .rank-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 60px;
+        }
+
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            margin: 0 auto;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, var(--bd-gold), #eab308);
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            box-shadow: 0 4px 16px rgba(148, 163, 184, 0.4);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+        }
+
+        .rank-other {
+            background: var(--ap-primary);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .student-details {
+            flex: 1;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .student-id {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        .score-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-primary);
+        }
+
+        /* Performance Chart */
+        .performance-chart {
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--ap-border);
+            background: white;
+            color: var(--ap-text-secondary);
+            border-radius: var(--ap-radius);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chart-btn.active {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--ap-radius);
+            margin-top: 1rem;
+        }
+
+        .chart-bar {
+            background: linear-gradient(to top, var(--ap-primary), var(--bd-green));
+            border-radius: 4px 4px 0 0;
+            min-width: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            white-space: nowrap;
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ap-text-primary);
+        }
+
+        /* Filters and Controls */
+        .results-filters {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--ap-border);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ap-text-secondary);
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            background: white;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .export-btn {
+            margin-left: auto;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            border: none;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        /* FOOTER (COPIED FROM DASHBOARD) */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .footer-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .results-nav-tabs {
+                flex-direction: column;
+            }
+
+            .results-nav-tab {
+                min-width: auto;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 1rem 1.5rem;
+            }
+
+            .results-nav-tab i {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+            }
+
+            .results-main-title {
+                font-size: 2rem;
+            }
+
+            .results-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .result-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .result-score {
+                align-self: center;
+            }
+
+            .leaderboard-table {
+                font-size: 0.9rem;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .results-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+
+            .export-btn {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .footer-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation (Same as Dashboard) -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Practice Tests</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">রা</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Rahul Ahmed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">HSC 2025 Candidate</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Progress</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Results Header Section -->
+        <div class="results-header-section fade-in">
+            <div class="results-header-content">
+                <h1 class="results-main-title">ফলাফল ও লিডারবোর্ড | Results & Leaderboard</h1>
+                <p class="results-subtitle">Track your academic progress and compare with classmates</p>
+                
+                <div class="results-stats-grid">
+                    <div class="results-stat-item">
+                        <div class="stat-icon exams">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Exams Completed</div>
+                    </div>
+                    <div class="results-stat-item">
+                        <div class="stat-icon average">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value">87%</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="results-stat-item">
+                        <div class="stat-icon rank">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-value">5th</div>
+                        <div class="stat-label">Class Rank</div>
+                    </div>
+                    <div class="results-stat-item">
+                        <div class="stat-icon contests">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Contests Won</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Navigation -->
+        <div class="results-nav-section fade-in">
+            <div class="results-nav-tabs">
+                <button class="results-nav-tab active" data-tab="my-results">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>My Results</span>
+                </button>
+                <button class="results-nav-tab" data-tab="leaderboard">
+                    <i class="fas fa-trophy"></i>
+                    <span>Class Leaderboard</span>
+                </button>
+                <button class="results-nav-tab" data-tab="contest-results">
+                    <i class="fas fa-code"></i>
+                    <span>Contest Results</span>
+                </button>
+                <button class="results-nav-tab" data-tab="analytics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Performance Analytics</span>
+                </button>
+                <button class="results-nav-tab" data-tab="compare">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Compare Results</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Content -->
+        <div class="results-content">
+            <!-- My Results Tab -->
+            <div class="results-tab-pane active" id="my-results-tab">
+                <!-- Filters -->
+                <div class="results-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Subject:</label>
+                        <select class="filter-select">
+                            <option value="all">All Subjects</option>
+                            <option value="bangla">বাংলা</option>
+                            <option value="english">English</option>
+                            <option value="math">গণিত</option>
+                            <option value="physics">পদার্থবিজ্ঞান</option>
+                            <option value="chemistry">রসায়ন</option>
+                            <option value="biology">জীববিজ্ঞান</option>
+                            <option value="ict">ICT</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Time Period:</label>
+                        <select class="filter-select">
+                            <option value="all">All Time</option>
+                            <option value="last-month">Last Month</option>
+                            <option value="last-3-months">Last 3 Months</option>
+                            <option value="this-year">This Year</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Exam Type:</label>
+                        <select class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="final">Final Exams</option>
+                            <option value="practice">Practice Tests</option>
+                            <option value="mock">Mock Exams</option>
+                        </select>
+                    </div>
+                    <button class="export-btn">
+                        <i class="fas fa-download"></i>
+                        Export Results
+                    </button>
+                </div>
+
+                <!-- Individual Results -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            আমার পরীক্ষার ফলাফল | My Exam Results
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <!-- Recent Result 1 -->
+                        <div class="result-item excellent">
+                            <div class="grade-badge grade-a-plus">A+</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">বাংলা ১ম পত্র - HSC Final Exam</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>May 28, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>3 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>589 participants</span>
+                                        <span><i class="fas fa-medal me-1"></i>Rank: 8th</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">92</div>
+                                    <div class="score-label">out of 100</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">MCQ Score:</span>
+                                    <span class="detail-value">28/30</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Written Score:</span>
+                                    <span class="detail-value">64/70</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time Taken:</span>
+                                    <span class="detail-value">2h 45m</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Class Average:</span>
+                                    <span class="detail-value">78.5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Result 2 -->
+                        <div class="result-item good">
+                            <div class="grade-badge grade-a">A</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">English 1st Paper - HSC Final Exam</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>May 25, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>3 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>467 participants</span>
+                                        <span><i class="fas fa-medal me-1"></i>Rank: 15th</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">85</div>
+                                    <div class="score-label">out of 100</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">MCQ Score:</span>
+                                    <span class="detail-value">25/30</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Written Score:</span>
+                                    <span class="detail-value">60/70</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time Taken:</span>
+                                    <span class="detail-value">2h 55m</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Class Average:</span>
+                                    <span class="detail-value">76.2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Result 3 -->
+                        <div class="result-item excellent">
+                            <div class="grade-badge grade-a-plus">A+</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">গণিত (উচ্চতর) - HSC Final Exam</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>May 22, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>3.5 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>524 participants</span>
+                                        <span><i class="fas fa-medal me-1"></i>Rank: 12th</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">89</div>
+                                    <div class="score-label">out of 100</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">MCQ Score:</span>
+                                    <span class="detail-value">27/30</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Problem Solving:</span>
+                                    <span class="detail-value">62/70</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time Taken:</span>
+                                    <span class="detail-value">3h 20m</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Class Average:</span>
+                                    <span class="detail-value">72.8</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Result 4 -->
+                        <div class="result-item average">
+                            <div class="grade-badge grade-b">B</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">পদার্থবিজ্ঞান - HSC Final Exam</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>May 20, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>3 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>498 participants</span>
+                                        <span><i class="fas fa-medal me-1"></i>Rank: 28th</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">78</div>
+                                    <div class="score-label">out of 100</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">MCQ Score:</span>
+                                    <span class="detail-value">22/30</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Problem Solving:</span>
+                                    <span class="detail-value">56/70</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time Taken:</span>
+                                    <span class="detail-value">2h 50m</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Class Average:</span>
+                                    <span class="detail-value">74.1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Leaderboard Tab -->
+            <div class="results-tab-pane" id="leaderboard-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            ক্লাস লিডারবোর্ড | Class Leaderboard - HSC 2025
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="results-filters">
+                            <div class="filter-group">
+                                <label class="filter-label">Subject:</label>
+                                <select class="filter-select">
+                                    <option value="overall">Overall Performance</option>
+                                    <option value="bangla">বাংলা</option>
+                                    <option value="english">English</option>
+                                    <option value="math">গণিত</option>
+                                    <option value="physics">পদার্থবিজ্ঞান</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Group:</label>
+                                <select class="filter-select">
+                                    <option value="science">Science Group</option>
+                                    <option value="commerce">Commerce Group</option>
+                                    <option value="arts">Arts Group</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Student</th>
+                                    <th>Institution</th>
+                                    <th>Average Score</th>
+                                    <th>Exams Taken</th>
+                                    <th>Total Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-1">1</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">আহ</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Ahmed Hassan</div>
+                                                <div class="student-id">ID: 2025002</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">94.2%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,130</td>
+                                </tr>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-2">2</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">ফা</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Fatima Khan</div>
+                                                <div class="student-id">ID: 2025015</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">92.8%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,114</td>
+                                </tr>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-3">3</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">মো</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Mohammad Ali</div>
+                                                <div class="student-id">ID: 2025008</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">91.5%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,098</td>
+                                </tr>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-other">4</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">না</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Nasir Ahmed</div>
+                                                <div class="student-id">ID: 2025012</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">89.7%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,076</td>
+                                </tr>
+                                <tr class="current-user">
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-other">5</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">রা</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Rahul Ahmed (You)</div>
+                                                <div class="student-id">ID: 2025001</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">87.3%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,048</td>
+                                </tr>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-other">6</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">সা</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Sakib Rahman</div>
+                                                <div class="student-id">ID: 2025019</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">85.9%</td>
+                                    <td>11/12</td>
+                                    <td class="score-cell">945</td>
+                                </tr>
+                                <tr>
+                                    <td class="rank-cell">
+                                        <div class="rank-badge rank-other">7</div>
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">তা</div>
+                                            <div class="student-details">
+                                                <div class="student-name">Tahmina Sultana</div>
+                                                <div class="student-id">ID: 2025023</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Dhaka College</td>
+                                    <td class="score-cell">84.6%</td>
+                                    <td>12/12</td>
+                                    <td class="score-cell">1,015</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contest Results Tab -->
+            <div class="results-tab-pane" id="contest-results-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            প্রোগ্রামিং কন্টেস্ট ফলাফল | Programming Contest Results
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <!-- Contest Result 1 -->
+                        <div class="result-item excellent">
+                            <div class="grade-badge" style="background: linear-gradient(135deg, var(--bd-gold), #eab308); color: #1a1a1a;">1st Place</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">Inter-College Programming Contest 2025</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>May 15, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>5 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>142 participants</span>
+                                        <span><i class="fas fa-trophy me-1"></i>Prize: ৳50,000</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">6</div>
+                                    <div class="score-label">problems solved</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Total Score:</span>
+                                    <span class="detail-value">1200 points</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Penalty Time:</span>
+                                    <span class="detail-value">347 minutes</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Languages Used:</span>
+                                    <span class="detail-value">C++, Python</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Team Name:</span>
+                                    <span class="detail-value">Code Warriors</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contest Result 2 -->
+                        <div class="result-item good">
+                            <div class="grade-badge" style="background: linear-gradient(135deg, #94a3b8, #64748b); color: white;">3rd Place</div>
+                            <div class="result-header">
+                                <div class="result-info">
+                                    <div class="result-title">National Programming Olympiad</div>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar me-1"></i>April 28, 2025</span>
+                                        <span><i class="fas fa-clock me-1"></i>4 hours</span>
+                                        <span><i class="fas fa-users me-1"></i>267 participants</span>
+                                        <span><i class="fas fa-trophy me-1"></i>Bronze Medal</span>
+                                    </div>
+                                </div>
+                                <div class="result-score">
+                                    <div class="score-value">4</div>
+                                    <div class="score-label">problems solved</div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Total Score:</span>
+                                    <span class="detail-value">800 points</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Penalty Time:</span>
+                                    <span class="detail-value">289 minutes</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Languages Used:</span>
+                                    <span class="detail-value">C++, Java</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Category:</span>
+                                    <span class="detail-value">Individual</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Analytics Tab -->
+            <div class="results-tab-pane" id="analytics-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            পারফরম্যান্স বিশ্লেষণ | Performance Analytics
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <!-- Performance Chart -->
+                        <div class="performance-chart">
+                            <div class="chart-header">
+                                <div class="chart-title">Subject-wise Performance Trend</div>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active">Last 6 Months</button>
+                                    <button class="chart-btn">This Year</button>
+                                    <button class="chart-btn">All Time</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <div class="chart-bar" style="height: 92%;">
+                                    <div class="chart-value">92%</div>
+                                    <div class="chart-label">বাংলা</div>
+                                </div>
+                                <div class="chart-bar" style="height: 85%;">
+                                    <div class="chart-value">85%</div>
+                                    <div class="chart-label">English</div>
+                                </div>
+                                <div class="chart-bar" style="height: 89%;">
+                                    <div class="chart-value">89%</div>
+                                    <div class="chart-label">গণিত</div>
+                                </div>
+                                <div class="chart-bar" style="height: 78%;">
+                                    <div class="chart-value">78%</div>
+                                    <div class="chart-label">পদার্থ</div>
+                                </div>
+                                <div class="chart-bar" style="height: 81%;">
+                                    <div class="chart-value">81%</div>
+                                    <div class="chart-label">রসায়ন</div>
+                                </div>
+                                <div class="chart-bar" style="height: 95%;">
+                                    <div class="chart-value">95%</div>
+                                    <div class="chart-label">ICT</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Improvement Suggestions -->
+                        <div style="margin-top: 2rem;">
+                            <h4 style="color: var(--ap-primary); margin-bottom: 1rem;">
+                                <i class="fas fa-lightbulb me-2"></i>Improvement Suggestions
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="background: rgba(239, 68, 68, 0.05); padding: 1rem; border-radius: var(--ap-radius); border-left: 4px solid var(--ap-secondary); margin-bottom: 1rem;">
+                                        <h6 style="color: var(--ap-secondary); margin-bottom: 0.5rem;">Areas to Focus</h6>
+                                        <ul style="margin: 0; padding-left: 1.2rem; color: var(--ap-text-secondary);">
+                                            <li>পদার্থবিজ্ঞান - Problem solving techniques</li>
+                                            <li>রসায়ন - Organic chemistry concepts</li>
+                                            <li>English - Essay writing skills</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="background: rgba(34, 197, 94, 0.05); padding: 1rem; border-radius: var(--ap-radius); border-left: 4px solid var(--ap-success); margin-bottom: 1rem;">
+                                        <h6 style="color: var(--ap-success); margin-bottom: 0.5rem;">Strengths</h6>
+                                        <ul style="margin: 0; padding-left: 1.2rem; color: var(--ap-text-secondary);">
+                                            <li>ICT - Excellent programming skills</li>
+                                            <li>বাংলা - Strong literature knowledge</li>
+                                            <li>গণিত - Good problem-solving ability</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compare Results Tab -->
+            <div class="results-tab-pane" id="compare-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            ফলাফল তুলনা | Compare Results
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="results-filters">
+                            <div class="filter-group">
+                                <label class="filter-label">Compare with:</label>
+                                <select class="filter-select">
+                                    <option value="class-average">Class Average</option>
+                                    <option value="top-performer">Top Performer</option>
+                                    <option value="specific-student">Specific Student</option>
+                                    <option value="national-average">National Average</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Subject:</label>
+                                <select class="filter-select">
+                                    <option value="all">All Subjects</option>
+                                    <option value="bangla">বাংলা</option>
+                                    <option value="english">English</option>
+                                    <option value="math">গণিত</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(5, 150, 105, 0.03); padding: 2rem; border-radius: var(--ap-radius); border: 1px solid rgba(5, 150, 105, 0.1); text-align: center;">
+                            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center;">
+                                <div>
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--ap-text-primary); margin-bottom: 0.5rem;">Your Performance</div>
+                                    <div style="font-size: 3rem; font-weight: 800; color: var(--ap-primary);">87.3%</div>
+                                    <div style="color: var(--ap-text-muted);">Average across all subjects</div>
+                                </div>
+                                
+                                <div style="font-size: 2rem; color: var(--ap-text-muted);">VS</div>
+                                
+                                <div>
+                                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--ap-text-primary); margin-bottom: 0.5rem;">Class Average</div>
+                                    <div style="font-size: 3rem; font-weight: 800; color: var(--ap-info);">79.8%</div>
+                                    <div style="color: var(--ap-text-muted);">Science Group - HSC 2025</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: var(--ap-radius); border: 1px solid rgba(34, 197, 94, 0.3);">
+                                <div style="color: var(--ap-success); font-weight: 700; font-size: 1.1rem;">
+                                    <i class="fas fa-arrow-up me-2"></i>You are performing 7.5% above class average!
+                                </div>
+                                <div style="color: var(--ap-text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                                    Keep up the excellent work! You're in the top 25% of your class.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer (Same as Dashboard) -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">25,000+</div>
+                        <div class="footer-stat-label">Active Students</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">1,500+</div>
+                        <div class="footer-stat-label">Exams Conducted</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">850+</div>
+                        <div class="footer-stat-label">Educational Institutes</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">99.8%</div>
+                        <div class="footer-stat-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.results-nav-tab');
+            const tabPanes = document.querySelectorAll('.results-tab-pane');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and panes
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding tab pane
+                    const targetTab = tab.getAttribute('data-tab');
+                    const targetPane = document.getElementById(targetTab + '-tab');
+                    if (targetPane) {
+                        targetPane.classList.add('active');
+                    }
+                });
+            });
+
+            // Fade in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Animated stats counter
+            function animateStats() {
+                const stats = document.querySelectorAll('.stat-value');
+                stats.forEach((stat, index) => {
+                    const originalText = stat.textContent;
+                    const hasPercent = originalText.includes('%');
+                    const isOrdinal = originalText.includes('th') || originalText.includes('st') || originalText.includes('nd') || originalText.includes('rd');
+                    
+                    if (isOrdinal) {
+                        // Handle ordinal numbers like "5th"
+                        const number = parseInt(originalText);
+                        let currentValue = 1;
+                        const timer = setInterval(() => {
+                            if (currentValue >= number) {
+                                stat.textContent = originalText;
+                                clearInterval(timer);
+                            } else {
+                                stat.textContent = currentValue + (originalText.includes('th') ? 'th' : 
+                                                  originalText.includes('st') ? 'st' : 
+                                                  originalText.includes('nd') ? 'nd' : 'rd');
+                                currentValue++;
+                            }
+                        }, 100 + index * 20);
+                    } else {
+                        // Handle regular numbers
+                        const finalValue = parseInt(originalText);
+                        let currentValue = 0;
+                        const increment = finalValue / 30;
+                        
+                        const timer = setInterval(() => {
+                            currentValue += increment;
+                            if (currentValue >= finalValue) {
+                                stat.textContent = finalValue + (hasPercent ? '%' : '');
+                                clearInterval(timer);
+                            } else {
+                                stat.textContent = Math.floor(currentValue) + (hasPercent ? '%' : '');
+                            }
+                        }, 50 + index * 20);
+                    }
+                });
+            }
+
+            // Animate chart bars
+            function animateChartBars() {
+                const chartBars = document.querySelectorAll('.chart-bar');
+                chartBars.forEach((bar, index) => {
+                    const height = bar.style.height;
+                    bar.style.height = '0%';
+                    setTimeout(() => {
+                        bar.style.height = height;
+                    }, 300 + index * 100);
+                });
+            }
+
+            // Chart controls
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Simulate chart data update
+                    animateChartBars();
+                    showNotification('Chart updated with new data', 'success');
+                });
+            });
+
+            // Filter functionality
+            document.querySelectorAll('.filter-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const filterType = this.closest('.filter-group').querySelector('.filter-label').textContent;
+                    const selectedValue = this.value;
+                    showNotification(`Filter updated: ${filterType} = ${selectedValue}`, 'info');
+                    
+                    // Simulate filtering results
+                    animateResultItems();
+                });
+            });
+
+            // Export functionality
+            document.querySelectorAll('.export-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showNotification('Exporting results... Download will start shortly.', 'success');
+                    
+                    // Simulate export
+                    setTimeout(() => {
+                        showNotification('Results exported successfully!', 'success');
+                    }, 2000);
+                });
+            });
+
+            // Result item interactions
+            function animateResultItems() {
+                const resultItems = document.querySelectorAll('.result-item');
+                resultItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '0.5';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                        }, 200);
+                    }, index * 100);
+                });
+            }
+
+            // Leaderboard row interactions
+            document.querySelectorAll('.leaderboard-table tbody tr').forEach(row => {
+                row.addEventListener('click', function() {
+                    const studentName = this.querySelector('.student-name').textContent;
+                    if (!studentName.includes('You')) {
+                        showNotification(`Viewing ${studentName}'s profile`, 'info');
+                    }
+                });
+            });
+
+            // Trigger initial animations
+            setTimeout(() => {
+                animateStats();
+                animateChartBars();
+            }, 500);
+
+            // Performance analytics tab specific animations
+            document.querySelector('[data-tab="analytics"]').addEventListener('click', () => {
+                setTimeout(animateChartBars, 300);
+            });
+
+            // Notification system
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                const colors = {
+                    success: 'var(--ap-success)',
+                    info: 'var(--ap-info)',
+                    warning: 'var(--ap-warning)',
+                    error: 'var(--ap-secondary)'
+                };
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type] || colors.info};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: var(--ap-radius);
+                    z-index: 9999;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    font-weight: 600;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease;
+                    max-width: 300px;
+                `;
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    info: 'fas fa-info-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    error: 'fas fa-times-circle'
+                };
+                
+                notification.innerHTML = `<i class="${icons[type] || icons.info} me-2"></i>${message}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            // Grade calculation and display
+            function calculateGrade(score) {
+                if (score >= 90) return { grade: 'A+', class: 'grade-a-plus' };
+                if (score >= 80) return { grade: 'A', class: 'grade-a' };
+                if (score >= 70) return { grade: 'B', class: 'grade-b' };
+                if (score >= 60) return { grade: 'C', class: 'grade-c' };
+                return { grade: 'F', class: 'grade-f' };
+            }
+
+            // Add hover effects to result items
+            document.querySelectorAll('.result-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px) scale(1.01)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Search functionality simulation
+            if (document.querySelector('.search-input')) {
+                document.querySelector('.search-input').addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    if (query.length > 2) {
+                        showNotification(`Searching for: ${query}`, 'info');
+                    }
+                });
+            }
+
+            console.log('ePorikkha Results & Leaderboard: Fully loaded! 🏆📊');
+        });
+    </script>
+</body>
+</html>

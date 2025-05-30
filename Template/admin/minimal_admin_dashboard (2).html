@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ePorikkha</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #059669;
+            --primary-light: #10b981;
+            --secondary-color: #dc2626;
+            --accent-color: #0891b2;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --dark-color: #1e293b;
+            --light-gray: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Bengali', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-brand {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand i {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        .brand-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-close:hover {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+
+        .nav-item {
+            margin: 2px 12px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-dark);
+            background: var(--light-gray);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background: rgba(5, 150, 105, 0.1);
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* Multi-level Menu */
+        .nav-item.has-submenu > .nav-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 12px;
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.has-submenu.open > .nav-link::after {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--light-gray);
+            margin: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .submenu.open {
+            max-height: 300px;
+            margin-bottom: 8px;
+        }
+
+        .submenu .nav-link {
+            padding: 10px 16px 10px 42px;
+            font-size: 0.8rem;
+            margin: 2px 4px;
+            color: var(--text-muted);
+        }
+
+        .submenu .nav-link:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .submenu .nav-link.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .admin-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Header */
+        .admin-header {
+            background: white;
+            height: var(--header-height);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 280px;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: var(--light-gray);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .notification-btn:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger-color);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: var(--light-gray);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: white;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+        }
+
+        /* Dropdowns */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-4px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light-gray);
+            color: var(--primary-color);
+        }
+
+        /* Notification Dropdown */
+        .notification-dropdown {
+            min-width: 300px;
+            max-width: 360px;
+        }
+
+        .notification-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: var(--light-gray);
+        }
+
+        .notification-item.unread {
+            background: rgba(5, 150, 105, 0.05);
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: var(--success-color);
+        }
+
+        .notification-icon.warning {
+            background: var(--warning-color);
+        }
+
+        .notification-icon.info {
+            background: var(--primary-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+        }
+
+        .notification-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Content */
+        .admin-content {
+            padding: 24px;
+        }
+
+        /* Enhanced Dashboard Cards */
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Enhanced Stat Cards */
+        .stat-card {
+            text-align: center;
+            padding: 32px 24px;
+            position: relative;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(8, 145, 178, 0.05));
+            border-radius: 0 16px 0 60px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover::after {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(8, 145, 178, 0.1));
+        }
+
+        .stat-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: white;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card.primary .stat-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .stat-card.success .stat-icon {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+        }
+
+        .stat-card.info .stat-icon {
+            background: linear-gradient(135deg, var(--accent-color), #0ea5e9);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--text-dark), #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-change.positive {
+            color: var(--success-color);
+            background: rgba(5, 150, 105, 0.1);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .stat-change.negative {
+            color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        /* Enhanced Action Cards */
+        .action-btn {
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.03), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-color);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+
+        .action-btn i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .action-btn:hover i {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .btn-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-dark), #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Enhanced Activity and Metrics Cards */
+        .activity-metrics-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-metrics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .activity-metrics-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .card-header-custom {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .view-all-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .view-all-btn i {
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .view-all-btn:hover i {
+            transform: translateX(2px);
+        }
+
+        .analytics-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.2);
+            width: 100%;
+        }
+
+        .analytics-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .analytics-btn i {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .analytics-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Activity Items */
+        .activity-item {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: rgba(5, 150, 105, 0.02);
+            margin: 0 -16px;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-icon.exam {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .activity-icon.contest {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .activity-icon.user {
+            background: linear-gradient(135deg, var(--accent-color), #0ea5e9);
+        }
+
+        .activity-icon.result {
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Progress Bars */
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background-color: rgba(5, 150, 105, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        .progress-item {
+            margin-bottom: 24px;
+        }
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+
+        .progress-value {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--primary-color);
+        }
+
+        .progress-change {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        /* Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar-close {
+                display: flex;
+            }
+
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .admin-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: block;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-header {
+                padding: 0 16px;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .admin-content {
+                padding: 16px;
+            }
+
+            .dashboard-card,
+            .activity-metrics-card {
+                margin-bottom: 16px;
+            }
+
+            .stat-card {
+                padding: 24px 20px;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 1.5rem;
+            }
+
+            .action-btn {
+                padding: 24px 20px;
+            }
+
+            .action-btn i {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-title {
+                font-size: 1.25rem;
+            }
+
+            .notification-dropdown {
+                min-width: 260px;
+                right: -10px;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span class="brand-text">ePorikkha</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Porikkha Management</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Create New Exam</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>All Exams</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Question Papers</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Scheduled Exams</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Contests</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Create Contest</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Active Contests</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Results</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Leaderboard</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Students</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>All Students</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Add Student</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Class Groups</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Question Bank</span>
+                </a>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports & Analytics</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Exam Reports</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Performance Analytics</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-poll"></i>
+                    <span>Results</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="header-title">Dashboard Overview</h1>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search students, exams...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="position-relative">
+                    <button class="notification-btn" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <div class="dropdown-menu notification-dropdown" id="notificationDropdown">
+                        <div class="dropdown-header">
+                            <div style="font-weight: 600; color: var(--text-dark);">Notifications</div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">SSC Mathematics Exam Completed</div>
+                                <div class="notification-text">Class 10 mathematics exam completed by 45 students</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>2 minutes ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon info">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">New Student Registration</div>
+                                <div class="notification-text">Rahul Ahmed registered for HSC Physics exam</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>5 minutes ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">System Maintenance</div>
+                                <div class="notification-text">Server maintenance scheduled for tonight at 2:00 AM</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="position-relative">
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-avatar">MR</div>
+                        <span class="user-name">Md. Rahman</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    
+                    <div class="dropdown-menu" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div style="font-weight: 600;">Md. Rahman</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">admin@eporikkha.edu.bd</div>
+                        </div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help</span>
+                        </a>
+                        <hr style="margin: 8px 0; border-color: var(--border-color);">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Total Exams</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+18% from last month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Active Contests</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12% from last month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card info">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number">2,847</div>
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+32% from last month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-number">14</div>
+                        <div class="stat-label">Pending Reviews</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>-6% from last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-plus-circle text-primary"></i>
+                        <div class="btn-title">Create New Exam</div>
+                        <div class="btn-desc">Design SSC, HSC or admission test papers</div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-trophy text-success"></i>
+                        <div class="btn-title">Launch Contest</div>
+                        <div class="btn-desc">Start inter-school programming competition</div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-user-plus" style="color: var(--accent-color);"></i>
+                        <div class="btn-title">Add Students</div>
+                        <div class="btn-desc">Register new students to the platform</div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-chart-line text-warning"></i>
+                        <div class="btn-title">View Reports</div>
+                        <div class="btn-desc">Analyze exam performance and trends</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Activity and Stats -->
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="activity-metrics-card">
+                        <div class="card-header-custom">
+                            <h5 class="card-title">Recent Activity</h5>
+                            <a href="#" class="view-all-btn">
+                                <span>View All</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon exam">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">HSC Physics Final Exam created for Dhaka College</div>
+                                <div class="activity-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon user">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">45 new students registered from Notre Dame College</div>
+                                <div class="activity-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>4 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon contest">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Inter-School Programming Contest started</div>
+                                <div class="activity-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>6 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon result">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">SSC Mathematics Exam results published</div>
+                                <div class="activity-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="activity-metrics-card">
+                        <div class="card-header-custom">
+                            <h5 class="card-title">Performance Metrics</h5>
+                            <span class="badge bg-success">Live</span>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Exam Completion Rate</span>
+                                <span class="progress-value">89%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 89%"></div>
+                            </div>
+                            <div class="progress-change text-success">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+7% from last week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Active Students</span>
+                                <span class="progress-value">94%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 94%"></div>
+                            </div>
+                            <div class="progress-change text-success">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+5% from last week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Contest Participation</span>
+                                <span class="progress-value">76%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" style="width: 76%"></div>
+                            </div>
+                            <div class="progress-change text-danger">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-3% from last week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <a href="#" class="analytics-btn">
+                                <i class="fas fa-chart-line"></i>
+                                <span>View Detailed Analytics</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const userProfile = document.getElementById('userProfile');
+            const userDropdown = document.getElementById('userDropdown');
+
+            // Mobile menu functions
+            function openSidebar() {
+                sidebar.classList.add('show');
+                overlay.classList.add('show');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+
+            // Mobile menu events
+            mobileMenuBtn.addEventListener('click', openSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+
+            // Submenu functionality
+            document.querySelectorAll('.nav-item.has-submenu').forEach(item => {
+                const link = item.querySelector('.nav-link');
+                const submenu = item.querySelector('.submenu');
+                
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Close other submenus
+                    document.querySelectorAll('.nav-item.has-submenu').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('open');
+                            otherItem.querySelector('.submenu').classList.remove('open');
+                        }
+                    });
+                    
+                    // Toggle current submenu
+                    item.classList.toggle('open');
+                    submenu.classList.toggle('open');
+                });
+            });
+
+            // Notification dropdown
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('show');
+                userDropdown.classList.remove('show');
+            });
+
+            // User profile dropdown
+            userProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+                notificationDropdown.classList.remove('show');
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                notificationDropdown.classList.remove('show');
+                userDropdown.classList.remove('show');
+            });
+
+            // Navigation active states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const hasSubmenu = this.closest('.nav-item.has-submenu') && 
+                                     this.closest('.nav-item.has-submenu').querySelector('.nav-link') === this;
+                    
+                    if (!hasSubmenu) {
+                        e.preventDefault();
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Close mobile menu
+                        if (window.innerWidth <= 768) {
+                            closeSidebar();
+                        }
+                    }
+                });
+            });
+
+            // Close sidebar on window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+
+            // Animate progress bars on load
+            setTimeout(() => {
+                document.querySelectorAll('.progress-bar').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>

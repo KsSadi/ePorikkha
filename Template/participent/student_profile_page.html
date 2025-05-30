@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - My Profile</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        /* ========================================
+           NEW CSS FOR PROFILE PAGE
+           ======================================== */
+
+        /* Profile Header Section */
+        .profile-header-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .profile-header-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+        }
+
+        .profile-header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar-section {
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 2.5rem;
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.3);
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            margin: 0 auto 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar-large:hover {
+            transform: scale(1.05);
+            box-shadow: 0 16px 50px rgba(5, 150, 105, 0.4);
+        }
+
+        .avatar-edit-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 35px;
+            height: 35px;
+            background: var(--ap-secondary);
+            border-radius: 50%;
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-edit-btn:hover {
+            background: var(--bd-red);
+            transform: scale(1.1);
+        }
+
+        .profile-info-section {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .profile-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 2px solid;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-student {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: var(--ap-success);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .badge-verified {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--ap-info);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .badge-rank {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: var(--ap-warning);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .profile-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .quick-stat-item:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.1);
+        }
+
+        .quick-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .quick-stat-label {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Profile Content Grid */
+        .profile-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.12);
+        }
+
+        .content-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            position: relative;
+        }
+
+        .content-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: var(--ap-radius);
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .content-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Personal Information Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+            background: white;
+        }
+
+        .form-control:disabled {
+            background: var(--ap-bg-light);
+            color: var(--ap-text-muted);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Academic Information */
+        .academic-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .academic-item {
+            padding: 1.25rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+            transition: all 0.3s ease;
+        }
+
+        .academic-item:hover {
+            background: rgba(5, 150, 105, 0.08);
+            transform: translateX(4px);
+        }
+
+        .academic-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .academic-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+        }
+
+        /* Performance Chart */
+        .performance-chart-container {
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            margin: 1rem 0;
+        }
+
+        .subject-performance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .subject-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .subject-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .subject-name {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            font-size: 0.95rem;
+        }
+
+        .subject-score {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--ap-primary);
+        }
+
+        .subject-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--ap-bg-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .subject-progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* Recent Activities */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(5, 150, 105, 0.08);
+            transform: translateX(4px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Edit Profile Button */
+        .edit-profile-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            border: none;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .edit-profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        /* FOOTER (COPIED FROM DASHBOARD) */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .footer-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .profile-subtitle {
+                font-size: 1rem;
+            }
+
+            .profile-quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .academic-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-profile-btn {
+                position: static;
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            .footer-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation (Same as Dashboard) -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Practice Tests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">My Profile</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">রা</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Rahul Ahmed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">HSC 2025 Candidate</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Progress</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Profile Header Section -->
+        <div class="profile-header-section fade-in">
+            <button class="edit-profile-btn">
+                <i class="fas fa-edit me-2"></i>Edit Profile
+            </button>
+            
+            <div class="profile-header-content">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar-large">
+                        রা
+                        <div class="avatar-edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--ap-text-muted); font-weight: 500;">
+                        Click to change photo
+                    </div>
+                </div>
+                
+                <div class="profile-info-section">
+                    <h1 class="profile-name">রাহুল আহমেদ | Rahul Ahmed</h1>
+                    <p class="profile-subtitle">HSC 2025 Candidate | Science Group | Student ID: 2025001</p>
+                    
+                    <div class="profile-badges">
+                        <div class="profile-badge badge-student">
+                            <i class="fas fa-graduation-cap"></i>
+                            Active Student
+                        </div>
+                        <div class="profile-badge badge-verified">
+                            <i class="fas fa-check-circle"></i>
+                            Verified Account
+                        </div>
+                        <div class="profile-badge badge-rank">
+                            <i class="fas fa-trophy"></i>
+                            Rank #5 in Class
+                        </div>
+                    </div>
+                    
+                    <div class="profile-quick-stats">
+                        <div class="quick-stat-item">
+                            <div class="quick-stat-value">12</div>
+                            <div class="quick-stat-label">Exams Taken</div>
+                        </div>
+                        <div class="quick-stat-item">
+                            <div class="quick-stat-value">87%</div>
+                            <div class="quick-stat-label">Average Score</div>
+                        </div>
+                        <div class="quick-stat-item">
+                            <div class="quick-stat-value">35</div>
+                            <div class="quick-stat-label">Practice Tests</div>
+                        </div>
+                        <div class="quick-stat-item">
+                            <div class="quick-stat-value">8</div>
+                            <div class="quick-stat-label">Achievements</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Content Grid -->
+        <div class="profile-content-grid">
+            <!-- Left Column - Personal & Academic Information -->
+            <div>
+                <!-- Personal Information -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            ব্যক্তিগত তথ্য | Personal Information
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Full Name (English)</label>
+                                <input type="text" class="form-control" value="Rahul Ahmed" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">নাম (বাংলায়)</label>
+                                <input type="text" class="form-control" value="রাহুল আহমেদ" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" value="rahul.ahmed@student.edu.bd" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" value="+880 1712-345678">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" value="2007-03-15" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Blood Group</label>
+                                <select class="form-control">
+                                    <option value="B+">B+ (Positive)</option>
+                                    <option value="A+">A+ (Positive)</option>
+                                    <option value="O+">O+ (Positive)</option>
+                                    <option value="AB+">AB+ (Positive)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Present Address</label>
+                            <textarea class="form-control" rows="3">House #42, Road #7, Dhanmondi R/A, Dhaka-1205, Bangladesh</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Permanent Address</label>
+                            <textarea class="form-control" rows="3">Village: Jhikargacha, Upazila: Jessore Sadar, District: Jessore, Division: Khulna</textarea>
+                        </div>
+                        
+                        <div style="margin-top: 2rem; text-align: center;">
+                            <button class="btn btn-primary" style="padding: 0.75rem 2rem; font-weight: 600;">
+                                <i class="fas fa-save me-2"></i>Update Information
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            শিক্ষাগত তথ্য | Academic Information
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="academic-info-grid">
+                            <div class="academic-item">
+                                <div class="academic-label">Current Institution</div>
+                                <div class="academic-value">Dhaka College</div>
+                            </div>
+                            <div class="academic-item">
+                                <div class="academic-label">Class/Level</div>
+                                <div class="academic-value">HSC 2025</div>
+                            </div>
+                            <div class="academic-item">
+                                <div class="academic-label">Group/Department</div>
+                                <div class="academic-value">Science</div>
+                            </div>
+                            <div class="academic-item">
+                                <div class="academic-label">Student ID</div>
+                                <div class="academic-value">2025001</div>
+                            </div>
+                            <div class="academic-item">
+                                <div class="academic-label">Roll Number</div>
+                                <div class="academic-value">150047</div>
+                            </div>
+                            <div class="academic-item">
+                                <div class="academic-label">Registration No.</div>
+                                <div class="academic-value">1512345678</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h5 style="color: var(--ap-primary); margin-bottom: 1rem;">
+                                <i class="fas fa-history me-2"></i>Previous Academic Records
+                            </h5>
+                            
+                            <div style="background: rgba(5, 150, 105, 0.05); padding: 1.5rem; border-radius: var(--ap-radius); border-left: 4px solid var(--ap-primary);">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 style="color: var(--ap-primary); margin-bottom: 0.75rem;">SSC Examination</h6>
+                                        <p style="margin: 0; color: var(--ap-text-secondary); line-height: 1.6;">
+                                            <strong>Institution:</strong> Jessore Zilla School<br>
+                                            <strong>Year:</strong> 2023<br>
+                                            <strong>Group:</strong> Science<br>
+                                            <strong>GPA:</strong> 5.00 (A+)<br>
+                                            <strong>Board:</strong> Jessore
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 style="color: var(--ap-primary); margin-bottom: 0.75rem;">JSC Examination</h6>
+                                        <p style="margin: 0; color: var(--ap-text-secondary); line-height: 1.6;">
+                                            <strong>Institution:</strong> Jessore Zilla School<br>
+                                            <strong>Year:</strong> 2020<br>
+                                            <strong>GPA:</strong> 5.00 (A+)<br>
+                                            <strong>Board:</strong> Jessore
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            জরুরি যোগাযোগ | Emergency Contact
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Father's Name</label>
+                                <input type="text" class="form-control" value="Md. Karim Ahmed">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Father's Mobile</label>
+                                <input type="tel" class="form-control" value="+880 1711-223344">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Mother's Name</label>
+                                <input type="text" class="form-control" value="Mst. Fatema Begum">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mother's Mobile</label>
+                                <input type="tel" class="form-control" value="+880 1712-334455">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Guardian's Address</label>
+                            <textarea class="form-control" rows="2">Same as permanent address</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Performance & Activities -->
+            <div>
+                <!-- Performance Overview -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            পারফরম্যান্স ওভারভিউ
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="performance-chart-container">
+                            <div class="subject-performance-item">
+                                <div class="subject-info">
+                                    <div class="subject-icon" style="background: linear-gradient(135deg, #059669, #047857);">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <div>
+                                        <div class="subject-name">বাংলা</div>
+                                        <div class="subject-progress">
+                                            <div class="subject-progress-bar" style="width: 92%; background: linear-gradient(90deg, #059669, #047857);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subject-score">92%</div>
+                            </div>
+                            
+                            <div class="subject-performance-item">
+                                <div class="subject-info">
+                                    <div class="subject-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                        <i class="fas fa-language"></i>
+                                    </div>
+                                    <div>
+                                        <div class="subject-name">English</div>
+                                        <div class="subject-progress">
+                                            <div class="subject-progress-bar" style="width: 85%; background: linear-gradient(90deg, #3b82f6, #1d4ed8);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subject-score">85%</div>
+                            </div>
+                            
+                            <div class="subject-performance-item">
+                                <div class="subject-info">
+                                    <div class="subject-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                        <i class="fas fa-calculator"></i>
+                                    </div>
+                                    <div>
+                                        <div class="subject-name">গণিত</div>
+                                        <div class="subject-progress">
+                                            <div class="subject-progress-bar" style="width: 89%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subject-score">89%</div>
+                            </div>
+                            
+                            <div class="subject-performance-item">
+                                <div class="subject-info">
+                                    <div class="subject-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                        <i class="fas fa-atom"></i>
+                                    </div>
+                                    <div>
+                                        <div class="subject-name">পদার্থবিজ্ঞান</div>
+                                        <div class="subject-progress">
+                                            <div class="subject-progress-bar" style="width: 81%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subject-score">81%</div>
+                            </div>
+                            
+                            <div class="subject-performance-item">
+                                <div class="subject-info">
+                                    <div class="subject-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                                        <i class="fas fa-laptop-code"></i>
+                                    </div>
+                                    <div>
+                                        <div class="subject-name">ICT</div>
+                                        <div class="subject-progress">
+                                            <div class="subject-progress-bar" style="width: 95%; background: linear-gradient(90deg, #ef4444, #dc2626);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subject-score">95%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            সাম্প্রতিক কার্যক্রম
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">গণিত পরীক্ষা সম্পন্ন</div>
+                                <div class="activity-time">89/100 স্কোর - ২ ঘন্টা আগে</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">English Practice Test</div>
+                                <div class="activity-time">৮২% accuracy - 4 hours ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Achievement Unlocked</div>
+                                <div class="activity-time">Top 5% in Physics - Yesterday</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Contest Participation</div>
+                                <div class="activity-time">Programming Contest - 15th rank</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            অর্জনসমূহ | Achievements
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <div style="text-align: center; padding: 1rem; background: rgba(255, 215, 0, 0.1); border-radius: var(--ap-radius); border: 2px solid rgba(255, 215, 0, 0.3);">
+                                <i class="fas fa-trophy" style="font-size: 2rem; color: var(--bd-gold); margin-bottom: 0.5rem;"></i>
+                                <div style="font-weight: 700; color: var(--ap-text-primary); font-size: 0.9rem;">Top Performer</div>
+                                <div style="font-size: 0.75rem; color: var(--ap-text-muted);">Science Group</div>
+                            </div>
+                            
+                            <div style="text-align: center; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: var(--ap-radius); border: 2px solid rgba(34, 197, 94, 0.3);">
+                                <i class="fas fa-medal" style="font-size: 2rem; color: var(--ap-success); margin-bottom: 0.5rem;"></i>
+                                <div style="font-weight: 700; color: var(--ap-text-primary); font-size: 0.9rem;">Perfect Score</div>
+                                <div style="font-size: 0.75rem; color: var(--ap-text-muted);">ICT Subject</div>
+                            </div>
+                            
+                            <div style="text-align: center; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: var(--ap-radius); border: 2px solid rgba(59, 130, 246, 0.3);">
+                                <i class="fas fa-certificate" style="font-size: 2rem; color: var(--ap-info); margin-bottom: 0.5rem;"></i>
+                                <div style="font-weight: 700; color: var(--ap-text-primary); font-size: 0.9rem;">Consistent</div>
+                                <div style="font-size: 0.75rem; color: var(--ap-text-muted);">12 Exams</div>
+                            </div>
+                            
+                            <div style="text-align: center; padding: 1rem; background: rgba(139, 92, 246, 0.1); border-radius: var(--ap-radius); border: 2px solid rgba(139, 92, 246, 0.3);">
+                                <i class="fas fa-code" style="font-size: 2rem; color: #8b5cf6; margin-bottom: 0.5rem;"></i>
+                                <div style="font-weight: 700; color: var(--ap-text-primary); font-size: 0.9rem;">Programmer</div>
+                                <div style="font-size: 0.75rem; color: var(--ap-text-muted);">Contest Winner</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem; text-align: center;">
+                            <a href="#" style="color: var(--ap-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+                                View All Achievements <i class="fas fa-chevron-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer (Same as Dashboard) -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">25,000+</div>
+                        <div class="footer-stat-label">Active Students</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">1,500+</div>
+                        <div class="footer-stat-label">Exams Conducted</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">850+</div>
+                        <div class="footer-stat-label">Educational Institutes</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">99.8%</div>
+                        <div class="footer-stat-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fade in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Animated progress bars
+            function animateProgressBars() {
+                const progressBars = document.querySelectorAll('.subject-progress-bar');
+                progressBars.forEach((bar, index) => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500 + index * 200);
+                });
+            }
+
+            // Animated stats counter
+            function animateStats() {
+                const stats = document.querySelectorAll('.quick-stat-value');
+                stats.forEach((stat, index) => {
+                    const originalText = stat.textContent;
+                    const hasPercent = originalText.includes('%');
+                    const finalValue = parseInt(originalText);
+                    let currentValue = 0;
+                    const increment = finalValue / 50;
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            stat.textContent = finalValue + (hasPercent ? '%' : '');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(currentValue) + (hasPercent ? '%' : '');
+                        }
+                    }, 30 + index * 10);
+                });
+            }
+
+            // Trigger animations when elements come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains('profile-header-section')) {
+                            setTimeout(animateStats, 300);
+                        }
+                        if (entry.target.querySelector('.subject-progress-bar')) {
+                            setTimeout(animateProgressBars, 500);
+                        }
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            // Observe header and performance sections
+            const headerSection = document.querySelector('.profile-header-section');
+            const performanceSection = document.querySelector('.performance-chart-container');
+            
+            if (headerSection) observer.observe(headerSection);
+            if (performanceSection) observer.observe(performanceSection);
+
+            // Profile picture upload simulation
+            document.querySelector('.profile-avatar-large').addEventListener('click', function() {
+                // In a real app, this would open a file picker
+                alert('প্রোফাইল ছবি আপলোড করার জন্য ক্লিক করুন!\n\nProfile picture upload functionality would be implemented here.');
+            });
+
+            // Form validation and interaction
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(control => {
+                control.addEventListener('focus', function() {
+                    this.style.borderColor = 'var(--ap-primary)';
+                    this.style.boxShadow = '0 0 0 3px rgba(5, 150, 105, 0.1)';
+                });
+                
+                control.addEventListener('blur', function() {
+                    this.style.borderColor = 'var(--ap-border)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Edit profile button functionality
+            document.querySelector('.edit-profile-btn').addEventListener('click', function() {
+                const readonlyFields = document.querySelectorAll('.form-control[readonly]');
+                let isEditing = this.textContent.includes('Edit');
+                
+                if (isEditing) {
+                    // Enable editing
+                    readonlyFields.forEach(field => {
+                        if (field.type !== 'email') { // Keep email readonly for security
+                            field.removeAttribute('readonly');
+                            field.style.background = 'white';
+                        }
+                    });
+                    this.innerHTML = '<i class="fas fa-save me-2"></i>Save Changes';
+                    this.style.background = 'linear-gradient(135deg, var(--ap-success), #16a34a)';
+                } else {
+                    // Save changes
+                    readonlyFields.forEach(field => {
+                        if (field.type !== 'email') {
+                            field.setAttribute('readonly', true);
+                            field.style.background = 'var(--ap-bg-light)';
+                        }
+                    });
+                    this.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Profile';
+                    this.style.background = 'linear-gradient(135deg, var(--ap-primary), var(--bd-green))';
+                    
+                    // Show success message
+                    const successMessage = document.createElement('div');
+                    successMessage.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: var(--ap-success);
+                        color: white;
+                        padding: 1rem 1.5rem;
+                        border-radius: var(--ap-radius);
+                        z-index: 9999;
+                        box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+                        font-weight: 600;
+                        opacity: 0;
+                        transform: translateY(-20px);
+                        transition: all 0.3s ease;
+                    `;
+                    successMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>Profile updated successfully!';
+                    document.body.appendChild(successMessage);
+                    
+                    setTimeout(() => {
+                        successMessage.style.opacity = '1';
+                        successMessage.style.transform = 'translateY(0)';
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        successMessage.style.opacity = '0';
+                        successMessage.style.transform = 'translateY(-20px)';
+                        setTimeout(() => successMessage.remove(), 300);
+                    }, 3000);
+                }
+            });
+
+            // Interactive achievement cards
+            document.querySelectorAll('[style*="background: rgba"]').forEach(card => {
+                if (card.querySelector('.fas')) {
+                    card.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.05)';
+                        this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                    });
+                    
+                    card.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                        this.style.boxShadow = 'none';
+                    });
+                }
+            });
+
+            console.log('ePorikkha Student Profile Page: Fully loaded! 👤');
+        });
+    </script>
+</body>
+</html>

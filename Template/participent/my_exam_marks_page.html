@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - আমার পরীক্ষার নম্বর বিশ্লেষণ</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           NEW CSS FOR MY EXAM MARKS PAGE
+           ======================================== */
+
+        /* Exam Header with Score Summary */
+        .exam-score-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-score-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+        }
+
+        .score-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .exam-info-section {
+            text-align: left;
+        }
+
+        .exam-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-details {
+            color: var(--ap-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .exam-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* NEW CSS: Score Display */
+        .total-score-display {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: var(--ap-radius-lg);
+            border: 2px solid var(--ap-primary);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.2);
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--ap-text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-outof {
+            font-size: 1rem;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+        }
+
+        /* NEW CSS: Grade Display */
+        .grade-display {
+            text-align: center;
+            background: linear-gradient(135deg, var(--bd-gold), #eab308);
+            padding: 1.5rem;
+            border-radius: var(--ap-radius-lg);
+            color: white;
+            box-shadow: 0 8px 24px rgba(234, 179, 8, 0.3);
+        }
+
+        .grade-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .grade-gpa {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        /* Question List Layout */
+        .questions-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* NEW CSS: Question Navigation with Marks */
+        .questions-nav-panel {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .nav-panel-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .nav-panel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-panel-subtitle {
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+        }
+
+        .section-divider {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .questions-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* NEW CSS: Question Navigation Button with Marks */
+        .question-nav-item {
+            aspect-ratio: 1;
+            background: var(--ap-bg-primary);
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.25rem;
+        }
+
+        .question-nav-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
+        .question-nav-item.current {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .question-nav-item.full-marks {
+            background: var(--ap-success);
+            color: white;
+            border-color: var(--ap-success);
+        }
+
+        .question-nav-item.partial-marks {
+            background: var(--ap-warning);
+            color: white;
+            border-color: var(--ap-warning);
+        }
+
+        .question-nav-item.no-marks {
+            background: var(--ap-secondary);
+            color: white;
+            border-color: var(--ap-secondary);
+        }
+
+        .question-nav-item.not-answered {
+            background: var(--ap-bg-light);
+            color: var(--ap-text-muted);
+            border-color: var(--ap-border);
+        }
+
+        .question-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.125rem;
+        }
+
+        .question-marks {
+            font-size: 0.7rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        /* NEW CSS: Legend for Navigation */
+        .marks-legend {
+            background: rgba(5, 150, 105, 0.05);
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            margin-top: 1rem;
+        }
+
+        .legend-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ap-primary);
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .legend-items {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Question Detail View */
+        .question-detail-panel {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            overflow: hidden;
+        }
+
+        .question-detail-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ap-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .question-badge {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .question-type-badge {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        /* NEW CSS: Score Box for Each Question */
+        .question-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            border: 2px solid var(--ap-border);
+            min-width: 120px;
+        }
+
+        .score-box-label {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-box-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-box-value.full {
+            color: var(--ap-success);
+        }
+
+        .score-box-value.partial {
+            color: var(--ap-warning);
+        }
+
+        .score-box-value.zero {
+            color: var(--ap-secondary);
+        }
+
+        .score-box-total {
+            font-size: 0.8rem;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+        }
+
+        .question-content {
+            padding: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ap-text-primary);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        /* NEW CSS: Answer Review Section */
+        .answer-review-section {
+            margin-bottom: 2rem;
+        }
+
+        .review-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .my-answer-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .my-answer-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .my-answer-label {
+            font-weight: 600;
+            color: var(--ap-info);
+            font-size: 0.9rem;
+        }
+
+        .my-answer-content {
+            color: var(--ap-text-primary);
+            line-height: 1.7;
+        }
+
+        /* NEW CSS: Marks Breakdown */
+        .marks-breakdown {
+            background: rgba(5, 150, 105, 0.05);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .breakdown-title {
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .breakdown-items {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: var(--ap-radius);
+            border: 1px solid var(--ap-border);
+        }
+
+        .breakdown-label {
+            font-weight: 500;
+            color: var(--ap-text-secondary);
+        }
+
+        .breakdown-marks {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .breakdown-marks.positive {
+            color: var(--ap-success);
+        }
+
+        .breakdown-marks.negative {
+            color: var(--ap-secondary);
+        }
+
+        /* Navigation Controls */
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--ap-bg-light);
+            border-top: 2px solid var(--ap-border);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .nav-btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Common utility classes from dashboard */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .score-summary-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .questions-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .questions-nav-panel {
+                position: static;
+                order: 2;
+            }
+
+            .questions-nav-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+
+            .exam-score-header {
+                padding: 1.5rem;
+                margin: 0.5rem 0 1.5rem 0;
+            }
+
+            .question-content {
+                padding: 1.5rem;
+            }
+
+            .question-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">My Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Study Materials</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> Rahul Ahmed
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-home me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i>My Results</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Exam Score Header -->
+        <div class="exam-score-header fade-in">
+            <div class="score-summary-grid">
+                <div class="exam-info-section">
+                    <h1 class="exam-title">বাংলা ১ম পত্র - HSC Final Exam 2025</h1>
+                    <div class="exam-details">
+                        <p><strong>পরীক্ষার তারিখ:</strong> June 15, 2025 | <strong>সময়:</strong> 10:00 AM - 1:00 PM</p>
+                        <p><strong>পরীক্ষা কেন্দ্র:</strong> Dhaka College | <strong>রোল নম্বর:</strong> 2025001</p>
+                    </div>
+                    <div class="exam-status">
+                        <i class="fas fa-check-circle"></i>
+                        পরীক্ষা সম্পন্ন
+                    </div>
+                </div>
+                
+                <div class="total-score-display">
+                    <div class="score-label">Total Marks</div>
+                    <div class="score-value" id="totalScore">87</div>
+                    <div class="score-outof">out of 100</div>
+                </div>
+                
+                <div class="grade-display">
+                    <div class="grade-label">Grade</div>
+                    <div class="grade-value" id="gradeValue">A</div>
+                    <div class="grade-gpa" id="gpaValue">GPA: 4.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <div class="questions-container">
+            <!-- Question Navigation Panel -->
+            <div class="questions-nav-panel fade-in">
+                <div class="nav-panel-header">
+                    <h3 class="nav-panel-title">প্রশ্ন নেভিগেশন</h3>
+                    <div class="nav-panel-subtitle">প্রতিটি প্রশ্নের নম্বর দেখুন</div>
+                </div>
+
+                <!-- MCQ Section -->
+                <div class="section-divider">
+                    <div class="section-title">বহুনির্বাচনী প্রশ্ন (MCQ)</div>
+                </div>
+                <div class="questions-nav-grid" id="mcqNavGrid">
+                    <!-- MCQ navigation items will be generated here -->
+                </div>
+
+                <!-- Written Section -->
+                <div class="section-divider">
+                    <div class="section-title">রচনামূলক প্রশ্ন</div>
+                </div>
+                <div class="questions-nav-grid" id="writtenNavGrid">
+                    <!-- Written question navigation items will be generated here -->
+                </div>
+
+                <!-- Marks Legend -->
+                <div class="marks-legend">
+                    <div class="legend-title">নম্বর স্থিতি</div>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: var(--ap-success);"></div>
+                            <span>Full Marks</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: var(--ap-warning);"></div>
+                            <span>Partial Marks</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: var(--ap-secondary);"></div>
+                            <span>No Marks</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: var(--ap-border);"></div>
+                            <span>Not Answered</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Detail Panel -->
+            <div class="question-detail-panel fade-in">
+                <div class="question-detail-header">
+                    <div class="question-info">
+                        <div class="question-badge" id="currentQuestionBadge">প্রশ্ন ১</div>
+                        <div class="question-type-badge" id="currentQuestionType">বহুনির্বাচনী</div>
+                    </div>
+                    <div class="question-score-box" id="currentScoreBox">
+                        <div class="score-box-label">আপনার নম্বর</div>
+                        <div class="score-box-value full" id="currentQuestionScore">1</div>
+                        <div class="score-box-total" id="currentQuestionTotal">out of 1</div>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-text" id="currentQuestionText">
+                        রবীন্দ্রনাথ ঠাকুরের 'অপরিচিতা' গল্পের মূল বিষয়বস্তু কী?
+                    </div>
+
+                    <div class="answer-review-section">
+                        <h4 class="review-title">
+                            <i class="fas fa-eye"></i>
+                            আপনার উত্তর পর্যালোচনা
+                        </h4>
+                        <div class="my-answer-box">
+                            <div class="my-answer-header">
+                                <div class="my-answer-label">আপনার নির্বাচিত উত্তর:</div>
+                            </div>
+                            <div class="my-answer-content" id="myAnswerContent">
+                                <strong>খ) যৌতুকের বিরুদ্ধে প্রতিবাদ ও নারীর আত্মমর্যাদাবোধ</strong>
+                            </div>
+                        </div>
+
+                        <!-- Marks Breakdown -->
+                        <div class="marks-breakdown">
+                            <h5 class="breakdown-title">
+                                <i class="fas fa-calculator"></i>
+                                নম্বর বিশ্লেষণ
+                            </h5>
+                            <div class="breakdown-items">
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">সঠিক উত্তরের জন্য</span>
+                                    <span class="breakdown-marks positive" id="correctMarks">+1</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">ভুল উত্তরের জন্য কাটা</span>
+                                    <span class="breakdown-marks" id="negativeMarks">0</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">মোট প্রাপ্ত নম্বর</span>
+                                    <span class="breakdown-marks positive" id="obtainedMarks">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-navigation">
+                    <button class="nav-btn nav-btn-secondary" id="prevQuestionBtn" onclick="previousQuestion()">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous Question
+                    </button>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="nav-btn nav-btn-secondary" onclick="showAnswerSheet()">
+                            <i class="fas fa-file-alt"></i>
+                            View Answer Sheet
+                        </button>
+                        <button class="nav-btn nav-btn-primary" id="nextQuestionBtn" onclick="nextQuestion()">
+                            Next Question
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Exam functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentQuestion = 1;
+            let totalQuestions = 50;
+            
+            // Sample question data with marks
+            const questionsData = {
+                // MCQ Questions (1-30)
+                1: { type: 'mcq', marks: 1, obtained: 1, total: 1, text: 'রবীন্দ্রনাথ ঠাকুরের \'অপরিচিতা\' গল্পের মূল বিষয়বস্তু কী?', myAnswer: 'খ) যৌতুকের বিরুদ্ধে প্রতিবাদ ও নারীর আত্মমর্যাদাবোধ' },
+                2: { type: 'mcq', marks: 1, obtained: 0, total: 1, text: 'কাজী নজরুল ইসলামের \'বিদ্রোহী\' কবিতা কোন কাব্যগ্রন্থের অন্তর্গত?', myAnswer: 'ক) অগ্নিবীণা (ভুল উত্তর)' },
+                3: { type: 'mcq', marks: 1, obtained: 1, total: 1, text: 'বাংলা সাহিত্যের প্রথম মহাকাব্য কোনটি?', myAnswer: 'গ) মেঘনাদবধ কাব্য' },
+                4: { type: 'mcq', marks: 1, obtained: 0.75, total: 1, text: 'জীবনানন্দ দাশের \'বনলতা সেন\' কবিতায় কোন অঞ্চলের উল্লেখ আছে?', myAnswer: 'খ) নাটোর (আংশিক সঠিক)' },
+                5: { type: 'mcq', marks: 1, obtained: 1, total: 1, text: 'মাইকেল মধুসূদন দত্তের জন্মস্থান কোথায়?', myAnswer: 'ক) সাগরদাঁড়ি' },
+                // Add more MCQ questions...
+                
+                // Written Questions (31-50)
+                31: { type: 'written', marks: 10, obtained: 8, total: 10, text: 'রবীন্দ্রনাথ ঠাকুরের \'সোনার তরী\' কবিতার মূলভাব বিশ্লেষণ করুন।', myAnswer: 'কবিতাটিতে জীবনের ক্ষণস্থায়িত্ব ও কর্মের স্থায়িত্বের কথা বলা হয়েছে...' },
+                32: { type: 'written', marks: 5, obtained: 4, total: 5, text: 'বাংলা গদ্যের বিকাশে ঈশ্বরচন্দ্র বিদ্যাসাগরের অবদান আলোচনা করুন।', myAnswer: 'ঈশ্বরচন্দ্র বিদ্যাসাগর বাংলা গদ্যের জনক হিসেবে পরিচিত...' },
+                33: { type: 'written', marks: 7, obtained: 5, total: 7, text: 'শরৎচন্দ্র চট্টোপাধ্যায়ের \'পল্লীসমাজ\' উপন্যাসের সমাজচিত্র বর্ণনা করুন।', myAnswer: 'পল্লীসমাজ উপন্যাসে গ্রামীণ সমাজের বিভিন্ন সমস্যার চিত্র...' },
+                // Add more written questions...
+            };
+            
+            // Initialize the page
+            initializeExamReview();
+            
+            function initializeExamReview() {
+                generateQuestionNavigation();
+                loadQuestion(1);
+                calculateTotalScore();
+            }
+            
+            function generateQuestionNavigation() {
+                const mcqGrid = document.getElementById('mcqNavGrid');
+                const writtenGrid = document.getElementById('writtenNavGrid');
+                
+                // Generate MCQ navigation (1-30)
+                for (let i = 1; i <= 30; i++) {
+                    const navItem = createQuestionNavItem(i);
+                    mcqGrid.appendChild(navItem);
+                }
+                
+                // Generate Written navigation (31-50)
+                for (let i = 31; i <= 50; i++) {
+                    const navItem = createQuestionNavItem(i);
+                    writtenGrid.appendChild(navItem);
+                }
+                
+                updateQuestionNavigation();
+            }
+            
+            function createQuestionNavItem(questionNum) {
+                const navItem = document.createElement('div');
+                navItem.className = 'question-nav-item';
+                navItem.id = `nav-item-${questionNum}`;
+                navItem.onclick = () => loadQuestion(questionNum);
+                
+                const questionData = questionsData[questionNum];
+                let marksClass = 'not-answered';
+                let marksText = '-';
+                
+                if (questionData) {
+                    const percentage = (questionData.obtained / questionData.total) * 100;
+                    if (percentage === 100) {
+                        marksClass = 'full-marks';
+                        marksText = `${questionData.obtained}/${questionData.total}`;
+                    } else if (percentage > 0) {
+                        marksClass = 'partial-marks';
+                        marksText = `${questionData.obtained}/${questionData.total}`;
+                    } else {
+                        marksClass = 'no-marks';
+                        marksText = `0/${questionData.total}`;
+                    }
+                } else {
+                    // Generate random marks for demo
+                    const total = questionNum <= 30 ? 1 : Math.floor(Math.random() * 8) + 3;
+                    const obtained = Math.random() > 0.2 ? Math.floor(Math.random() * total) + (Math.random() > 0.5 ? 1 : 0) : 0;
+                    const actualObtained = Math.min(obtained, total);
+                    
+                    questionsData[questionNum] = {
+                        type: questionNum <= 30 ? 'mcq' : 'written',
+                        marks: total,
+                        obtained: actualObtained,
+                        total: total,
+                        text: `প্রশ্ন ${questionNum} এর বিষয়বস্তু এখানে দেখানো হবে...`,
+                        myAnswer: questionNum <= 30 ? 'নির্বাচিত উত্তর দেখানো হবে' : 'লিখিত উত্তর এখানে দেখানো হবে...'
+                    };
+                    
+                    const percentage = (actualObtained / total) * 100;
+                    if (percentage === 100) {
+                        marksClass = 'full-marks';
+                    } else if (percentage > 0) {
+                        marksClass = 'partial-marks';
+                    } else {
+                        marksClass = 'no-marks';
+                    }
+                    marksText = `${actualObtained}/${total}`;
+                }
+                
+                navItem.classList.add(marksClass);
+                navItem.innerHTML = `
+                    <div class="question-number">${questionNum}</div>
+                    <div class="question-marks">${marksText}</div>
+                `;
+                
+                return navItem;
+            }
+            
+            function loadQuestion(questionNum) {
+                currentQuestion = questionNum;
+                const questionData = questionsData[questionNum];
+                
+                if (questionData) {
+                    // Update question header
+                    document.getElementById('currentQuestionBadge').textContent = `প্রশ্ন ${questionNum}`;
+                    document.getElementById('currentQuestionType').textContent = questionData.type === 'mcq' ? 'বহুনির্বাচনী' : 'রচনামূলক';
+                    document.getElementById('currentQuestionText').textContent = questionData.text;
+                    
+                    // Update score box
+                    const scoreBox = document.getElementById('currentQuestionScore');
+                    const percentage = (questionData.obtained / questionData.total) * 100;
+                    
+                    scoreBox.textContent = questionData.obtained;
+                    scoreBox.className = 'score-box-value';
+                    
+                    if (percentage === 100) {
+                        scoreBox.classList.add('full');
+                    } else if (percentage > 0) {
+                        scoreBox.classList.add('partial');
+                    } else {
+                        scoreBox.classList.add('zero');
+                    }
+                    
+                    document.getElementById('currentQuestionTotal').textContent = `out of ${questionData.total}`;
+                    
+                    // Update answer content
+                    document.getElementById('myAnswerContent').innerHTML = `<strong>${questionData.myAnswer}</strong>`;
+                    
+                    // Update marks breakdown
+                    if (questionData.type === 'mcq') {
+                        document.getElementById('correctMarks').textContent = `+${questionData.total}`;
+                        document.getElementById('negativeMarks').textContent = questionData.obtained < questionData.total ? '-0.25' : '0';
+                        document.getElementById('obtainedMarks').textContent = questionData.obtained;
+                    } else {
+                        document.getElementById('correctMarks').textContent = `${questionData.obtained}`;
+                        document.getElementById('negativeMarks').textContent = '0';
+                        document.getElementById('obtainedMarks').textContent = questionData.obtained;
+                    }
+                }
+                
+                updateQuestionNavigation();
+                updateNavigationButtons();
+            }
+            
+            function updateQuestionNavigation() {
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const navItem = document.getElementById(`nav-item-${i}`);
+                    if (navItem) {
+                        navItem.classList.remove('current');
+                        if (i === currentQuestion) {
+                            navItem.classList.add('current');
+                        }
+                    }
+                }
+            }
+            
+            function updateNavigationButtons() {
+                const prevBtn = document.getElementById('prevQuestionBtn');
+                const nextBtn = document.getElementById('nextQuestionBtn');
+                
+                prevBtn.disabled = currentQuestion === 1;
+                nextBtn.disabled = currentQuestion === totalQuestions;
+                
+                if (currentQuestion === totalQuestions) {
+                    nextBtn.innerHTML = '<i class="fas fa-flag-checkered"></i> Exam Complete';
+                } else {
+                    nextBtn.innerHTML = 'Next Question <i class="fas fa-chevron-right"></i>';
+                }
+            }
+            
+            function calculateTotalScore() {
+                let totalObtained = 0;
+                let totalPossible = 0;
+                
+                Object.values(questionsData).forEach(question => {
+                    totalObtained += question.obtained;
+                    totalPossible += question.total;
+                });
+                
+                document.getElementById('totalScore').textContent = totalObtained;
+                
+                // Calculate grade
+                const percentage = (totalObtained / totalPossible) * 100;
+                let grade = 'F';
+                let gpa = '0.00';
+                
+                if (percentage >= 80) { grade = 'A+'; gpa = '5.00'; }
+                else if (percentage >= 70) { grade = 'A'; gpa = '4.00'; }
+                else if (percentage >= 60) { grade = 'A-'; gpa = '3.50'; }
+                else if (percentage >= 50) { grade = 'B'; gpa = '3.00'; }
+                else if (percentage >= 40) { grade = 'C'; gpa = '2.00'; }
+                else if (percentage >= 33) { grade = 'D'; gpa = '1.00'; }
+                
+                document.getElementById('gradeValue').textContent = grade;
+                document.getElementById('gpaValue').textContent = `GPA: ${gpa}`;
+            }
+            
+            // Navigation functions
+            window.nextQuestion = function() {
+                if (currentQuestion < totalQuestions) {
+                    loadQuestion(currentQuestion + 1);
+                }
+            };
+            
+            window.previousQuestion = function() {
+                if (currentQuestion > 1) {
+                    loadQuestion(currentQuestion - 1);
+                }
+            };
+            
+            window.showAnswerSheet = function() {
+                alert('Answer Sheet view will be implemented next!\nসম্পূর্ণ উত্তরপত্র দেখানো হবে পরবর্তী পৃষ্ঠায়।');
+            };
+            
+            // Animate score counter
+            function animateScore() {
+                const scoreElement = document.getElementById('totalScore');
+                const finalScore = parseInt(scoreElement.textContent);
+                let currentScore = 0;
+                const increment = finalScore / 50;
+                
+                const timer = setInterval(() => {
+                    currentScore += increment;
+                    if (currentScore >= finalScore) {
+                        scoreElement.textContent = finalScore;
+                        clearInterval(timer);
+                    } else {
+                        scoreElement.textContent = Math.floor(currentScore);
+                    }
+                }, 30);
+            }
+            
+            // Start score animation after page load
+            setTimeout(animateScore, 500);
+            
+            console.log('ePorikkha My Exam Marks Page: Ready! 📊');
+        });
+    </script>
+</body>
+</html>

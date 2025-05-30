@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Study Materials & Resources</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        /* ========================================
+           NEW CSS FOR STUDY MATERIALS PAGE
+           ======================================== */
+
+        /* Study Materials Header Section */
+        .study-header-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .study-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .study-header-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+        }
+
+        .study-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .study-main-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .study-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .study-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .study-stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .study-stat-item:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon.materials {
+            background: linear-gradient(135deg, var(--ap-info), #3b82f6);
+        }
+
+        .stat-icon.videos {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+        }
+
+        .stat-icon.notes {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+        }
+
+        .stat-icon.downloads {
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ap-text-muted);
+            font-size: 1.2rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ap-text-secondary);
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            background: white;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .quick-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .quick-filter-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-filter-btn:hover, .quick-filter-btn.active {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Subject Tabs Navigation */
+        .subject-nav-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .subject-nav-tabs {
+            display: flex;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .subject-nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .subject-nav-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subject-nav-tab i {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .subject-nav-tab:hover {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+        }
+
+        .subject-nav-tab.active {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+        }
+
+        .subject-nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        /* Content Container */
+        .study-content {
+            min-height: 500px;
+        }
+
+        .study-tab-pane {
+            display: none;
+        }
+
+        .study-tab-pane.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* Resource Cards Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .resource-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+        }
+
+        .resource-card-header {
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 1px solid var(--ap-border);
+            position: relative;
+        }
+
+        .resource-type-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-pdf {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .type-video {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--ap-info);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .type-notes {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--ap-warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .type-practice {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .icon-pdf {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+        }
+
+        .icon-video {
+            background: linear-gradient(135deg, var(--ap-info), #1d4ed8);
+        }
+
+        .icon-notes {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+        }
+
+        .icon-practice {
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+        }
+
+        .resource-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .resource-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .resource-card-body {
+            padding: 1.25rem;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .action-btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+        }
+
+        .action-btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .bookmark-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bookmark-btn:hover, .bookmark-btn.bookmarked {
+            background: var(--ap-warning);
+            color: white;
+            border-color: var(--ap-warning);
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--ap-bg-light);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
+
+        /* Recent & Popular Sections */
+        .featured-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: var(--ap-radius);
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .view-all-btn {
+            color: var(--ap-primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--ap-primary);
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background: var(--ap-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Study Progress Section */
+        .study-progress-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .progress-item {
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-item:hover {
+            background: rgba(5, 150, 105, 0.08);
+            transform: translateX(4px);
+        }
+
+        .progress-subject {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            color: var(--ap-primary);
+        }
+
+        .progress-count {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* FOOTER (COPIED FROM DASHBOARD) */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .footer-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .subject-nav-tabs {
+                flex-direction: column;
+            }
+
+            .subject-nav-tab {
+                min-width: auto;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 1rem 1.5rem;
+            }
+
+            .subject-nav-tab i {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+            }
+
+            .study-main-title {
+                font-size: 2rem;
+            }
+
+            .study-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+
+            .quick-filters {
+                justify-content: center;
+            }
+
+            .resource-actions {
+                flex-direction: column;
+            }
+
+            .footer-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation (Same as Dashboard) -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Practice Tests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Study Materials</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">রা</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Rahul Ahmed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">HSC 2025 Candidate</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Progress</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Study Materials Header Section -->
+        <div class="study-header-section fade-in">
+            <div class="study-header-content">
+                <h1 class="study-main-title">অধ্যয়ন সামগ্রী | Study Materials & Resources</h1>
+                <p class="study-subtitle">Comprehensive learning resources for HSC 2025 preparation</p>
+                
+                <div class="study-stats-grid">
+                    <div class="study-stat-item">
+                        <div class="stat-icon materials">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Total Resources</div>
+                    </div>
+                    <div class="study-stat-item">
+                        <div class="stat-icon videos">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="stat-value">356</div>
+                        <div class="stat-label">Video Lectures</div>
+                    </div>
+                    <div class="study-stat-item">
+                        <div class="stat-icon notes">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Study Notes</div>
+                    </div>
+                    <div class="study-stat-item">
+                        <div class="stat-icon downloads">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-value">2,456</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section fade-in">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search for study materials, topics, or subjects..." id="searchInput">
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label class="filter-label">Subject:</label>
+                    <select class="filter-select" id="subjectFilter">
+                        <option value="all">All Subjects</option>
+                        <option value="bangla">বাংলা</option>
+                        <option value="english">English</option>
+                        <option value="math">গণিত</option>
+                        <option value="physics">পদার্থবিজ্ঞান</option>
+                        <option value="chemistry">রসায়ন</option>
+                        <option value="biology">জীববিজ্ঞান</option>
+                        <option value="ict">ICT</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Type:</label>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="pdf">PDF Documents</option>
+                        <option value="video">Video Lectures</option>
+                        <option value="notes">Study Notes</option>
+                        <option value="practice">Practice Questions</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Level:</label>
+                    <select class="filter-select" id="levelFilter">
+                        <option value="all">All Levels</option>
+                        <option value="basic">Basic</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="quick-filters">
+                <button class="quick-filter-btn active" data-filter="all">All Resources</button>
+                <button class="quick-filter-btn" data-filter="recent">Recently Added</button>
+                <button class="quick-filter-btn" data-filter="popular">Most Popular</button>
+                <button class="quick-filter-btn" data-filter="bookmarked">My Bookmarks</button>
+                <button class="quick-filter-btn" data-filter="downloaded">Downloaded</button>
+            </div>
+        </div>
+
+        <!-- Study Progress Overview -->
+        <div class="study-progress-section fade-in">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    আপনার অগ্রগতি | Your Study Progress
+                </h2>
+            </div>
+            
+            <div class="progress-grid">
+                <div class="progress-item">
+                    <div class="progress-subject">বাংলা সাহিত্য</div>
+                    <div class="progress-stats">
+                        <span class="progress-percentage">85%</span>
+                        <span class="progress-count">17/20 materials</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-subject">English Literature</div>
+                    <div class="progress-stats">
+                        <span class="progress-percentage">72%</span>
+                        <span class="progress-count">13/18 materials</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 72%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-subject">উচ্চতর গণিত</div>
+                    <div class="progress-stats">
+                        <span class="progress-percentage">91%</span>
+                        <span class="progress-count">22/24 materials</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 91%;"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-subject">পদার্থবিজ্ঞান</div>
+                    <div class="progress-stats">
+                        <span class="progress-percentage">68%</span>
+                        <span class="progress-count">15/22 materials</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Navigation -->
+        <div class="subject-nav-section fade-in">
+            <div class="subject-nav-tabs">
+                <button class="subject-nav-tab active" data-subject="all">
+                    <i class="fas fa-th-large"></i>
+                    <span>All Subjects</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="bangla">
+                    <i class="fas fa-book"></i>
+                    <span>বাংলা</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="english">
+                    <i class="fas fa-language"></i>
+                    <span>English</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="math">
+                    <i class="fas fa-calculator"></i>
+                    <span>গণিত</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="physics">
+                    <i class="fas fa-atom"></i>
+                    <span>পদার্থবিজ্ঞান</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="chemistry">
+                    <i class="fas fa-flask"></i>
+                    <span>রসায়ন</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="biology">
+                    <i class="fas fa-leaf"></i>
+                    <span>জীববিজ্ঞান</span>
+                </button>
+                <button class="subject-nav-tab" data-subject="ict">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>ICT</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Study Content -->
+        <div class="study-content">
+            <!-- Recently Added Section -->
+            <div class="featured-section fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        সাম্প্রতিক সংযোজন | Recently Added
+                    </h2>
+                    <a href="#" class="view-all-btn">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="resources-grid">
+                    <!-- Resource Card 1 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-pdf">PDF</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="resource-title">রবীন্দ্রনাথ ঠাকুরের কবিতা সমগ্র</div>
+                            <div class="resource-description">
+                                Complete collection of Rabindranath Tagore's poetry with detailed analysis and explanations for HSC preparation.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>Prof. Kamal Hassan</span>
+                                <span><i class="fas fa-calendar me-1"></i>2 days ago</span>
+                                <span><i class="fas fa-file-alt me-1"></i>45 pages</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-eye"></i>
+                                    Preview
+                                </a>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Card 2 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-video">Video</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-video">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="resource-title">Advanced Calculus - HSC Math</div>
+                            <div class="resource-description">
+                                Comprehensive video lecture series covering advanced calculus topics with solved examples and practice problems.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>Dr. Rahman Khan</span>
+                                <span><i class="fas fa-calendar me-1"></i>1 week ago</span>
+                                <span><i class="fas fa-clock me-1"></i>2h 15m</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-play"></i>
+                                    Watch Now
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-list"></i>
+                                    Playlist
+                                </a>
+                                <button class="bookmark-btn bookmarked">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Card 3 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-notes">Notes</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-notes">
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                            <div class="resource-title">Physics Formula Sheet</div>
+                            <div class="resource-description">
+                                Complete formula sheet for HSC Physics with derivations, constants, and important equations for quick reference.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>Physics Dept.</span>
+                                <span><i class="fas fa-calendar me-1"></i>3 days ago</span>
+                                <span><i class="fas fa-file-alt me-1"></i>12 pages</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-print"></i>
+                                    Print
+                                </a>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Resources Section -->
+            <div class="featured-section fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        জনপ্রিয় সামগ্রী | Popular Resources
+                    </h2>
+                    <a href="#" class="view-all-btn">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="resources-grid">
+                    <!-- Resource Card 4 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-practice">Practice</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-practice">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="resource-title">HSC English 1st Paper - Model Questions</div>
+                            <div class="resource-description">
+                                Comprehensive set of model questions with answers for HSC English 1st Paper based on latest syllabus and board patterns.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>English Faculty</span>
+                                <span><i class="fas fa-download me-1"></i>1,247 downloads</span>
+                                <span><i class="fas fa-star me-1"></i>4.8/5</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-play"></i>
+                                    Start Practice
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Card 5 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-video">Video</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-video">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="resource-title">রসায়নের মৌলিক ধারণা | Basic Chemistry Concepts</div>
+                            <div class="resource-description">
+                                Fundamental chemistry concepts explained in Bengali with practical examples and real-world applications for HSC students.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>Dr. Fatema Khatun</span>
+                                <span><i class="fas fa-download me-1"></i>892 views</span>
+                                <span><i class="fas fa-clock me-1"></i>1h 45m</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-play"></i>
+                                    Watch Now
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-share"></i>
+                                    Share
+                                </a>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resource Card 6 -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-pdf">PDF</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="resource-title">ICT Programming Guide - C Language</div>
+                            <div class="resource-description">
+                                Complete programming guide for C language covering all HSC ICT syllabus topics with examples and practice exercises.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>IT Department</span>
+                                <span><i class="fas fa-download me-1"></i>756 downloads</span>
+                                <span><i class="fas fa-file-alt me-1"></i>68 pages</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-code"></i>
+                                    Try Code
+                                </a>
+                                <button class="bookmark-btn bookmarked">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject-wise Resources -->
+            <div class="featured-section fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        বিষয়ভিত্তিক সামগ্রী | Subject-wise Resources
+                    </h2>
+                </div>
+                
+                <div class="resources-grid">
+                    <!-- More resource cards would be dynamically loaded here based on selected subject -->
+                    <div class="resource-card fade-in">
+                        <div class="resource-type-badge type-notes">Notes</div>
+                        <div class="resource-card-header">
+                            <div class="resource-icon icon-notes">
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                            <div class="resource-title">জীববিজ্ঞান - কোষ বিভাজন নোট</div>
+                            <div class="resource-description">
+                                Detailed notes on cell division processes including mitosis and meiosis with diagrams and explanations in Bengali.
+                            </div>
+                            <div class="resource-meta">
+                                <span><i class="fas fa-user me-1"></i>Biology Faculty</span>
+                                <span><i class="fas fa-calendar me-1"></i>1 week ago</span>
+                                <span><i class="fas fa-file-alt me-1"></i>15 pages</span>
+                            </div>
+                        </div>
+                        <div class="resource-card-body">
+                            <div class="resource-actions">
+                                <a href="#" class="action-btn action-btn-primary">
+                                    <i class="fas fa-download"></i>
+                                    Download
+                                </a>
+                                <a href="#" class="action-btn action-btn-secondary">
+                                    <i class="fas fa-eye"></i>
+                                    Preview
+                                </a>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer (Same as Dashboard) -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">25,000+</div>
+                        <div class="footer-stat-label">Active Students</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">1,500+</div>
+                        <div class="footer-stat-label">Exams Conducted</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">850+</div>
+                        <div class="footer-stat-label">Educational Institutes</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">99.8%</div>
+                        <div class="footer-stat-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fade in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Subject tab switching
+            const subjectTabs = document.querySelectorAll('.subject-nav-tab');
+            subjectTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    subjectTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const subject = tab.getAttribute('data-subject');
+                    filterResourcesBySubject(subject);
+                    showNotification(`Showing resources for: ${tab.textContent.trim()}`, 'info');
+                });
+            });
+
+            // Quick filter buttons
+            const quickFilters = document.querySelectorAll('.quick-filter-btn');
+            quickFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    quickFilters.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.getAttribute('data-filter');
+                    applyQuickFilter(filter);
+                    showNotification(`Filter applied: ${btn.textContent}`, 'success');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const query = this.value.toLowerCase();
+                    if (query.length > 2) {
+                        searchResources(query);
+                        showNotification(`Searching for: "${query}"`, 'info');
+                    } else if (query.length === 0) {
+                        resetResourceDisplay();
+                    }
+                }, 300);
+            });
+
+            // Filter controls
+            document.querySelectorAll('.filter-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    applyFilters();
+                    const filterName = this.closest('.filter-group').querySelector('.filter-label').textContent;
+                    showNotification(`${filterName} filter updated`, 'success');
+                });
+            });
+
+            // Resource card interactions
+            setupResourceCardInteractions();
+
+            // Bookmark functionality
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const isBookmarked = this.classList.toggle('bookmarked');
+                    const resourceTitle = this.closest('.resource-card').querySelector('.resource-title').textContent;
+                    
+                    if (isBookmarked) {
+                        showNotification(`Bookmarked: ${resourceTitle}`, 'success');
+                    } else {
+                        showNotification(`Removed bookmark: ${resourceTitle}`, 'info');
+                    }
+                });
+            });
+
+            // Download functionality
+            document.querySelectorAll('.action-btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Download')) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const resourceTitle = this.closest('.resource-card').querySelector('.resource-title').textContent;
+                        simulateDownload(resourceTitle, this);
+                    });
+                }
+            });
+
+            // Video play functionality
+            document.querySelectorAll('.action-btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Watch') || btn.textContent.includes('Play')) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const resourceTitle = this.closest('.resource-card').querySelector('.resource-title').textContent;
+                        simulateVideoPlay(resourceTitle, this);
+                    });
+                }
+            });
+
+            // Practice test functionality
+            document.querySelectorAll('.action-btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Practice')) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const resourceTitle = this.closest('.resource-card').querySelector('.resource-title').textContent;
+                        showNotification(`Starting practice session: ${resourceTitle}`, 'success');
+                    });
+                }
+            });
+
+            // Animate statistics on load
+            setTimeout(() => {
+                animateStats();
+                animateProgressBars();
+            }, 500);
+
+            // Functions
+            function filterResourcesBySubject(subject) {
+                const resourceCards = document.querySelectorAll('.resource-card');
+                resourceCards.forEach(card => {
+                    if (subject === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        // In a real app, this would filter based on actual subject data
+                        const shouldShow = Math.random() > 0.3; // Simulate filtering
+                        card.style.display = shouldShow ? 'block' : 'none';
+                    }
+                });
+                
+                // Animate visible cards
+                setTimeout(() => {
+                    const visibleCards = document.querySelectorAll('.resource-card[style*="block"]');
+                    visibleCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '0.5';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                            }, 100);
+                        }, index * 50);
+                    });
+                }, 100);
+            }
+
+            function applyQuickFilter(filter) {
+                const resourceCards = document.querySelectorAll('.resource-card');
+                resourceCards.forEach(card => {
+                    switch (filter) {
+                        case 'all':
+                            card.style.display = 'block';
+                            break;
+                        case 'recent':
+                            // Show only recently added (first section)
+                            card.style.display = card.closest('.featured-section').querySelector('.section-title i').classList.contains('fa-clock') ? 'block' : 'none';
+                            break;
+                        case 'popular':
+                            // Show only popular (second section)
+                            card.style.display = card.closest('.featured-section').querySelector('.section-title i').classList.contains('fa-fire') ? 'block' : 'none';
+                            break;
+                        case 'bookmarked':
+                            // Show only bookmarked items
+                            card.style.display = card.querySelector('.bookmark-btn.bookmarked') ? 'block' : 'none';
+                            break;
+                        case 'downloaded':
+                            // Show items with progress
+                            const progress = card.querySelector('.progress-fill');
+                            card.style.display = (progress && parseInt(progress.style.width) > 0) ? 'block' : 'none';
+                            break;
+                    }
+                });
+            }
+
+            function searchResources(query) {
+                const resourceCards = document.querySelectorAll('.resource-card');
+                resourceCards.forEach(card => {
+                    const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                    const description = card.querySelector('.resource-description').textContent.toLowerCase();
+                    const shouldShow = title.includes(query) || description.includes(query);
+                    card.style.display = shouldShow ? 'block' : 'none';
+                });
+            }
+
+            function resetResourceDisplay() {
+                const resourceCards = document.querySelectorAll('.resource-card');
+                resourceCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+            }
+
+            function applyFilters() {
+                const subjectFilter = document.getElementById('subjectFilter').value;
+                const typeFilter = document.getElementById('typeFilter').value;
+                const levelFilter = document.getElementById('levelFilter').value;
+                
+                // In a real app, this would apply complex filtering logic
+                showNotification('Filters applied successfully', 'success');
+            }
+
+            function setupResourceCardInteractions() {
+                document.querySelectorAll('.resource-card').forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-8px) scale(1.02)';
+                    });
+                    
+                    card.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    });
+                });
+            }
+
+            function simulateDownload(resourceTitle, button) {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i> Downloaded';
+                    showNotification(`Download completed: ${resourceTitle}`, 'success');
+                    
+                    // Update progress bar
+                    const progressBar = button.closest('.resource-card').querySelector('.progress-fill');
+                    if (progressBar) {
+                        progressBar.style.width = '100%';
+                    }
+                    
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-download"></i> Download';
+                        button.disabled = false;
+                    }, 2000);
+                }, 1500);
+            }
+
+            function simulateVideoPlay(resourceTitle, button) {
+                showNotification(`Playing: ${resourceTitle}`, 'success');
+                
+                // Update progress bar to simulate watching
+                const progressBar = button.closest('.resource-card').querySelector('.progress-fill');
+                if (progressBar) {
+                    const currentProgress = parseInt(progressBar.style.width) || 0;
+                    const newProgress = Math.min(currentProgress + 15, 100);
+                    progressBar.style.width = `${newProgress}%`;
+                }
+            }
+
+            function animateStats() {
+                const stats = document.querySelectorAll('.stat-value');
+                stats.forEach((stat, index) => {
+                    const originalText = stat.textContent;
+                    const finalValue = parseInt(originalText.replace(/,/g, ''));
+                    let currentValue = 0;
+                    const increment = finalValue / 50;
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            stat.textContent = originalText;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(currentValue).toLocaleString();
+                        }
+                    }, 30 + index * 10);
+                });
+            }
+
+            function animateProgressBars() {
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach((bar, index) => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500 + index * 100);
+                });
+            }
+
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                const colors = {
+                    success: 'var(--ap-success)',
+                    info: 'var(--ap-info)',
+                    warning: 'var(--ap-warning)',
+                    error: 'var(--ap-secondary)'
+                };
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type] || colors.info};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: var(--ap-radius);
+                    z-index: 9999;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    font-weight: 600;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease;
+                    max-width: 300px;
+                `;
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    info: 'fas fa-info-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    error: 'fas fa-times-circle'
+                };
+                
+                notification.innerHTML = `<i class="${icons[type] || icons.info} me-2"></i>${message}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            console.log('ePorikkha Study Materials & Resources: Fully loaded! 📚✨');
+        });
+    </script>
+</body>
+</html>

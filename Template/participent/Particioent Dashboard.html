@@ -1,0 +1,3578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Student Dashboard</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           ENHANCED STUDENT DASHBOARD STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Sidebar Navigation */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            z-index: 1050;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .mobile-sidebar.show {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ap-border);
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+        }
+
+        .mobile-sidebar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--ap-text-primary);
+        }
+
+        .mobile-sidebar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .mobile-sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--ap-secondary);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .mobile-sidebar-close:hover {
+            background: var(--bd-red);
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--ap-text-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--ap-radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            transform: translateX(8px);
+        }
+
+        .mobile-nav-link:hover::before, .mobile-nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        .mobile-nav-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover .mobile-nav-icon {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .mobile-sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar-user {
+            margin: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.8));
+            border-radius: var(--ap-radius);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .mobile-user-details {
+            flex: 1;
+        }
+
+        .mobile-user-name {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-user-role {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Hide default navbar collapse on mobile */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                display: none !important;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0.5rem;
+                background: var(--ap-primary);
+                color: white;
+                border-radius: var(--ap-radius);
+                transition: all 0.3s ease;
+            }
+            
+            .navbar-toggler:hover {
+                background: var(--ap-primary-dark);
+                transform: scale(1.05);
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .mobile-sidebar,
+            .mobile-sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        /* Notification Dropdown */
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 350px;
+            background: var(--ap-bg-primary);
+            border-radius: var(--ap-radius);
+            box-shadow: var(--ap-shadow-lg);
+            border: 1px solid var(--ap-border);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+        }
+        
+        .notification-header h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .notification-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .notification-item:hover {
+            background: var(--ap-primary-light);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-text {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--ap-text-muted);
+        }
+        
+        .notification-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 1px solid var(--ap-border);
+        }
+        
+        .notification-footer a {
+            text-decoration: none;
+            color: var(--ap-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* ========================================
+           USER DROPDOWN STYLES (FIXED)
+           ======================================== */
+
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.25rem;
+            border-bottom: 2px solid var(--ap-border);
+            margin-bottom: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .user-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .user-role i {
+            font-size: 0.7rem;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        .dropdown-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .dropdown-item.text-danger {
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #fef2f2;
+            color: var(--bd-red);
+        }
+
+        .dropdown-item i {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .dropdown-item:hover i {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown-item.text-danger i {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover i {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .dropdown-item span {
+            flex: 1;
+        }
+
+        /* Dropdown Divider */
+        .dropdown-divider {
+            height: 1px;
+            background: var(--ap-border);
+            margin: 0.5rem 1.25rem;
+            border: none;
+        }
+
+        /* ========================================
+           STUDENT WELCOME SECTION
+           ======================================== */
+
+        .student-welcome {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem 1.5rem;
+            margin: 1rem 0 1.5rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-welcome::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(6, 106, 78, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .student-welcome::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .student-greeting {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .student-greeting .student-name {
+            font-weight: 700;
+            color: var(--ap-primary);
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .student-info {
+            font-size: 1rem;
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .student-motivation {
+            font-size: 0.95rem;
+            color: var(--ap-text-muted);
+            font-style: italic;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Time and Date Section */
+        .welcome-time-date {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .time-block, .date-block {
+            text-align: center;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .time-block:hover, .date-block:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.1);
+        }
+
+        .time-value, .date-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .time-label, .date-label {
+            font-size: 0.7rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .student-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .student-stat-item {
+            text-align: center;
+            padding: 1rem 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .student-stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(5, 150, 105, 0.15);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(5, 150, 105, 0.2);
+        }
+
+        .student-stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 3px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.5rem auto 1rem;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon.exams {
+            background: linear-gradient(135deg, var(--ap-info), #3b82f6);
+        }
+
+        .stat-icon.performance {
+            background: linear-gradient(135deg, var(--ap-success), #22c55e);
+        }
+
+        .stat-icon.practice {
+            background: linear-gradient(135deg, var(--ap-warning), #f59e0b);
+        }
+
+        .stat-icon.rank {
+            background: linear-gradient(135deg, var(--bd-gold), #eab308);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        .welcome-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn {
+            padding: 0.875rem 2rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .action-btn-outline {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .action-btn-outline:hover {
+            background: var(--ap-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           LIVE EXAM/CONTEST SECTION
+           ======================================== */
+
+        .live-exams-section {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fecaca 100%);
+            border: 2px solid var(--ap-secondary);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+        }
+
+        .live-exams-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-secondary), var(--bd-red), #f97316);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .live-exams-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.03) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .live-exam-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--ap-radius);
+            padding: 1rem;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .live-exam-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .live-exam-card::before {
+            content: '';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, var(--ap-secondary), var(--bd-red));
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .live-indicator i {
+            animation: pulse 1s infinite;
+        }
+
+        /* ========================================
+           COUNTDOWN SECTION
+           ======================================== */
+
+        .countdown-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+            border: 2px solid var(--ap-info);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+        }
+
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-info), #0ea5e9, #06b6d4);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .countdown-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%);
+            animation: rotate 25s linear infinite reverse;
+        }
+
+        .countdown-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-info);
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 0.5rem;
+            border-radius: var(--ap-radius);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+        }
+
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .countdown-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.2);
+            border-color: var(--ap-info);
+        }
+
+        .countdown-item:hover::before {
+            left: 100%;
+        }
+
+        .countdown-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--ap-info);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            color: var(--ap-info);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* ========================================
+           ENHANCED EXAM CARDS
+           ======================================== */
+
+        .exam-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exam-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(5, 150, 105, 0.2);
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+
+        .exam-card:hover::before {
+            opacity: 1;
+        }
+
+        .exam-card-header {
+            padding: 1.25rem 1.25rem 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(240, 253, 244, 0.3));
+            border-bottom: 1px solid rgba(5, 150, 105, 0.1);
+            position: relative;
+        }
+
+        .exam-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.25rem;
+            right: 1.25rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.2), transparent);
+        }
+
+        .exam-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .exam-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg) translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .exam-card:hover .exam-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+        }
+
+        .exam-card:hover .exam-icon::after {
+            transform: rotate(45deg) translateX(100%);
+        }
+
+        .exam-icon.bangla { 
+            background: linear-gradient(135deg, #059669, #047857);
+            border: 2px solid rgba(5, 150, 105, 0.3);
+        }
+        .exam-icon.english { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        .exam-icon.math { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+        .exam-icon.science { 
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        .exam-icon.ict { 
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+        .exam-icon.contest { 
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+        }
+
+        .exam-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exam-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            background: linear-gradient(135deg, var(--ap-text-primary), #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .exam-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .exam-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exam-details {
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.6rem;
+            padding: 0.4rem 0.6rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:hover {
+            background: rgba(5, 150, 105, 0.08);
+            border-left-color: var(--ap-primary);
+            transform: translateX(4px);
+        }
+
+        .detail-icon {
+            color: var(--ap-primary);
+            width: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .detail-text {
+            font-size: 0.8rem;
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        .exam-progress {
+            margin: 1rem 0;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 6px;
+            position: relative;
+        }
+
+        .exam-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .exam-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 8px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .exam-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .exam-status:hover::before {
+            left: 100%;
+        }
+
+        .exam-status.available {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: var(--ap-success);
+            border-color: rgba(34, 197, 94, 0.4);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+        }
+
+        .exam-status.upcoming {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: var(--ap-warning);
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+
+        .exam-status.completed {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--ap-info);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .exam-status.live {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: var(--ap-secondary);
+            border-color: rgba(239, 68, 68, 0.4);
+            animation: livePulse 2s infinite;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5); }
+        }
+
+        .exam-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .exam-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .exam-btn:hover::before {
+            left: 100%;
+        }
+
+        .exam-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            border-color: var(--ap-primary);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        .exam-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.4);
+            color: white;
+        }
+
+        .exam-btn-danger {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+            color: white;
+            border-color: var(--ap-secondary);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .exam-btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4);
+            color: white;
+        }
+
+        .exam-btn-outline {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .exam-btn-outline:hover {
+            background: var(--ap-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        /* ========================================
+           QUICK ACTIONS SECTION
+           ======================================== */
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-action-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius);
+            padding: 1.25rem 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-action-desc {
+            font-size: 0.8rem;
+            color: var(--ap-text-secondary);
+            line-height: 1.4;
+        }
+
+        /* ========================================
+           PERFORMANCE SECTION
+           ======================================== */
+
+        .performance-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            height: 100%;
+        }
+
+        .performance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--ap-border);
+        }
+
+        .performance-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+        }
+
+        .subject-performance {
+            margin-bottom: 1.5rem;
+        }
+
+        .subject-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .subject-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .subject-name {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+        }
+
+        .subject-score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-primary);
+        }
+
+        .subject-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--ap-bg-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .subject-progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* ========================================
+           RECENT ACTIVITY
+           ======================================== */
+
+        .activity-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius);
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--ap-border);
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.1);
+        }
+
+        .activity-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .footer-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
+
+        @media (max-width: 768px) {
+            .student-welcome {
+                padding: 1rem 0.75rem;
+                margin: 0.75rem 0 1rem 0;
+            }
+            
+            .student-greeting {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-time-date {
+                gap: 0.75rem;
+                margin: 0.75rem 0;
+            }
+            
+            .time-block, .date-block {
+                padding: 0.5rem 0.75rem;
+            }
+            
+            .time-value, .date-value {
+                font-size: 0.9rem;
+            }
+            
+            .student-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                margin: 1rem 0;
+            }
+            
+            .student-stat-item {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .stat-value {
+                font-size: 1.25rem;
+            }
+            
+            .stat-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+                margin: 0.25rem auto 0.5rem;
+            }
+            
+            .welcome-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+            }
+            
+            .action-btn {
+                justify-content: center;
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+
+            .countdown-display {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .countdown-item {
+                padding: 0.75rem;
+            }
+
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .quick-action-card {
+                padding: 1rem;
+            }
+
+            .quick-action-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .exam-card-header,
+            .exam-body {
+                padding: 1rem;
+            }
+
+            .exam-header {
+                gap: 0.75rem;
+            }
+
+            .exam-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .exam-title {
+                font-size: 1rem;
+            }
+
+            .exam-subtitle {
+                font-size: 0.75rem;
+                gap: 0.5rem;
+            }
+
+            .detail-row {
+                padding: 0.35rem 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .detail-text {
+                font-size: 0.75rem;
+            }
+
+            .exam-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
+
+            .exam-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.6rem 1rem;
+                font-size: 0.75rem;
+                min-width: auto;
+            }
+
+            .exam-status {
+                align-self: center;
+                padding: 0.35rem 0.75rem;
+                font-size: 0.65rem;
+            }
+
+            .footer-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .footer-stat {
+                padding: 0.75rem;
+            }
+
+            .footer-stat-value {
+                font-size: 1.25rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+            }
+        }
+
+        /* ========================================
+           ANIMATIONS
+           ======================================== */
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        /* Common Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .ap-section {
+            margin-bottom: 2rem;
+        }
+
+        .ap-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: var(--ap-space-sm);
+        }
+
+        .ap-section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+        }
+
+        .ap-grid {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .ap-grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .ap-grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+        .ap-grid-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+        .view-all-btn {
+            color: var(--ap-primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--ap-primary);
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background: var(--ap-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <a href="#" class="mobile-sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <div>
+                    <span style="color: var(--ap-primary); font-weight: 900;">e</span><span style="color: var(--bd-green); font-weight: 700;">Porikkha</span>
+                </div>
+            </a>
+            <button class="mobile-sidebar-close" id="mobileSidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-sidebar-user">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar">রা</div>
+                <div class="mobile-user-details">
+                    <div class="mobile-user-name">Rahul Ahmed</div>
+                    <div class="mobile-user-role">HSC 2025 Candidate</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="mobile-sidebar-nav">
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link active">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <span>Live Exams</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <span>Contests</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <span>Practice Tests</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span>Results</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span>Study Materials</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <span>Schedule</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Profile</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item" style="margin-top: 1rem; border-top: 1px solid var(--ap-border); padding-top: 1rem;">
+                <a href="#" class="mobile-nav-link" style="color: var(--ap-secondary);">
+                    <div class="mobile-nav-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--ap-secondary);">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" id="mobileNavToggler">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Practice Tests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Study Materials</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div style="position: relative;">
+                        <button class="notification-btn" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h6>Notifications</h6>
+                                <a href="#" style="font-size: 0.75rem; color: var(--ap-primary);">Mark all as read</a>
+                            </div>
+                            <div class="notification-list">
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #fecaca; color: var(--ap-secondary);">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">গণিত পরীক্ষা শুরু!</div>
+                                        <div class="notification-text">Your Mathematics exam is starting in 15 minutes</div>
+                                        <div class="notification-time">5 minutes ago</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #dcfce7; color: var(--ap-success);">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Contest Result Published</div>
+                                        <div class="notification-text">Programming Contest 2025 results are now available</div>
+                                        <div class="notification-time">2 hours ago</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #dbeafe; color: var(--ap-info);">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">New Exam Available</div>
+                                        <div class="notification-text">English 1st Paper practice test is now open</div>
+                                        <div class="notification-time">1 day ago</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">রা</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Rahul Ahmed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">HSC 2025 Candidate</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li class="dropdown-header">
+                                <div class="user-info">
+                                    <div class="user-avatar-large">রা</div>
+                                    <div class="user-details">
+                                        <div class="user-name">Rahul Ahmed</div>
+                                        <div class="user-email">rahul.ahmed@student.edu.bd</div>
+                                        <div class="user-role">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            HSC 2025
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Progress</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-trophy"></i><span>Achievements</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark"></i><span>Saved Items</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle"></i><span>Help & Support</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+       
+        <!-- Student Welcome Section -->
+        <div class="student-welcome fade-in">
+            <div class="welcome-header">
+                <h1 class="student-greeting" id="greetingTitle">
+                    শুভ সকাল, <span class="student-name">Rahul Ahmed</span>
+                </h1>
+                <div class="student-info">
+                    Dhaka College | HSC 2025 Batch | Science Group | Student ID: 2025001
+                </div>
+                <p class="student-motivation" id="motivationText">
+                    "সফলতার জন্য কঠোর পরিশ্রম এবং ধৈর্য্যই যথেষ্ট" - Keep pushing towards your dreams!
+                </p>
+            </div>
+            
+            <!-- Time and Date Section -->
+            <div class="welcome-time-date">
+                <div class="time-block">
+                    <div class="time-value" id="currentTime">10:30 AM</div>
+                    <div class="time-label">Current Time</div>
+                </div>
+                <div class="date-block">
+                    <div class="date-value" id="currentDate">May 30, 2025</div>
+                    <div class="date-label">Today's Date</div>
+                </div>
+            </div>
+            
+            <div class="student-stats">
+                <div class="student-stat-item">
+                    <div class="stat-icon exams">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Completed Exams</div>
+                </div>
+                <div class="student-stat-item">
+                    <div class="stat-icon performance">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="student-stat-item">
+                    <div class="stat-icon practice">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="stat-value">35</div>
+                    <div class="stat-label">Practice Tests</div>
+                </div>
+                <div class="student-stat-item">
+                    <div class="stat-icon rank">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-value">5th</div>
+                    <div class="stat-label">Class Rank</div>
+                </div>
+            </div>
+            
+            <div class="welcome-actions">
+                <a href="#" class="action-btn action-btn-primary">
+                    <i class="fas fa-play"></i>
+                    Start Live Exam
+                </a>
+                <a href="#" class="action-btn action-btn-outline">
+                    <i class="fas fa-trophy"></i>
+                    Join Contest
+                </a>
+                <a href="#" class="action-btn action-btn-outline">
+                    <i class="fas fa-book-open"></i>
+                    Practice Test
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Exams Section -->
+        <div class="live-exams-section fade-in">
+            <h2 class="ap-section-title" style="color: var(--ap-secondary); margin-bottom: 1.5rem;">🔴 Live Exams & Contests</h2>
+            
+            <div class="live-exam-card">
+                <div class="live-indicator">
+                    <i class="fas fa-circle"></i>
+                    Live Now
+                </div>
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h4 style="color: var(--ap-secondary); margin-bottom: 0.5rem;">HSC Mathematics Final Exam</h4>
+                        <p class="mb-2" style="color: var(--ap-text-secondary);">
+                            <i class="fas fa-users me-2"></i>486 students participating
+                            <span class="ms-3"><i class="fas fa-clock me-2"></i>1 hour 25 minutes remaining</span>
+                        </p>
+                        <p class="mb-0" style="font-size: 0.875rem; color: var(--ap-text-muted);">
+                            Exam ID: HSC-MATH-2025-F1 | Duration: 3 hours
+                        </p>
+                    </div>
+                    <a href="#" class="exam-btn exam-btn-danger">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Join Exam
+                    </a>
+                </div>
+            </div>
+            
+            <div class="live-exam-card">
+                <div class="live-indicator">
+                    <i class="fas fa-circle"></i>
+                    Live Now
+                </div>
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h4 style="color: var(--ap-secondary); margin-bottom: 0.5rem;">Inter-College Programming Contest</h4>
+                        <p class="mb-2" style="color: var(--ap-text-secondary);">
+                            <i class="fas fa-users me-2"></i>142 participants
+                            <span class="ms-3"><i class="fas fa-clock me-2"></i>2 hours 10 minutes remaining</span>
+                        </p>
+                        <p class="mb-0" style="font-size: 0.875rem; color: var(--ap-text-muted);">
+                            Contest ID: PROG-2025-IC | Prize: ৳50,000
+                        </p>
+                    </div>
+                    <a href="#" class="exam-btn exam-btn-danger">
+                        <i class="fas fa-code"></i>
+                        Join Contest
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="countdown-section fade-in">
+            <h3 class="countdown-title">⏰ Next Exam: বাংলা ১ম পত্র</h3>
+            <p style="color: var(--ap-text-secondary); margin-bottom: 1rem;">HSC Final Examination 2025 - Get ready for your Bengali literature exam</p>
+            <div class="countdown-display">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">03</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">14</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">22</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">45</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            <a href="#" class="action-btn action-btn-primary">
+                <i class="fas fa-bell"></i>
+                Set Reminder
+            </a>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div class="ap-section">
+            <div class="ap-section-header">
+                <h2 class="ap-section-title">Quick Actions</h2>
+            </div>
+            
+            <div class="quick-actions-grid">
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="quick-action-title">Take Practice Test</div>
+                    <div class="quick-action-desc">Start a quick practice session</div>
+                </a>
+                
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, var(--ap-info), #1d4ed8);">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="quick-action-title">Join Contest</div>
+                    <div class="quick-action-desc">Participate in live competitions</div>
+                </a>
+                
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, var(--ap-warning), #d97706);">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="quick-action-title">Study Materials</div>
+                    <div class="quick-action-desc">Access notes and resources</div>
+                </a>
+                
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="quick-action-title">View Results</div>
+                    <div class="quick-action-desc">Check your exam scores</div>
+                </a>
+                
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="quick-action-title">Exam Schedule</div>
+                    <div class="quick-action-desc">View upcoming examinations</div>
+                </a>
+                
+                <a href="#" class="quick-action-card fade-in">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="quick-action-title">Certificates</div>
+                    <div class="quick-action-desc">Download your achievements</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Available Exams Section -->
+        <div class="ap-section">
+            <div class="ap-section-header">
+                <h2 class="ap-section-title">Available Exams & Contests</h2>
+                <a href="#" class="view-all-btn">
+                    View All <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+
+            <div class="ap-grid ap-grid-3">
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon bangla">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">বাংলা ১ম পত্র</div>
+                                <div class="exam-subtitle">
+                                    <span>৫০ প্রশ্ন</span>
+                                    <span>•</span>
+                                    <span>৩ ঘন্টা</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">HSC Final Exam - 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">৩ দিন বাকি</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-users detail-icon"></i>
+                                <span class="detail-text">৫৮৯ জন নিবন্ধিত</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-star detail-icon"></i>
+                                <span class="detail-text">Marks: 100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 75%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status upcoming">আসন্ন পরীক্ষা</div>
+                            <a href="#" class="exam-btn exam-btn-outline">
+                                <i class="fas fa-eye"></i>
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon english">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">English 1st Paper</div>
+                                <div class="exam-subtitle">
+                                    <span>40 Questions</span>
+                                    <span>•</span>
+                                    <span>3 Hours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">HSC Final Exam - 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">Available Now</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-users detail-icon"></i>
+                                <span class="detail-text">৪৬৭ participants</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-star detail-icon"></i>
+                                <span class="detail-text">Marks: 100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 100%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status available">Available</div>
+                            <a href="#" class="exam-btn exam-btn-primary">
+                                <i class="fas fa-play"></i>
+                                Start Exam
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon math">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">গণিত (উচ্চতর)</div>
+                                <div class="exam-subtitle">
+                                    <span>৩৫ প্রশ্ন</span>
+                                    <span>•</span>
+                                    <span>৩.৫ ঘন্টা</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">HSC Final Exam - 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">Completed</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-star detail-icon"></i>
+                                <span class="detail-text">Your Score: 89/100</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-medal detail-icon"></i>
+                                <span class="detail-text">Rank: 12th</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 89%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status completed">Completed</div>
+                            <a href="#" class="exam-btn exam-btn-outline">
+                                <i class="fas fa-chart-bar"></i>
+                                View Result
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon contest">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">Programming Contest</div>
+                                <div class="exam-subtitle">
+                                    <span>8 Problems</span>
+                                    <span>•</span>
+                                    <span>5 Hours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">Inter-College Contest 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">Live Now</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-users detail-icon"></i>
+                                <span class="detail-text">142 contestants</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-gift detail-icon"></i>
+                                <span class="detail-text">Prize: ৳50,000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 60%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status live">Live Contest</div>
+                            <a href="#" class="exam-btn exam-btn-danger">
+                                <i class="fas fa-code"></i>
+                                Join Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon science">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">পদার্থবিজ্ঞান</div>
+                                <div class="exam-subtitle">
+                                    <span>৪৫ প্রশ্ন</span>
+                                    <span>•</span>
+                                    <span>৩ ঘন্টা</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">HSC Final Exam - 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">১ সপ্তাহ বাকি</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-users detail-icon"></i>
+                                <span class="detail-text">৫২৪ জন নিবন্ধিত</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-star detail-icon"></i>
+                                <span class="detail-text">Marks: 100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 45%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status upcoming">আসন্ন পরীক্ষা</div>
+                            <a href="#" class="exam-btn exam-btn-outline">
+                                <i class="fas fa-eye"></i>
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exam-card fade-in">
+                    <div class="exam-card-header">
+                        <div class="exam-header">
+                            <div class="exam-icon ict">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="exam-info">
+                                <div class="exam-title">ICT Practice Test</div>
+                                <div class="exam-subtitle">
+                                    <span>30 Questions</span>
+                                    <span>•</span>
+                                    <span>1.5 Hours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-body">
+                        <div class="exam-details">
+                            <div class="detail-row">
+                                <i class="fas fa-calendar-alt detail-icon"></i>
+                                <span class="detail-text">Practice Test Series</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-clock detail-icon"></i>
+                                <span class="detail-text">Available Now</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-users detail-icon"></i>
+                                <span class="detail-text">৩৮৯ participants</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="fas fa-star detail-icon"></i>
+                                <span class="detail-text">Free Practice</span>
+                            </div>
+                        </div>
+                        
+                        <div class="exam-progress">
+                            <div class="exam-progress-bar" style="width: 100%;"></div>
+                        </div>
+                        
+                        <div class="exam-footer">
+                            <div class="exam-status available">Available</div>
+                            <a href="#" class="exam-btn exam-btn-primary">
+                                <i class="fas fa-play"></i>
+                                Start Practice
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance & Activity Section -->
+        <div class="ap-section">
+            <div class="ap-grid ap-grid-2">
+                <!-- Performance Card -->
+                <div class="performance-card fade-in">
+                    <div class="performance-header">
+                        <h3 class="performance-title">Subject Performance</h3>
+                        <span class="badge bg-success">Excellent Progress</span>
+                    </div>
+                    
+                    <div class="subject-performance">
+                        <div class="subject-row">
+                            <div class="subject-info">
+                                <div class="subject-icon bangla" style="background: linear-gradient(135deg, #059669, #047857);">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">বাংলা</div>
+                                    <div class="subject-progress">
+                                        <div class="subject-progress-bar" style="width: 92%; background: linear-gradient(90deg, #059669, #047857);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subject-score">92%</div>
+                        </div>
+                        
+                        <div class="subject-row">
+                            <div class="subject-info">
+                                <div class="subject-icon english" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">English</div>
+                                    <div class="subject-progress">
+                                        <div class="subject-progress-bar" style="width: 85%; background: linear-gradient(90deg, #3b82f6, #1d4ed8);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subject-score">85%</div>
+                        </div>
+                        
+                        <div class="subject-row">
+                            <div class="subject-info">
+                                <div class="subject-icon math" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">গণিত</div>
+                                    <div class="subject-progress">
+                                        <div class="subject-progress-bar" style="width: 89%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subject-score">89%</div>
+                        </div>
+                        
+                        <div class="subject-row">
+                            <div class="subject-info">
+                                <div class="subject-icon science" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                    <i class="fas fa-atom"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">পদার্থবিজ্ঞান</div>
+                                    <div class="subject-progress">
+                                        <div class="subject-progress-bar" style="width: 81%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subject-score">81%</div>
+                        </div>
+                        
+                        <div class="subject-row">
+                            <div class="subject-info">
+                                <div class="subject-icon ict" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <div class="subject-name">ICT</div>
+                                    <div class="subject-progress">
+                                        <div class="subject-progress-bar" style="width: 95%; background: linear-gradient(90deg, #ef4444, #dc2626);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="subject-score">95%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="fade-in">
+                    <div class="performance-header">
+                        <h3 class="performance-title">Recent Activities</h3>
+                        <a href="#" class="view-all-btn" style="font-size: 0.8rem; padding: 0.5rem 0.75rem;">View All</a>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-content">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-text">
+                                <div class="activity-title">গণিত পরীক্ষা সম্পন্ন</div>
+                                <div class="activity-time">89/100 স্কোর - ২ ঘন্টা আগে</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-content">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="activity-text">
+                                <div class="activity-title">English Practice Test</div>
+                                <div class="activity-time">৮২% accuracy - 4 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-content">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-text">
+                                <div class="activity-title">Achievement Unlocked</div>
+                                <div class="activity-time">Top 5% in Physics - Yesterday</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-content">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="activity-text">
+                                <div class="activity-title">Contest Participation</div>
+                                <div class="activity-time">Programming Contest - 15th rank</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-content">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            <div class="activity-text">
+                                <div class="activity-title">বাংলা পরীক্ষার জন্য নিবন্ধন</div>
+                                <div class="activity-time">Successfully registered - 2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">25,000+</div>
+                        <div class="footer-stat-label">Active Students</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">1,500+</div>
+                        <div class="footer-stat-label">Exams Conducted</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">850+</div>
+                        <div class="footer-stat-label">Educational Institutes</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">99.8%</div>
+                        <div class="footer-stat-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Mobile Sidebar Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggler = document.getElementById('mobileNavToggler');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+            const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+            
+            // Open mobile sidebar
+            function openMobileSidebar() {
+                mobileSidebar.classList.add('show');
+                mobileSidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close mobile sidebar
+            function closeMobileSidebar() {
+                mobileSidebar.classList.remove('show');
+                mobileSidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            
+            // Event listeners
+            if (mobileNavToggler) {
+                mobileNavToggler.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openMobileSidebar();
+                });
+            }
+            
+            if (mobileSidebarClose) {
+                mobileSidebarClose.addEventListener('click', closeMobileSidebar);
+            }
+            
+            if (mobileSidebarOverlay) {
+                mobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
+            }
+            
+            // Close sidebar when clicking on nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Update active states
+                    document.querySelectorAll('.mobile-nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close sidebar after a short delay
+                    setTimeout(closeMobileSidebar, 200);
+                });
+            });
+            
+            // Handle escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+            
+            // Close sidebar on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992 && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+        });
+
+        // Notification Dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (!notificationDropdown.contains(e.target) && e.target !== notificationBtn) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        // Date and Time Display with Bengali greeting
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            
+            const dateElement = document.getElementById('currentDate');
+            const timeElement = document.getElementById('currentTime');
+            
+            if (dateElement && timeElement) {
+                dateElement.textContent = now.toLocaleDateString('en-US', options);
+                timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+            }
+        }
+
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = 'শুভ সন্ধ্যা';
+            
+            if (hour < 12) greeting = 'শুভ সকাল';
+            else if (hour < 17) greeting = 'শুভ দুপুর';
+            
+            const greetingElement = document.getElementById('greetingTitle');
+            if (greetingElement) {
+                greetingElement.innerHTML = `${greeting}, <span class="student-name">Rahul Ahmed</span>`;
+            }
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date('2025-06-02T09:00:00').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                const daysElement = document.getElementById('days');
+                const hoursElement = document.getElementById('hours');
+                const minutesElement = document.getElementById('minutes');
+                const secondsElement = document.getElementById('seconds');
+
+                if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+                if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+                if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+                if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
+            }
+        }
+
+        // Animated progress bars
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.subject-progress-bar, .exam-progress-bar');
+            progressBars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300 + index * 100);
+            });
+        }
+
+        // Animated stats counter
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-value');
+            stats.forEach((stat, index) => {
+                const originalText = stat.textContent;
+                const hasPercent = originalText.includes('%');
+                const isOrdinal = originalText.includes('th') || originalText.includes('st') || originalText.includes('nd') || originalText.includes('rd');
+                
+                if (isOrdinal) {
+                    // Handle ordinal numbers like "5th"
+                    const number = parseInt(originalText);
+                    let currentValue = 1;
+                    const timer = setInterval(() => {
+                        if (currentValue >= number) {
+                            stat.textContent = originalText;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = currentValue + (originalText.includes('th') ? 'th' : 
+                                              originalText.includes('st') ? 'st' : 
+                                              originalText.includes('nd') ? 'nd' : 'rd');
+                            currentValue++;
+                        }
+                    }, 100 + index * 20);
+                } else {
+                    // Handle regular numbers
+                    const finalValue = parseInt(originalText);
+                    let currentValue = 0;
+                    const increment = finalValue / 30;
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            stat.textContent = finalValue + (hasPercent ? '%' : '');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(currentValue) + (hasPercent ? '%' : '');
+                        }
+                    }, 50 + index * 20);
+                }
+            });
+        }
+
+        // Animated footer stats
+        function animateFooterStats() {
+            const footerStats = document.querySelectorAll('.footer-stat-value');
+            footerStats.forEach((stat, index) => {
+                const originalText = stat.textContent;
+                const hasPlus = originalText.includes('+');
+                const hasPercent = originalText.includes('%');
+                const cleanNumber = parseInt(originalText.replace(/[^\d]/g, ''));
+                
+                let currentValue = 0;
+                const increment = cleanNumber / 50;
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= cleanNumber) {
+                        stat.textContent = originalText;
+                        clearInterval(timer);
+                    } else {
+                        let displayValue = Math.floor(currentValue);
+                        if (cleanNumber >= 1000) {
+                            displayValue = (displayValue / 1000).toFixed(1) + 'K';
+                        }
+                        stat.textContent = displayValue + (hasPlus ? '+' : '') + (hasPercent ? '%' : '');
+                    }
+                }, 30 + index * 10);
+            });
+        }
+
+        // Motivational quotes rotation
+        function setupMotivationalQuotes() {
+            const motivationalQuotes = [
+                '"সফলতার জন্য কঠোর পরিশ্রম এবং ধৈর্য্যই যথেষ্ট" - Keep pushing towards your dreams!',
+                '"শিক্ষাই জাতির মেরুদণ্ড" - Education is the backbone of the nation!',
+                '"যে পড়ে সে রাজা, যে পড়ে না সে প্রজা" - Knowledge is power!',
+                '"প্রতিদিন একটু একটু করে এগিয়ে চলো" - Progress every day, step by step!',
+                '"স্বপ্ন দেখো, পরিকল্পনা করো, সফল হও" - Dream, plan, succeed!',
+                '"অধ্যবসায়ই সাফল্যের চাবিকাঠি" - Perseverance is the key to success!',
+                '"জ্ঞানার্জনের কোন বিকল্প নেই" - There is no substitute for knowledge!'
+            ];
+
+            const motivationElement = document.getElementById('motivationText');
+            if (motivationElement) {
+                let currentQuoteIndex = 0;
+                setInterval(() => {
+                    currentQuoteIndex = (currentQuoteIndex + 1) % motivationalQuotes.length;
+                    motivationElement.style.opacity = '0';
+                    setTimeout(() => {
+                        motivationElement.textContent = motivationalQuotes[currentQuoteIndex];
+                        motivationElement.style.opacity = '1';
+                    }, 300);
+                }, 10000); // Change quote every 10 seconds
+            }
+        }
+
+        // Add interactive card effects
+        function setupCardInteractions() {
+            // Add click handlers for exam cards
+            document.querySelectorAll('.exam-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.exam-btn')) {
+                        // Add subtle click effect
+                        card.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            card.style.transform = '';
+                        }, 150);
+                    }
+                });
+            });
+
+            // Add hover effects for quick action cards
+            document.querySelectorAll('.quick-action-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const icon = card.querySelector('.quick-action-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.1) rotate(5deg)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    const icon = card.querySelector('.quick-action-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1) rotate(0deg)';
+                    }
+                });
+            });
+        }
+
+        // Intersection Observer for animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all elements that should animate
+            document.querySelectorAll('.exam-card, .quick-action-card, .activity-card, .performance-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Live exam timer simulation
+        function simulateLiveExamTimers() {
+            const liveExamCards = document.querySelectorAll('.live-exam-card');
+            liveExamCards.forEach((card, index) => {
+                const timeElement = card.querySelector('.fa-clock').nextSibling;
+                if (timeElement) {
+                    let remainingMinutes = 85 + (index * 45); // Different times for different exams
+                    
+                    setInterval(() => {
+                        remainingMinutes--;
+                        if (remainingMinutes > 0) {
+                            const hours = Math.floor(remainingMinutes / 60);
+                            const minutes = remainingMinutes % 60;
+                            timeElement.textContent = ` ${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''} remaining`;
+                        } else {
+                            timeElement.textContent = ' Exam ended';
+                            const liveIndicator = card.querySelector('.live-indicator');
+                            if (liveIndicator) {
+                                liveIndicator.innerHTML = '<i class="fas fa-stop-circle"></i> Ended';
+                                liveIndicator.style.background = '#6b7280';
+                            }
+                        }
+                    }, 60000); // Update every minute
+                }
+            });
+        }
+
+        // Enhanced notification system
+        function setupNotificationSystem() {
+            // Simulate new notifications
+            const notificationBadge = document.querySelector('.notification-badge');
+            let notificationCount = 3;
+
+            // Simulate receiving new notifications
+            setInterval(() => {
+                if (Math.random() > 0.7) { // 30% chance every 30 seconds
+                    notificationCount++;
+                    if (notificationBadge) {
+                        notificationBadge.textContent = notificationCount;
+                        notificationBadge.style.animation = 'pulse 1s ease-in-out';
+                        setTimeout(() => {
+                            notificationBadge.style.animation = 'pulse 2s infinite';
+                        }, 1000);
+                    }
+                }
+            }, 30000);
+        }
+
+        // Initialize all functions
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            updateCountdown();
+            updateGreeting();
+            setupMotivationalQuotes();
+            setupCardInteractions();
+            setupScrollAnimations();
+            simulateLiveExamTimers();
+            setupNotificationSystem();
+            
+            // Set up intervals
+            setInterval(() => {
+                updateDateTime();
+                updateCountdown();
+            }, 1000);
+            
+            setInterval(updateGreeting, 60000);
+
+            // Desktop navbar link interactions (only for larger screens)
+            if (window.innerWidth >= 992) {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                    });
+                });
+            }
+            
+            // Trigger animations after page load
+            setTimeout(() => {
+                animateStats();
+                animateProgressBars();
+            }, 500);
+
+            // Animate footer stats when they come into view
+            const footerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateFooterStats();
+                        footerObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            const footerStats = document.querySelector('.footer-stats');
+            if (footerStats) {
+                footerObserver.observe(footerStats);
+            }
+
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl/Cmd + K to focus search (if implemented)
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    const searchInput = document.querySelector('.search-input');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                }
+                
+                // Escape to close dropdowns
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.dropdown-menu.show, .notification-dropdown.show').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
+            });
+
+            // Performance optimization: Lazy load images
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // Add PWA-like features
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // Service worker registration would go here for offline functionality
+                    console.log('ePorikkha: Ready for enhanced features');
+                });
+            }
+
+            // Analytics and tracking (placeholder for real implementation)
+            function trackEvent(category, action, label) {
+                console.log(`Analytics: ${category} - ${action} - ${label}`);
+                // Real analytics implementation would go here
+            }
+
+            // Track exam starts
+            document.querySelectorAll('.exam-btn-primary, .exam-btn-danger').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const examTitle = this.closest('.exam-card, .live-exam-card').querySelector('.exam-title, h4').textContent;
+                    trackEvent('Exam', 'Start', examTitle);
+                });
+            });
+
+            // Track quick actions
+            document.querySelectorAll('.quick-action-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const actionTitle = card.querySelector('.quick-action-title').textContent;
+                    trackEvent('Quick Action', 'Click', actionTitle);
+                });
+            });
+
+            console.log('ePorikkha Student Dashboard: Fully loaded and ready! 🎓');
+        });
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('ePorikkha Error:', e.error);
+            // In production, this would send error reports to monitoring service
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log(`Page loaded in ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+            }, 0);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - বাংলা ১ম পত্র পরীক্ষা</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        /* ========================================
+           NEW CSS FOR REGULAR EXAM PAGE
+           ======================================== */
+
+        /* Exam Header */
+        .exam-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            color: var(--ap-text-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 76px;
+            z-index: 999;
+            border-bottom: 3px solid var(--ap-primary);
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1);
+        }
+
+        .exam-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .exam-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .exam-timer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(5, 150, 105, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: var(--ap-radius);
+            border: 2px solid var(--ap-primary);
+        }
+
+        .timer-display {
+            font-family: 'Inter', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+        }
+
+        .timer-warning {
+            animation: pulse 1s infinite;
+            color: var(--ap-secondary) !important;
+        }
+
+        .exam-progress {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .progress-item {
+            text-align: center;
+            padding: 0.5rem 0.75rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid var(--ap-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Exam Layout */
+        .exam-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: calc(100vh - 140px);
+            background: var(--ap-bg-primary);
+        }
+
+        /* Question Navigation Panel */
+        .question-nav-panel {
+            background: var(--ap-bg-card);
+            border-right: 2px solid var(--ap-border);
+            overflow-y: auto;
+            box-shadow: var(--ap-shadow);
+            padding: 1rem;
+        }
+
+        .nav-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .nav-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-dot.answered {
+            background: var(--ap-success);
+        }
+
+        .legend-dot.not-answered {
+            background: var(--ap-border);
+        }
+
+        .legend-dot.marked {
+            background: var(--ap-warning);
+        }
+
+        .legend-dot.current {
+            background: var(--ap-primary);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-nav-btn {
+            aspect-ratio: 1;
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            color: var(--ap-text-secondary);
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .question-nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .question-nav-btn.current {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .question-nav-btn.answered {
+            background: var(--ap-success);
+            color: white;
+            border-color: var(--ap-success);
+        }
+
+        .question-nav-btn.marked {
+            background: var(--ap-warning);
+            color: white;
+            border-color: var(--ap-warning);
+        }
+
+        .question-nav-btn.marked::after {
+            content: '⭐';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.7rem;
+            background: var(--bd-gold);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-divider {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-info {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Question Area */
+        .question-area {
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--ap-bg-primary);
+        }
+
+        .question-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .question-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .question-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .question-type {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .question-marks {
+            color: var(--ap-text-muted);
+            font-weight: 600;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .action-btn-outline {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+        }
+
+        .action-btn-outline:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .action-btn-warning {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+            color: white;
+        }
+
+        .action-btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .question-content {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ap-text-primary);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        /* Multiple Choice Questions */
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--ap-bg-card);
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mcq-option:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.1);
+        }
+
+        .mcq-option.selected {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.15);
+        }
+
+        .mcq-radio {
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--ap-border);
+            border-radius: 50%;
+            background: white;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mcq-option.selected .mcq-radio {
+            border-color: var(--ap-primary);
+            background: var(--ap-primary);
+        }
+
+        .mcq-option.selected .mcq-radio::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .mcq-label {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .mcq-text {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--ap-text-primary);
+        }
+
+        /* Written Answer Questions */
+        .written-answer {
+            margin-bottom: 2rem;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 1rem;
+            line-height: 1.8;
+            resize: vertical;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .answer-textarea:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .answer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+        }
+
+        .char-count {
+            color: var(--ap-primary);
+            font-weight: 600;
+        }
+
+        /* Navigation Controls */
+        .navigation-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--ap-border);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .nav-btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Submit Modal */
+        .submit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-modal {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--ap-shadow-xl);
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .submit-modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .submit-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--ap-warning);
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-warning);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .submit-summary {
+            background: rgba(5, 150, 105, 0.05);
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .summary-label {
+            color: var(--ap-text-secondary);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+        }
+
+        .submit-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--ap-success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .exam-container {
+                grid-template-columns: 1fr;
+            }
+
+            .question-nav-panel {
+                position: fixed;
+                top: 140px;
+                left: -300px;
+                width: 300px;
+                height: calc(100vh - 140px);
+                z-index: 1002;
+                transition: left 0.3s ease;
+            }
+
+            .question-nav-panel.open {
+                left: 0;
+            }
+
+            .nav-toggle-btn {
+                position: fixed;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+                background: var(--ap-primary);
+                color: white;
+                border: none;
+                padding: 1rem 0.5rem;
+                border-radius: 0 var(--ap-radius) var(--ap-radius) 0;
+                writing-mode: vertical-lr;
+                font-weight: 600;
+                cursor: pointer;
+                z-index: 1001;
+            }
+
+            .question-area {
+                padding: 1rem;
+            }
+
+            .exam-header-content {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .question-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .navigation-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Utility Classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation (Same as Dashboard) -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-warning" onclick="showSubmitModal()">
+                    <i class="fas fa-paper-plane"></i> Submit Exam
+                </button>
+                
+                <button class="btn btn-outline-danger" onclick="exitExam()">
+                    <i class="fas fa-sign-out-alt"></i> Exit
+                </button>
+                
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> Rahul Ahmed
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-home me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle me-2"></i>Help</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="exitExam()"><i class="fas fa-sign-out-alt me-2"></i>Exit Exam</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Exam Header -->
+    <div class="exam-header">
+        <div class="container-fluid">
+            <div class="exam-header-content">
+                <div class="exam-title">
+                    <i class="fas fa-book"></i>
+                    বাংলা ১ম পত্র - HSC Final Exam 2025
+                </div>
+                
+                <div class="exam-timer">
+                    <i class="fas fa-clock"></i>
+                    <div class="timer-display" id="examTimer">02:47:32</div>
+                </div>
+                
+                <div class="exam-progress">
+                    <div class="progress-item">
+                        <div class="progress-value" id="answeredCount">12</div>
+                        <div class="progress-label">Answered</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-value" id="totalQuestions">50</div>
+                        <div class="progress-label">Total</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-value" id="markedCount">3</div>
+                        <div class="progress-label">Marked</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Toggle -->
+    <button class="nav-toggle-btn d-md-none" onclick="toggleQuestionNav()">
+        Questions
+    </button>
+
+    <!-- Main Exam Interface -->
+    <div class="exam-container">
+        <!-- Question Navigation Panel -->
+        <div class="question-nav-panel" id="questionNavPanel">
+            <div class="nav-header">
+                <div class="nav-title">প্রশ্ন নেভিগেশন</div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot answered"></div>
+                        <span>Answered</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot not-answered"></div>
+                        <span>Not Answered</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot marked"></div>
+                        <span>Marked</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot current"></div>
+                        <span>Current</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MCQ Section -->
+            <div class="section-divider">
+                <div class="section-title">বহুনির্বাচনী প্রশ্ন (MCQ)</div>
+                <div class="section-info">প্রশ্ন ১-৩০ | প্রতিটি ১ নম্বর</div>
+            </div>
+            <div class="question-grid" id="mcqGrid">
+                <!-- MCQ navigation buttons will be generated here -->
+            </div>
+
+            <!-- Written Section -->
+            <div class="section-divider">
+                <div class="section-title">রচনামূলক প্রশ্ন</div>
+                <div class="section-info">প্রশ্ন ৩১-৫০ | ৫-১০ নম্বর</div>
+            </div>
+            <div class="question-grid" id="writtenGrid">
+                <!-- Written question navigation buttons will be generated here -->
+            </div>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="question-container">
+                <div class="question-header">
+                    <div class="question-info">
+                        <div class="question-number" id="currentQuestionNumber">প্রশ্ন ১</div>
+                        <div class="question-type" id="questionType">বহুনির্বাচনী</div>
+                        <div class="question-marks" id="questionMarks">মান: ১</div>
+                    </div>
+                    <div class="question-actions">
+                        <button class="action-btn action-btn-outline" onclick="clearAnswer()">
+                            <i class="fas fa-eraser"></i>
+                            Clear Answer
+                        </button>
+                        <button class="action-btn action-btn-warning" onclick="toggleMark()">
+                            <i class="fas fa-star"></i>
+                            <span id="markText">Mark for Review</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-text" id="questionText">
+                        রবীন্দ্রনাথ ঠাকুরের 'অপরিচিতা' গল্পের মূল বিষয়বস্তু কী?
+                    </div>
+
+                    <!-- MCQ Options (shown for MCQ questions) -->
+                    <div class="mcq-options" id="mcqOptions">
+                        <div class="mcq-option" data-option="A">
+                            <div class="mcq-radio"></div>
+                            <div class="mcq-label">ক</div>
+                            <div class="mcq-text">সামাজিক অনুষ্ঠানে নারী-পুরুষের পারস্পরিক মিলন</div>
+                        </div>
+                        <div class="mcq-option" data-option="B">
+                            <div class="mcq-radio"></div>
+                            <div class="mcq-label">খ</div>
+                            <div class="mcq-text">যৌতুকের বিরুদ্ধে প্রতিবাদ ও নারীর আত্মমর্যাদাবোধ</div>
+                        </div>
+                        <div class="mcq-option" data-option="C">
+                            <div class="mcq-radio"></div>
+                            <div class="mcq-label">গ</div>
+                            <div class="mcq-text">পারিবারিক কলহ ও বিচ্ছেদের কাহিনী</div>
+                        </div>
+                        <div class="mcq-option" data-option="D">
+                            <div class="mcq-radio"></div>
+                            <div class="mcq-label">ঘ</div>
+                            <div class="mcq-text">প্রেম ও বিরহের মনোকাহিনী</div>
+                        </div>
+                    </div>
+
+                    <!-- Written Answer (shown for written questions) -->
+                    <div class="written-answer" id="writtenAnswer" style="display: none;">
+                        <textarea class="answer-textarea" id="answerTextarea" placeholder="আপনার উত্তর এখানে লিখুন..."></textarea>
+                        <div class="answer-info">
+                            <span>সর্বোচ্চ ৫০০ শব্দ</span>
+                            <span class="char-count" id="charCount">0 characters</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation-controls">
+                    <button class="nav-btn nav-btn-secondary" id="prevBtn" onclick="previousQuestion()">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous Question
+                    </button>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="nav-btn nav-btn-secondary" onclick="saveAndNext()">
+                            <i class="fas fa-save"></i>
+                            Save & Continue
+                        </button>
+                        <button class="nav-btn nav-btn-primary" id="nextBtn" onclick="nextQuestion()">
+                            Next Question
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Modal -->
+    <div class="submit-overlay" id="submitOverlay">
+        <div class="submit-modal">
+            <div class="submit-modal-header">
+                <div class="submit-modal-title">পরীক্ষা জমা দিন</div>
+                <p style="color: var(--ap-text-secondary); margin: 0;">Are you sure you want to submit your exam?</p>
+            </div>
+
+            <div class="submit-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Once submitted, you cannot make any changes to your answers.
+            </div>
+
+            <div class="submit-summary">
+                <div class="summary-row">
+                    <span class="summary-label">Total Questions:</span>
+                    <span class="summary-value">50</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Questions Answered:</span>
+                    <span class="summary-value" id="summaryAnswered">12</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Questions Not Answered:</span>
+                    <span class="summary-value" id="summaryNotAnswered">38</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Questions Marked for Review:</span>
+                    <span class="summary-value" id="summaryMarked">3</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Time Remaining:</span>
+                    <span class="summary-value" id="summaryTimeRemaining">02:47:32</span>
+                </div>
+            </div>
+
+            <div class="submit-actions">
+                <button class="nav-btn nav-btn-secondary" onclick="closeSubmitModal()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="nav-btn nav-btn-primary" onclick="submitExam()">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Final Answer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Indicator -->
+    <div class="auto-save-indicator" id="autoSaveIndicator">
+        <i class="fas fa-check-circle me-2"></i>
+        Auto-saved
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Exam functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentQuestion = 1;
+            let totalQuestions = 50;
+            let answers = {};
+            let markedQuestions = new Set();
+            let timeRemaining = 10052; // seconds (2:47:32)
+            
+            // Initialize exam
+            initializeExam();
+            
+            function initializeExam() {
+                generateQuestionNavigation();
+                loadQuestion(1);
+                startTimer();
+                setupAutoSave();
+                updateProgress();
+            }
+            
+            // Generate question navigation buttons
+            function generateQuestionNavigation() {
+                const mcqGrid = document.getElementById('mcqGrid');
+                const writtenGrid = document.getElementById('writtenGrid');
+                
+                // MCQ questions (1-30)
+                for (let i = 1; i <= 30; i++) {
+                    const btn = createQuestionNavButton(i);
+                    mcqGrid.appendChild(btn);
+                }
+                
+                // Written questions (31-50)
+                for (let i = 31; i <= 50; i++) {
+                    const btn = createQuestionNavButton(i);
+                    writtenGrid.appendChild(btn);
+                }
+                
+                // Mark question 1 as current
+                updateQuestionNavigation();
+            }
+            
+            function createQuestionNavButton(questionNum) {
+                const btn = document.createElement('button');
+                btn.className = 'question-nav-btn';
+                btn.textContent = questionNum;
+                btn.id = `nav-btn-${questionNum}`;
+                btn.onclick = () => loadQuestion(questionNum);
+                return btn;
+            }
+            
+            // Timer functionality
+            function startTimer() {
+                setInterval(() => {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                    
+                    if (timeRemaining <= 0) {
+                        autoSubmitExam();
+                    } else if (timeRemaining <= 600) { // 10 minutes warning
+                        document.getElementById('examTimer').classList.add('timer-warning');
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const hours = Math.floor(timeRemaining / 3600);
+                const minutes = Math.floor((timeRemaining % 3600) / 60);
+                const seconds = timeRemaining % 60;
+                
+                const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('examTimer').textContent = display;
+                document.getElementById('summaryTimeRemaining').textContent = display;
+            }
+            
+            // Load question content
+            function loadQuestion(questionNum) {
+                currentQuestion = questionNum;
+                
+                const questions = {
+                    1: {
+                        type: 'mcq',
+                        marks: 1,
+                        text: 'রবীন্দ্রনাথ ঠাকুরের \'অপরিচিতা\' গল্পের মূল বিষয়বস্তু কী?',
+                        options: [
+                            'সামাজিক অনুষ্ঠানে নারী-পুরুষের পারস্পরিক মিলন',
+                            'যৌতুকের বিরুদ্ধে প্রতিবাদ ও নারীর আত্মমর্যাদাবোধ',
+                            'পারিবারিক কলহ ও বিচ্ছেদের কাহিনী',
+                            'প্রেম ও বিরহের মনোকাহিনী'
+                        ]
+                    },
+                    2: {
+                        type: 'mcq',
+                        marks: 1,
+                        text: 'কাজী নজরুল ইসলামের \'আমার পথ\' প্রবন্ধের মূল বক্তব্য কী?',
+                        options: [
+                            'ধর্মীয় গোঁড়ামির বিরুদ্ধে প্রতিবাদ',
+                            'জাতীয়তাবাদী চেতনার উন্মেষ',
+                            'প্রগতিশীল চিন্তাধারার বিকাশ',
+                            'সবগুলোই সঠিক'
+                        ]
+                    },
+                    31: {
+                        type: 'written',
+                        marks: 10,
+                        text: 'রবীন্দ্রনাথ ঠাকুরের \'সোনার তরী\' কবিতার মূলভাব বিশ্লেষণ করুন। কবিতাটিতে কোন দর্শনের প্রতিফলন ঘটেছে?'
+                    },
+                    32: {
+                        type: 'written',
+                        marks: 5,
+                        text: 'মানিক বন্দ্যোপাধ্যায়ের \'মাসি-পিসি\' গল্পে নারী চরিত্রের বৈশিষ্ট্য আলোচনা করুন।'
+                    }
+                };
+                
+                const question = questions[questionNum] || {
+                    type: questionNum <= 30 ? 'mcq' : 'written',
+                    marks: questionNum <= 30 ? 1 : 5,
+                    text: `প্রশ্ন ${questionNum} এর বিষয়বস্তু এখানে দেখানো হবে...`,
+                    options: questionNum <= 30 ? ['বিকল্প ক', 'বিকল্প খ', 'বিকল্প গ', 'বিকল্প ঘ'] : null
+                };
+                
+                // Update question header
+                document.getElementById('currentQuestionNumber').textContent = `প্রশ্ন ${questionNum}`;
+                document.getElementById('questionType').textContent = question.type === 'mcq' ? 'বহুনির্বাচনী' : 'রচনামূলক';
+                document.getElementById('questionMarks').textContent = `মান: ${question.marks}`;
+                document.getElementById('questionText').textContent = question.text;
+                
+                // Show/hide appropriate answer sections
+                const mcqOptions = document.getElementById('mcqOptions');
+                const writtenAnswer = document.getElementById('writtenAnswer');
+                
+                if (question.type === 'mcq') {
+                    mcqOptions.style.display = 'flex';
+                    writtenAnswer.style.display = 'none';
+                    
+                    // Update MCQ options
+                    const optionElements = mcqOptions.querySelectorAll('.mcq-option');
+                    optionElements.forEach((elem, index) => {
+                        if (question.options && question.options[index]) {
+                            elem.querySelector('.mcq-text').textContent = question.options[index];
+                        }
+                        
+                        // Restore selected answer
+                        if (answers[questionNum] === elem.getAttribute('data-option')) {
+                            elem.classList.add('selected');
+                        } else {
+                            elem.classList.remove('selected');
+                        }
+                    });
+                } else {
+                    mcqOptions.style.display = 'none';
+                    writtenAnswer.style.display = 'block';
+                    
+                    // Restore written answer
+                    const textarea = document.getElementById('answerTextarea');
+                    textarea.value = answers[questionNum] || '';
+                    updateCharCount();
+                }
+                
+                updateNavigationButtons();
+                updateQuestionNavigation();
+                updateMarkButton();
+            }
+            
+            // MCQ option selection
+            document.querySelectorAll('.mcq-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selection from all options
+                    document.querySelectorAll('.mcq-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Select clicked option
+                    this.classList.add('selected');
+                    
+                    // Save answer
+                    answers[currentQuestion] = this.getAttribute('data-option');
+                    updateProgress();
+                    updateQuestionNavigation();
+                    showAutoSaveIndicator();
+                });
+            });
+            
+            // Written answer handling
+            document.getElementById('answerTextarea').addEventListener('input', function() {
+                answers[currentQuestion] = this.value;
+                updateCharCount();
+                updateProgress();
+                updateQuestionNavigation();
+            });
+            
+            function updateCharCount() {
+                const textarea = document.getElementById('answerTextarea');
+                const charCount = document.getElementById('charCount');
+                charCount.textContent = `${textarea.value.length} characters`;
+            }
+            
+            // Navigation functions
+            window.nextQuestion = function() {
+                if (currentQuestion < totalQuestions) {
+                    loadQuestion(currentQuestion + 1);
+                }
+            };
+            
+            window.previousQuestion = function() {
+                if (currentQuestion > 1) {
+                    loadQuestion(currentQuestion - 1);
+                }
+            };
+            
+            window.saveAndNext = function() {
+                showAutoSaveIndicator();
+                if (currentQuestion < totalQuestions) {
+                    nextQuestion();
+                }
+            };
+            
+            function updateNavigationButtons() {
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                
+                prevBtn.disabled = currentQuestion === 1;
+                
+                if (currentQuestion === totalQuestions) {
+                    nextBtn.innerHTML = '<i class="fas fa-flag-checkered"></i> Finish Exam';
+                    nextBtn.onclick = () => showSubmitModal();
+                } else {
+                    nextBtn.innerHTML = 'Next Question <i class="fas fa-chevron-right"></i>';
+                    nextBtn.onclick = nextQuestion;
+                }
+            }
+            
+            function updateQuestionNavigation() {
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const btn = document.getElementById(`nav-btn-${i}`);
+                    if (btn) {
+                        btn.classList.remove('current', 'answered', 'marked');
+                        
+                        if (i === currentQuestion) {
+                            btn.classList.add('current');
+                        } else if (answers[i]) {
+                            btn.classList.add('answered');
+                        }
+                        
+                        if (markedQuestions.has(i)) {
+                            btn.classList.add('marked');
+                        }
+                    }
+                }
+            }
+            
+            function updateProgress() {
+                const answeredCount = Object.keys(answers).length;
+                document.getElementById('answeredCount').textContent = answeredCount;
+                document.getElementById('summaryAnswered').textContent = answeredCount;
+                document.getElementById('summaryNotAnswered').textContent = totalQuestions - answeredCount;
+                document.getElementById('markedCount').textContent = markedQuestions.size;
+                document.getElementById('summaryMarked').textContent = markedQuestions.size;
+            }
+            
+            // Mark for review functionality
+            window.toggleMark = function() {
+                if (markedQuestions.has(currentQuestion)) {
+                    markedQuestions.delete(currentQuestion);
+                    document.getElementById('markText').textContent = 'Mark for Review';
+                } else {
+                    markedQuestions.add(currentQuestion);
+                    document.getElementById('markText').textContent = 'Unmark';
+                }
+                updateProgress();
+                updateQuestionNavigation();
+            };
+            
+            function updateMarkButton() {
+                const markText = document.getElementById('markText');
+                markText.textContent = markedQuestions.has(currentQuestion) ? 'Unmark' : 'Mark for Review';
+            }
+            
+            // Clear answer functionality
+            window.clearAnswer = function() {
+                if (confirm('Are you sure you want to clear your answer for this question?')) {
+                    delete answers[currentQuestion];
+                    
+                    if (currentQuestion <= 30) {
+                        // Clear MCQ selection
+                        document.querySelectorAll('.mcq-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                    } else {
+                        // Clear written answer
+                        document.getElementById('answerTextarea').value = '';
+                        updateCharCount();
+                    }
+                    
+                    updateProgress();
+                    updateQuestionNavigation();
+                    showAutoSaveIndicator();
+                }
+            };
+            
+            // Auto-save functionality
+            function setupAutoSave() {
+                setInterval(() => {
+                    if (Object.keys(answers).length > 0) {
+                        // Save to localStorage
+                        localStorage.setItem('exam_answers', JSON.stringify(answers));
+                        localStorage.setItem('exam_marked', JSON.stringify([...markedQuestions]));
+                    }
+                }, 30000); // Auto-save every 30 seconds
+            }
+            
+            function showAutoSaveIndicator() {
+                const indicator = document.getElementById('autoSaveIndicator');
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }
+            
+            // Submit modal functions
+            window.showSubmitModal = function() {
+                updateProgress();
+                document.getElementById('submitOverlay').style.display = 'flex';
+            };
+            
+            window.closeSubmitModal = function() {
+                document.getElementById('submitOverlay').style.display = 'none';
+            };
+            
+            window.submitExam = function() {
+                if (confirm('আপনি কি নিশ্চিত যে পরীক্ষা জমা দিতে চান? জমা দেওয়ার পর কোনো পরিবর্তন করা যাবে না।')) {
+                    // Clear localStorage
+                    localStorage.removeItem('exam_answers');
+                    localStorage.removeItem('exam_marked');
+                    
+                    alert('পরীক্ষা সফলভাবে জমা দেওয়া হয়েছে! Your exam has been submitted successfully!');
+                    window.location.href = '#dashboard';
+                }
+            };
+            
+            function autoSubmitExam() {
+                alert('সময় শেষ! আপনার উত্তর স্বয়ংক্রিয়ভাবে জমা দেওয়া হচ্ছে।');
+                submitExam();
+            }
+            
+            // Exit exam function
+            window.exitExam = function() {
+                if (confirm('Are you sure you want to exit the exam? Your progress will be saved.')) {
+                    window.location.href = '#dashboard';
+                }
+            };
+            
+            // Mobile navigation toggle
+            window.toggleQuestionNav = function() {
+                const panel = document.getElementById('questionNavPanel');
+                panel.classList.toggle('open');
+            };
+            
+            // Load saved answers
+            const savedAnswers = localStorage.getItem('exam_answers');
+            const savedMarked = localStorage.getItem('exam_marked');
+            
+            if (savedAnswers) {
+                answers = JSON.parse(savedAnswers);
+            }
+            
+            if (savedMarked) {
+                markedQuestions = new Set(JSON.parse(savedMarked));
+            }
+            
+            // Prevent accidental page refresh
+            window.addEventListener('beforeunload', function(e) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            });
+            
+            console.log('ePorikkha Regular Exam: Ready to start! 📝');
+        });
+    </script>
+</body>
+</html>

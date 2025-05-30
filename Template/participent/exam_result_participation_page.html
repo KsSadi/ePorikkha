@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - বাংলা ১ম পত্র পরীক্ষার ফলাফল ও অংশগ্রহণ</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           NEW CSS FOR EXAM RESULT & PARTICIPATION PAGE
+           ======================================== */
+
+        /* Exam Header Banner */
+        .exam-banner {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+        }
+
+        .exam-banner-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .exam-title-section {
+            text-align: left;
+        }
+
+        .exam-main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .exam-subtitle {
+            font-size: 1.1rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .exam-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ap-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .exam-meta-icon {
+            color: var(--ap-primary);
+        }
+
+        .exam-status-section {
+            text-align: center;
+        }
+
+        .exam-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--ap-radius-lg);
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .exam-status-badge.upcoming {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .exam-status-badge.closed {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .participation-btn {
+            padding: 0.875rem 2rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .participation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .participation-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* NEW CSS: Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* NEW CSS: Exam Details Card */
+        .exam-details-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            height: fit-content;
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .details-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-item {
+            background: rgba(5, 150, 105, 0.03);
+            padding: 1.25rem;
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+        }
+
+        /* NEW CSS: Exam Instructions */
+        .instructions-section {
+            margin-top: 2rem;
+        }
+
+        .instructions-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instruction-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--ap-primary);
+        }
+
+        .instruction-number {
+            background: var(--ap-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .instruction-text {
+            color: var(--ap-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* NEW CSS: Quick Stats Sidebar */
+        .quick-stats-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            height: fit-content;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .stat-label {
+            color: var(--ap-text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 1.1rem;
+        }
+
+        /* NEW CSS: Sample Questions Section */
+        .sample-questions-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+        }
+
+        .sample-question {
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .sample-q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sample-q-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .sample-q-marks {
+            color: var(--ap-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .sample-q-text {
+            color: var(--ap-text-primary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .sample-options {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .sample-option {
+            padding: 0.75rem;
+            background: white;
+            border-radius: var(--ap-radius);
+            border: 1px solid var(--ap-border);
+            font-size: 0.9rem;
+        }
+
+        /* NEW CSS: Registration/Eligibility Section */
+        .eligibility-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--ap-warning);
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
+        }
+
+        .eligibility-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .eligibility-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-warning);
+            margin: 0;
+        }
+
+        .eligibility-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .eligibility-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--ap-text-primary);
+        }
+
+        .eligibility-check {
+            color: var(--ap-success);
+            font-weight: 700;
+        }
+
+        /* Common utility classes from dashboard */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .exam-banner-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .exam-meta {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .exam-main-title {
+                font-size: 1.5rem;
+            }
+
+            .exam-banner {
+                padding: 1.5rem;
+                margin: 0.5rem 0 1.5rem 0;
+            }
+
+            .exam-details-card,
+            .quick-stats-card,
+            .sample-questions-card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Study Materials</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> Rahul Ahmed
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-home me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i>My Results</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Exam Banner -->
+        <div class="exam-banner fade-in">
+            <div class="exam-banner-content">
+                <div class="exam-title-section">
+                    <h1 class="exam-main-title">বাংলা ১ম পত্র - HSC Final Exam 2025</h1>
+                    <div class="exam-subtitle">Dhaka Education Board | Science Group | Final Examination</div>
+                    <div class="exam-meta">
+                        <div class="exam-meta-item">
+                            <i class="fas fa-calendar-alt exam-meta-icon"></i>
+                            <span>June 15, 2025</span>
+                        </div>
+                        <div class="exam-meta-item">
+                            <i class="fas fa-clock exam-meta-icon"></i>
+                            <span>10:00 AM - 1:00 PM</span>
+                        </div>
+                        <div class="exam-meta-item">
+                            <i class="fas fa-users exam-meta-icon"></i>
+                            <span>45,000+ Registered</span>
+                        </div>
+                        <div class="exam-meta-item">
+                            <i class="fas fa-map-marker-alt exam-meta-icon"></i>
+                            <span>All Centers</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="exam-status-section">
+                    <div class="exam-status-badge">
+                        <i class="fas fa-check-circle"></i>
+                        Registration Open
+                    </div>
+                    <button class="participation-btn" onclick="registerForExam()">
+                        <i class="fas fa-user-plus"></i>
+                        Register Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column: Exam Details -->
+            <div>
+                <!-- Exam Details Card -->
+                <div class="exam-details-card fade-in">
+                    <div class="details-header">
+                        <i class="fas fa-info-circle" style="color: var(--ap-primary); font-size: 1.5rem;"></i>
+                        <h2 class="details-title">পরীক্ষার বিস্তারিত</h2>
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">পরীক্ষার ধরন</div>
+                            <div class="detail-value">HSC Final Exam</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">বিষয়</div>
+                            <div class="detail-value">বাংলা ১ম পত্র</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">পূর্ণমান</div>
+                            <div class="detail-value">100 নম্বর</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">সময়</div>
+                            <div class="detail-value">3 ঘন্টা</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">MCQ প্রশ্ন</div>
+                            <div class="detail-value">30টি (30 নম্বর)</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">রচনামূলক প্রশ্ন</div>
+                            <div class="detail-value">20টি (70 নম্বর)</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">পাশের নম্বর</div>
+                            <div class="detail-value">33 নম্বর</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">রেজিস্ট্রেশন ফি</div>
+                            <div class="detail-value">৳500</div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions Section -->
+                    <div class="instructions-section">
+                        <h3 class="instructions-title">
+                            <i class="fas fa-list-check"></i>
+                            পরীক্ষার নির্দেশনা
+                        </h3>
+                        <ul class="instructions-list">
+                            <li class="instruction-item">
+                                <div class="instruction-number">1</div>
+                                <div class="instruction-text">পরীক্ষা শুরুর 30 মিনিট আগে পরীক্ষা কেন্দ্রে উপস্থিত হতে হবে।</div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="instruction-number">2</div>
+                                <div class="instruction-text">বৈধ প্রবেশপত্র ও পরিচয়পত্র অবশ্যই সঙ্গে আনতে হবে।</div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="instruction-number">3</div>
+                                <div class="instruction-text">প্রথম 30 মিনিট MCQ প্রশ্নের উত্তর করতে হবে।</div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="instruction-number">4</div>
+                                <div class="instruction-text">OMR শিট সতর্কতার সাথে পূরণ করতে হবে।</div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="instruction-number">5</div>
+                                <div class="instruction-text">প্রতিটি MCQ প্রশ্নের জন্য 1 নম্বর এবং ভুল উত্তরের জন্য 0.25 নম্বর কাটা হবে।</div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="instruction-number">6</div>
+                                <div class="instruction-text">রচনামূলক প্রশ্নের উত্তর স্পষ্ট ও সুন্দর হাতের লেখায় লিখতে হবে।</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Stats and Sample -->
+            <div>
+                <!-- Quick Stats -->
+                <div class="quick-stats-card fade-in">
+                    <div class="stats-header">
+                        <i class="fas fa-chart-bar" style="color: var(--ap-primary);"></i>
+                        <h3 class="stats-title">পরীক্ষার পরিসংখ্যান</h3>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">নিবন্ধিত পরীক্ষার্থী</span>
+                        <span class="stat-value">45,247</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">পরীক্ষা কেন্দ্র</span>
+                        <span class="stat-value">856</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">গত বছরের পাশের হার</span>
+                        <span class="stat-value">82.4%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">A+ পাওয়ার হার</span>
+                        <span class="stat-value">15.7%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">গড় নম্বর</span>
+                        <span class="stat-value">67.2</span>
+                    </div>
+                </div>
+
+                <!-- Eligibility Card -->
+                <div class="eligibility-card fade-in">
+                    <div class="eligibility-header">
+                        <i class="fas fa-user-check" style="color: var(--ap-warning); font-size: 1.25rem;"></i>
+                        <h3 class="eligibility-title">যোগ্যতার শর্তাবলী</h3>
+                    </div>
+                    
+                    <ul class="eligibility-list">
+                        <li class="eligibility-item">
+                            <i class="fas fa-check eligibility-check"></i>
+                            <span>HSC 2025 ব্যাচের নিয়মিত শিক্ষার্থী</span>
+                        </li>
+                        <li class="eligibility-item">
+                            <i class="fas fa-check eligibility-check"></i>
+                            <span>বৈধ একাডেমিক ট্রান্সক্রিপ্ট</span>
+                        </li>
+                        <li class="eligibility-item">
+                            <i class="fas fa-check eligibility-check"></i>
+                            <span>রেজিস্ট্রেশন ফি পরিশোধিত</span>
+                        </li>
+                        <li class="eligibility-item">
+                            <i class="fas fa-check eligibility-check"></i>
+                            <span>কোনো শৃঙ্খলাভঙ্গের রেকর্ড নেই</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Sample Questions -->
+                <div class="sample-questions-card fade-in">
+                    <div class="stats-header">
+                        <i class="fas fa-question-circle" style="color: var(--ap-primary);"></i>
+                        <h3 class="stats-title">নমুনা প্রশ্ন</h3>
+                    </div>
+
+                    <div class="sample-question">
+                        <div class="sample-q-header">
+                            <div class="sample-q-number">MCQ - 1</div>
+                            <div class="sample-q-marks">1 নম্বর</div>
+                        </div>
+                        <div class="sample-q-text">
+                            রবীন্দ্রনাথ ঠাকুরের 'গীতাঞ্জলি' কাব্যগ্রন্থের জন্য তিনি কোন পুরস্কার পেয়েছিলেন?
+                        </div>
+                        <div class="sample-options">
+                            <div class="sample-option">ক) নোবেল পুরস্কার</div>
+                            <div class="sample-option">খ) ভারত রত্ন</div>
+                            <div class="sample-option">গ) একুশে পদক</div>
+                            <div class="sample-option">ঘ) স্বাধীনতা পুরস্কার</div>
+                        </div>
+                    </div>
+
+                    <div class="sample-question">
+                        <div class="sample-q-header">
+                            <div class="sample-q-number">রচনামূলক - 1</div>
+                            <div class="sample-q-marks">10 নম্বর</div>
+                        </div>
+                        <div class="sample-q-text">
+                            "সোনার তরী" কবিতায় কবি রবীন্দ্রনাথ ঠাকুর কী বার্তা দিতে চেয়েছেন? কবিতার মূলভাব ও তাৎপর্য বিশ্লেষণ করুন।
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Registration functionality
+        function registerForExam() {
+            const isRegistered = confirm('আপনি কি এই পরীক্ষার জন্য নিবন্ধন করতে চান?\n\nপরীক্ষার ফি: ৳500\nপরীক্ষার তারিখ: June 15, 2025\nসময়: 10:00 AM - 1:00 PM');
+            
+            if (isRegistered) {
+                // Simulate registration process
+                const registrationSteps = [
+                    'যোগ্যতা যাচাই করা হচ্ছে...',
+                    'তথ্য সংরক্ষণ করা হচ্ছে...',
+                    'পেমেন্ট প্রক্রিয়া শুরু...',
+                    'নিবন্ধন সম্পন্ন করা হচ্ছে...'
+                ];
+                
+                let stepIndex = 0;
+                const progressInterval = setInterval(() => {
+                    if (stepIndex < registrationSteps.length) {
+                        console.log(registrationSteps[stepIndex]);
+                        stepIndex++;
+                    } else {
+                        clearInterval(progressInterval);
+                        showRegistrationSuccess();
+                    }
+                }, 1000);
+            }
+        }
+
+        function showRegistrationSuccess() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--ap-success);
+                color: white;
+                padding: 1.5rem 2rem;
+                border-radius: var(--ap-radius);
+                z-index: 9999;
+                box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);
+                font-weight: 600;
+                max-width: 400px;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <div style="font-size: 1.1rem; margin-bottom: 0.25rem;">নিবন্ধন সফল!</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">Registration ID: HSC2025BG001547</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+
+            // Update UI to show registered status
+            updateRegistrationStatus();
+        }
+
+        function updateRegistrationStatus() {
+            const statusBadge = document.querySelector('.exam-status-badge');
+            const participationBtn = document.querySelector('.participation-btn');
+            
+            statusBadge.innerHTML = '<i class="fas fa-user-check"></i> Registered';
+            statusBadge.style.background = 'linear-gradient(135deg, var(--ap-info), #1d4ed8)';
+            
+            participationBtn.innerHTML = '<i class="fas fa-id-card"></i> View Admit Card';
+            participationBtn.onclick = () => {
+                alert('আপনার প্রবেশপত্র ডাউনলোড করা হচ্ছে...\nYour admit card is being downloaded...');
+            };
+        }
+
+        // Add smooth scrolling animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats numbers
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach((stat, index) => {
+                const originalText = stat.textContent;
+                const hasComma = originalText.includes(',');
+                const hasPercent = originalText.includes('%');
+                let cleanNumber = parseInt(originalText.replace(/[^\d]/g, ''));
+                
+                if (!isNaN(cleanNumber)) {
+                    let currentValue = 0;
+                    const increment = cleanNumber / 50;
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= cleanNumber) {
+                            stat.textContent = originalText;
+                            clearInterval(timer);
+                        } else {
+                            let displayValue = Math.floor(currentValue);
+                            if (hasComma && displayValue >= 1000) {
+                                displayValue = displayValue.toLocaleString();
+                            }
+                            stat.textContent = displayValue + (hasPercent ? '%' : '');
+                        }
+                    }, 30 + index * 10);
+                }
+            });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.exam-details-card, .quick-stats-card, .sample-questions-card, .eligibility-card').forEach(el => {
+                observer.observe(el);
+            });
+
+            console.log('ePorikkha Exam Result & Participation Page: Ready! 📋');
+        });
+    </script>
+</body>
+</html>

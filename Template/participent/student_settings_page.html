@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Settings</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        /* ========================================
+           NEW CSS FOR SETTINGS PAGE
+           ======================================== */
+
+        /* Settings Header Section */
+        .settings-header-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .settings-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .settings-header-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+        }
+
+        .settings-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .settings-main-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .settings-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
+        /* Settings Navigation Tabs */
+        .settings-nav-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .settings-nav-tabs {
+            display: flex;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .settings-nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .settings-nav-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-nav-tab i {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .settings-nav-tab:hover {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+        }
+
+        .settings-nav-tab.active {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+        }
+
+        .settings-nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        /* Settings Content Container */
+        .settings-content {
+            min-height: 500px;
+        }
+
+        .settings-tab-pane {
+            display: none;
+        }
+
+        .settings-tab-pane.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.12);
+        }
+
+        .content-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            position: relative;
+        }
+
+        .content-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: var(--ap-radius);
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .content-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Settings Form Elements */
+        .settings-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        .settings-group-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .settings-group-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--ap-radius);
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item-info {
+            flex: 1;
+        }
+
+        .settings-item-title {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .settings-item-description {
+            color: var(--ap-text-muted);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .settings-item-control {
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Form Controls */
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+            background: white;
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--ap-border);
+            transition: 0.3s;
+            border-radius: 14px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--ap-primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .action-btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+        }
+
+        .action-btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .action-btn-danger {
+            background: linear-gradient(135deg, var(--ap-secondary), var(--bd-red));
+            color: white;
+        }
+
+        .action-btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* Security Settings Specific Styles */
+        .security-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .security-status.enabled {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .security-status.disabled {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Login History Table */
+        .login-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .login-history-table th,
+        .login-history-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--ap-border);
+        }
+
+        .login-history-table th {
+            background: rgba(5, 150, 105, 0.05);
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+        }
+
+        .login-history-table td {
+            color: var(--ap-text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .login-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .login-status.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+        }
+
+        .login-status.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        /* Data Management Styles */
+        .data-usage-chart {
+            padding: 1.5rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            margin: 1rem 0;
+        }
+
+        .usage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .usage-label {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+        }
+
+        .usage-value {
+            font-weight: 700;
+            color: var(--ap-primary);
+        }
+
+        .usage-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--ap-bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .usage-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        /* FOOTER (COPIED FROM DASHBOARD) */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .footer-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-stat-label {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .settings-nav-tabs {
+                flex-direction: column;
+            }
+
+            .settings-nav-tab {
+                min-width: auto;
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 1rem 1.5rem;
+            }
+
+            .settings-nav-tab i {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+            }
+
+            .settings-main-title {
+                font-size: 2rem;
+            }
+
+            .settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .settings-item-control {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .login-history-table {
+                font-size: 0.8rem;
+            }
+
+            .login-history-table th,
+            .login-history-table td {
+                padding: 0.5rem;
+            }
+
+            .footer-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation (Same as Dashboard) -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Practice Tests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Settings</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">রা</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Rahul Ahmed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">HSC 2025 Candidate</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Progress</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Settings Header Section -->
+        <div class="settings-header-section fade-in">
+            <div class="settings-header-content">
+                <h1 class="settings-main-title">সেটিংস | Settings</h1>
+                <p class="settings-subtitle">Customize your ePorikkha experience and manage your account preferences</p>
+            </div>
+        </div>
+
+        <!-- Settings Navigation -->
+        <div class="settings-nav-section fade-in">
+            <div class="settings-nav-tabs">
+                <button class="settings-nav-tab active" data-tab="account">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Account</span>
+                </button>
+                <button class="settings-nav-tab" data-tab="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </button>
+                <button class="settings-nav-tab" data-tab="exam-preferences">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Exam Preferences</span>
+                </button>
+                <button class="settings-nav-tab" data-tab="security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </button>
+                <button class="settings-nav-tab" data-tab="privacy">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Privacy</span>
+                </button>
+                <button class="settings-nav-tab" data-tab="data">
+                    <i class="fas fa-database"></i>
+                    <span>Data & Storage</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="settings-content">
+            <!-- Account Settings Tab -->
+            <div class="settings-tab-pane active" id="account-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            অ্যাকাউন্ট সেটিংস | Account Settings
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                পাসওয়ার্ড ও নিরাপত্তা | Password & Security
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Change Password</div>
+                                    <div class="settings-item-description">Update your account password for better security</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-secondary">
+                                        <i class="fas fa-key"></i>
+                                        Change Password
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Two-Factor Authentication</div>
+                                    <div class="settings-item-description">Add an extra layer of security to your account</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                ভাষা ও অঞ্চল | Language & Region
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Preferred Language</div>
+                                    <div class="settings-item-description">Choose your default language for the interface</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 200px;">
+                                        <option value="bn-bd">বাংলা (Bangladesh)</option>
+                                        <option value="en-us" selected>English (US)</option>
+                                        <option value="both">Both (Bengali + English)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Time Zone</div>
+                                    <div class="settings-item-description">Set your local time zone for exam schedules</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 250px;">
+                                        <option value="asia/dhaka" selected>Asia/Dhaka (GMT+6)</option>
+                                        <option value="asia/kolkata">Asia/Kolkata (GMT+5:30)</option>
+                                        <option value="utc">UTC (GMT+0)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                যোগাযোগের তথ্য | Contact Information
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Email Address</div>
+                                    <div class="settings-item-description">rahul.ahmed@student.edu.bd</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-secondary">
+                                        <i class="fas fa-edit"></i>
+                                        Update Email
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Mobile Number</div>
+                                    <div class="settings-item-description">+880 1712-345678</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-secondary">
+                                        <i class="fas fa-edit"></i>
+                                        Update Phone
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button class="action-btn action-btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save All Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div class="settings-tab-pane" id="notifications-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            বিজ্ঞপ্তি সেটিংস | Notification Settings
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                পরীক্ষা সংক্রান্ত | Exam Notifications
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Exam Reminders</div>
+                                    <div class="settings-item-description">Get notified before upcoming exams</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Result Announcements</div>
+                                    <div class="settings-item-description">Receive notifications when exam results are published</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Live Exam Alerts</div>
+                                    <div class="settings-item-description">Get notified when live exams are starting</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                কন্টেস্ট ও প্রতিযোগিতা | Contests & Competitions
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Contest Announcements</div>
+                                    <div class="settings-item-description">Get notified about new programming contests</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Achievement Unlocked</div>
+                                    <div class="settings-item-description">Celebrate when you unlock new achievements</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                Delivery Method | বিজ্ঞপ্তি পদ্ধতি
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Email Notifications</div>
+                                    <div class="settings-item-description">Receive notifications via email</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">SMS Alerts</div>
+                                    <div class="settings-item-description">Get important alerts via SMS</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Browser Push Notifications</div>
+                                    <div class="settings-item-description">Allow browser notifications for instant alerts</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Preferences Tab -->
+            <div class="settings-tab-pane" id="exam-preferences-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            পরীক্ষার পছন্দ | Exam Preferences
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-desktop"></i>
+                                </div>
+                                Display Settings | প্রদর্শন সেটিংস
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Font Size</div>
+                                    <div class="settings-item-description">Choose comfortable font size for reading questions</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 150px;">
+                                        <option value="small">Small</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="large">Large</option>
+                                        <option value="extra-large">Extra Large</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Theme Mode</div>
+                                    <div class="settings-item-description">Switch between light and dark mode for better comfort</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 150px;">
+                                        <option value="light" selected>Light Mode</option>
+                                        <option value="dark">Dark Mode</option>
+                                        <option value="auto">Auto (System)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">High Contrast</div>
+                                    <div class="settings-item-description">Enable high contrast mode for better visibility</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                Time & Duration | সময় ও সময়কাল
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Auto-Submit Warning</div>
+                                    <div class="settings-item-description">Warn me before auto-submitting the exam</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 200px;">
+                                        <option value="5">5 minutes before</option>
+                                        <option value="10" selected>10 minutes before</option>
+                                        <option value="15">15 minutes before</option>
+                                        <option value="disabled">Disabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Time Display Format</div>
+                                    <div class="settings-item-description">How to show remaining time during exam</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 200px;">
+                                        <option value="digital" selected>Digital (02:30:45)</option>
+                                        <option value="analog">Analog Clock</option>
+                                        <option value="progress">Progress Bar</option>
+                                        <option value="both">Digital + Progress</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-keyboard"></i>
+                                </div>
+                                Input Preferences | ইনপুট পছন্দ
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Auto-Save Answers</div>
+                                    <div class="settings-item-description">Automatically save answers as you type</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Keyboard Shortcuts</div>
+                                    <div class="settings-item-description">Enable keyboard shortcuts for faster navigation</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Spell Check</div>
+                                    <div class="settings-item-description">Enable spell checking for written answers</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="settings-tab-pane" id="security-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            নিরাপত্তা সেটিংস | Security Settings
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                Account Security | অ্যাকাউন্ট নিরাপত্তা
+                            </div>
+                            
+                            <div class="security-status enabled">
+                                <i class="fas fa-check-circle"></i>
+                                Your account is secure
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Two-Factor Authentication (2FA)</div>
+                                    <div class="settings-item-description">Add an extra layer of security using your mobile device</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-primary">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        Enable 2FA
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Session Timeout</div>
+                                    <div class="settings-item-description">Automatically log out after period of inactivity</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 200px;">
+                                        <option value="15">15 minutes</option>
+                                        <option value="30" selected>30 minutes</option>
+                                        <option value="60">1 hour</option>
+                                        <option value="disabled">Never</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Login Alerts</div>
+                                    <div class="settings-item-description">Get notified when someone logs into your account</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                Login History | লগইন ইতিহাস
+                            </div>
+                            
+                            <table class="login-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Device</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>May 30, 2025 10:30 AM</td>
+                                        <td>Chrome on Windows</td>
+                                        <td>Dhaka, Bangladesh</td>
+                                        <td><span class="login-status success">Success</span></td>
+                                        <td><a href="#" style="color: var(--ap-primary); font-size: 0.8rem;">Current Session</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 29, 2025 08:15 PM</td>
+                                        <td>Mobile App (Android)</td>
+                                        <td>Dhaka, Bangladesh</td>
+                                        <td><span class="login-status success">Success</span></td>
+                                        <td><a href="#" style="color: var(--ap-secondary); font-size: 0.8rem;">Revoke</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 28, 2025 02:45 PM</td>
+                                        <td>Firefox on Windows</td>
+                                        <td>Dhaka, Bangladesh</td>
+                                        <td><span class="login-status success">Success</span></td>
+                                        <td><a href="#" style="color: var(--ap-text-muted); font-size: 0.8rem;">Expired</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>May 27, 2025 11:22 AM</td>
+                                        <td>Unknown Device</td>
+                                        <td>Unknown Location</td>
+                                        <td><span class="login-status failed">Failed</span></td>
+                                        <td><a href="#" style="color: var(--ap-warning); font-size: 0.8rem;">Investigate</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div style="margin-top: 1rem; text-align: center;">
+                                <button class="action-btn action-btn-secondary">
+                                    <i class="fas fa-eye"></i>
+                                    View All Login History
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                Emergency Actions | জরুরি কার্যক্রম
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Log Out All Devices</div>
+                                    <div class="settings-item-description">Sign out from all devices except this one</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-danger">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Log Out All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Tab -->
+            <div class="settings-tab-pane" id="privacy-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-user-secret"></i>
+                            </div>
+                            গোপনীয়তা সেটিংস | Privacy Settings
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                Profile Visibility | প্রোফাইল দৃশ্যমানতা
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Show Profile to Other Students</div>
+                                    <div class="settings-item-description">Allow other students to view your profile and achievements</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Show Exam Results</div>
+                                    <div class="settings-item-description">Display your exam results on public leaderboards</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Show Activity Status</div>
+                                    <div class="settings-item-description">Let others see when you're online and active</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                Analytics & Tracking | বিশ্লেষণ ও ট্র্যাকিং
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Performance Analytics</div>
+                                    <div class="settings-item-description">Allow us to analyze your performance to provide better recommendations</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Usage Statistics</div>
+                                    <div class="settings-item-description">Help improve ePorikkha by sharing anonymous usage data</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Personalized Recommendations</div>
+                                    <div class="settings-item-description">Receive personalized study and exam recommendations</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                Communication Preferences | যোগাযোগের পছন্দ
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Marketing Emails</div>
+                                    <div class="settings-item-description">Receive promotional emails about new features and offers</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Third-party Sharing</div>
+                                    <div class="settings-item-description">Allow sharing your progress with educational institutions</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Storage Tab -->
+            <div class="settings-tab-pane" id="data-tab">
+                <div class="content-card fade-in">
+                    <div class="content-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            ডেটা ও স্টোরেজ | Data & Storage
+                        </h2>
+                    </div>
+                    <div class="content-card-body">
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                Storage Usage | স্টোরেজ ব্যবহার
+                            </div>
+                            
+                            <div class="data-usage-chart">
+                                <div class="usage-item">
+                                    <div class="usage-label">Exam Responses</div>
+                                    <div class="usage-value">156 MB</div>
+                                </div>
+                                <div class="usage-bar">
+                                    <div class="usage-progress" style="width: 65%;"></div>
+                                </div>
+                                
+                                <div class="usage-item">
+                                    <div class="usage-label">Practice Test Data</div>
+                                    <div class="usage-value">89 MB</div>
+                                </div>
+                                <div class="usage-bar">
+                                    <div class="usage-progress" style="width: 37%;"></div>
+                                </div>
+                                
+                                <div class="usage-item">
+                                    <div class="usage-label">Profile & Media</div>
+                                    <div class="usage-value">23 MB</div>
+                                </div>
+                                <div class="usage-bar">
+                                    <div class="usage-progress" style="width: 10%;"></div>
+                                </div>
+                                
+                                <div class="usage-item" style="border-top: 2px solid var(--ap-primary); padding-top: 1rem; margin-top: 1rem;">
+                                    <div class="usage-label"><strong>Total Used</strong></div>
+                                    <div class="usage-value"><strong>268 MB</strong> / 1 GB</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                Data Export | ডেটা এক্সপোর্ট
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Download Your Data</div>
+                                    <div class="settings-item-description">Export all your exam data, results, and profile information</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-secondary">
+                                        <i class="fas fa-download"></i>
+                                        Request Export
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Export Format</div>
+                                    <div class="settings-item-description">Choose the format for your data export</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <select class="form-control form-select" style="width: 150px;">
+                                        <option value="json" selected>JSON</option>
+                                        <option value="csv">CSV</option>
+                                        <option value="pdf">PDF Report</option>
+                                        <option value="excel">Excel</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon">
+                                    <i class="fas fa-trash"></i>
+                                </div>
+                                Data Management | ডেটা ব্যবস্থাপনা
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Clear Cache</div>
+                                    <div class="settings-item-description">Clear temporary files and cached data to free up space</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-secondary">
+                                        <i class="fas fa-broom"></i>
+                                        Clear Cache
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Delete Practice Test Data</div>
+                                    <div class="settings-item-description">Remove all practice test responses (exam data will be preserved)</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Delete Practice Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group" style="border: 2px solid var(--ap-secondary); background: rgba(239, 68, 68, 0.05);">
+                            <div class="settings-group-title">
+                                <div class="settings-group-icon" style="background: var(--ap-secondary);">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                Danger Zone | বিপদজনক এলাকা
+                            </div>
+                            
+                            <div class="settings-item">
+                                <div class="settings-item-info">
+                                    <div class="settings-item-title">Delete Account</div>
+                                    <div class="settings-item-description">Permanently delete your account and all associated data. This action cannot be undone.</div>
+                                </div>
+                                <div class="settings-item-control">
+                                    <button class="action-btn action-btn-danger">
+                                        <i class="fas fa-user-times"></i>
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer (Same as Dashboard) -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">25,000+</div>
+                        <div class="footer-stat-label">Active Students</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">1,500+</div>
+                        <div class="footer-stat-label">Exams Conducted</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">850+</div>
+                        <div class="footer-stat-label">Educational Institutes</div>
+                    </div>
+                    <div class="footer-stat">
+                        <div class="footer-stat-value">99.8%</div>
+                        <div class="footer-stat-label">Uptime</div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.settings-nav-tab');
+            const tabPanes = document.querySelectorAll('.settings-tab-pane');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and panes
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding tab pane
+                    const targetTab = tab.getAttribute('data-tab');
+                    const targetPane = document.getElementById(targetTab + '-tab');
+                    if (targetPane) {
+                        targetPane.classList.add('active');
+                    }
+                });
+            });
+
+            // Fade in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Toggle switch interactions
+            const toggleSwitches = document.querySelectorAll('.toggle-switch input');
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const settingName = this.closest('.settings-item').querySelector('.settings-item-title').textContent;
+                    const isEnabled = this.checked;
+                    
+                    // Show brief notification
+                    showNotification(`${settingName} ${isEnabled ? 'enabled' : 'disabled'}`, isEnabled ? 'success' : 'info');
+                });
+            });
+
+            // Action button interactions
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const buttonText = this.textContent.trim();
+                    let message = '';
+                    let type = 'info';
+                    
+                    // Handle different button types
+                    if (buttonText.includes('Save')) {
+                        message = 'Settings saved successfully!';
+                        type = 'success';
+                    } else if (buttonText.includes('Change Password')) {
+                        message = 'Password change form would open here';
+                        type = 'info';
+                    } else if (buttonText.includes('Enable 2FA')) {
+                        message = 'Two-factor authentication setup would begin';
+                        type = 'info';
+                    } else if (buttonText.includes('Delete')) {
+                        message = 'Confirmation dialog would appear';
+                        type = 'warning';
+                    } else if (buttonText.includes('Download') || buttonText.includes('Export')) {
+                        message = 'Data export would begin in background';
+                        type = 'info';
+                    } else if (buttonText.includes('Clear Cache')) {
+                        message = 'Cache cleared successfully!';
+                        type = 'success';
+                    } else {
+                        message = `${buttonText} feature would be implemented here`;
+                        type = 'info';
+                    }
+                    
+                    showNotification(message, type);
+                });
+            });
+
+            // Form control interactions
+            const formControls = document.querySelectorAll('.form-control, .form-select');
+            formControls.forEach(control => {
+                control.addEventListener('change', function() {
+                    const settingGroup = this.closest('.settings-item');
+                    if (settingGroup) {
+                        const settingName = settingGroup.querySelector('.settings-item-title').textContent;
+                        const newValue = this.value;
+                        showNotification(`${settingName} updated to: ${newValue}`, 'success');
+                    }
+                });
+            });
+
+            // Animate usage bars
+            function animateUsageBars() {
+                const usageBars = document.querySelectorAll('.usage-progress');
+                usageBars.forEach((bar, index) => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500 + index * 200);
+                });
+            }
+
+            // Trigger usage bar animation when Data tab is viewed
+            const dataTab = document.querySelector('[data-tab="data"]');
+            if (dataTab) {
+                dataTab.addEventListener('click', () => {
+                    setTimeout(animateUsageBars, 300);
+                });
+            }
+
+            // Security features
+            document.querySelectorAll('a[href="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const linkText = this.textContent.trim();
+                    
+                    if (linkText.includes('Revoke')) {
+                        showNotification('Session revoked successfully', 'success');
+                        this.textContent = 'Revoked';
+                        this.style.color = 'var(--ap-text-muted)';
+                    } else if (linkText.includes('Investigate')) {
+                        showNotification('Security team has been notified', 'info');
+                    }
+                });
+            });
+
+            // Notification system
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                const colors = {
+                    success: 'var(--ap-success)',
+                    info: 'var(--ap-info)',
+                    warning: 'var(--ap-warning)',
+                    error: 'var(--ap-secondary)'
+                };
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type] || colors.info};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: var(--ap-radius);
+                    z-index: 9999;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    font-weight: 600;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease;
+                    max-width: 300px;
+                `;
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    info: 'fas fa-info-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    error: 'fas fa-times-circle'
+                };
+                
+                notification.innerHTML = `<i class="${icons[type] || icons.info} me-2"></i>${message}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            // Load saved settings simulation
+            setTimeout(() => {
+                showNotification('Settings loaded successfully', 'success');
+            }, 1000);
+
+            console.log('ePorikkha Settings Page: Fully loaded! ⚙️');
+        });
+    </script>
+</body>
+</html>
