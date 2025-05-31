@@ -1,0 +1,3559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Create New Exam</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING ORIGINAL DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COMPLETE ORIGINAL SYSTEM)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Sidebar Navigation - COMPLETE ORIGINAL SYSTEM */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            z-index: 1050;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .mobile-sidebar.show {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ap-border);
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+        }
+
+        .mobile-sidebar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--ap-text-primary);
+        }
+
+        .mobile-sidebar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .mobile-sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--ap-secondary);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .mobile-sidebar-close:hover {
+            background: var(--bd-red);
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--ap-text-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--ap-radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            transform: translateX(8px);
+        }
+
+        .mobile-nav-link:hover::before, .mobile-nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        .mobile-nav-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover .mobile-nav-icon {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .mobile-sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar-user {
+            margin: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.8));
+            border-radius: var(--ap-radius);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .mobile-user-details {
+            flex: 1;
+        }
+
+        .mobile-user-name {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-user-role {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Hide default navbar collapse on mobile */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                display: none !important;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0.5rem;
+                background: var(--ap-primary);
+                color: white;
+                border-radius: var(--ap-radius);
+                transition: all 0.3s ease;
+            }
+            
+            .navbar-toggler:hover {
+                background: var(--ap-primary-dark);
+                transform: scale(1.05);
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .mobile-sidebar,
+            .mobile-sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        /* Notification Dropdown */
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 350px;
+            background: var(--ap-bg-primary);
+            border-radius: var(--ap-radius);
+            box-shadow: var(--ap-shadow-lg);
+            border: 1px solid var(--ap-border);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+        }
+        
+        .notification-header h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .notification-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .notification-item:hover {
+            background: var(--ap-primary-light);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-text {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--ap-text-muted);
+        }
+        
+        .notification-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 1px solid var(--ap-border);
+        }
+        
+        .notification-footer a {
+            text-decoration: none;
+            color: var(--ap-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* USER DROPDOWN STYLES - COMPLETE ORIGINAL SYSTEM */
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.25rem;
+            border-bottom: 2px solid var(--ap-border);
+            margin-bottom: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .user-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .user-role i {
+            font-size: 0.7rem;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        .dropdown-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .dropdown-item.text-danger {
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #fef2f2;
+            color: var(--bd-red);
+        }
+
+        .dropdown-item i {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .dropdown-item:hover i {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown-item.text-danger i {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover i {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .dropdown-item span {
+            flex: 1;
+        }
+
+        /* Dropdown Divider */
+        .dropdown-divider {
+            height: 1px;
+            background: var(--ap-border);
+            margin: 0.5rem 1.25rem;
+            border: none;
+        }
+
+        /* ========================================
+           CREATE EXAM PAGE SPECIFIC STYLES
+           ======================================== */
+
+        .create-exam-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-subtitle {
+            color: var(--ap-text-secondary);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .points-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .points-cost {
+            background: var(--bd-gold);
+            color: #1a1a1a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+        }
+
+        .points-available {
+            color: var(--ap-text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Tab Navigation */
+        .exam-tabs {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--ap-border);
+        }
+
+        .tab-nav {
+            display: flex;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            min-width: 150px;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--ap-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--ap-primary);
+            color: white;
+        }
+
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+
+        .tab-content {
+            padding: 2rem;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 2px;
+        }
+
+        .section-title i {
+            color: var(--ap-primary);
+            font-size: 1.1rem;
+        }
+
+        .section-subtitle {
+            color: var(--ap-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--ap-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .form-control:invalid {
+            border-color: var(--ap-secondary);
+        }
+
+        .form-row {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Custom Checkbox Styles */
+        .checkbox-group {
+            margin-bottom: 1rem;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(5, 150, 105, 0.03);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: var(--ap-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .custom-checkbox:hover {
+            background: rgba(5, 150, 105, 0.08);
+            border-color: rgba(5, 150, 105, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            background: var(--ap-bg-primary);
+            border: 2px solid var(--ap-border);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+            background: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked ~ .checkmark::after {
+            display: block;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .checkbox-description {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Enhanced Select Styles */
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 12px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Form Section Headers */
+        .settings-section {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .settings-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+        }
+
+        /* Question Management */
+        .questions-section {
+            margin-bottom: 2rem;
+        }
+
+        .question-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            background: var(--ap-bg-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .type-btn:hover {
+            border-color: var(--ap-primary);
+            background: var(--ap-primary-light);
+        }
+
+        .type-btn.active {
+            border-color: var(--ap-primary);
+            background: var(--ap-primary);
+            color: white;
+        }
+
+        .type-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .type-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .type-desc {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        .type-btn.active .type-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Question Form */
+        .question-form {
+            background: rgba(5, 150, 105, 0.05);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-form.hidden {
+            display: none;
+        }
+
+        /* MCQ Options */
+        .mcq-options {
+            margin-top: 1rem;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--ap-bg-primary);
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--ap-primary);
+        }
+
+        .mcq-option.correct {
+            border-color: var(--ap-success);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .option-label {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .option-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+
+        .option-input:focus {
+            outline: none;
+        }
+
+        .correct-btn {
+            background: var(--ap-border);
+            border: none;
+            color: var(--ap-text-muted);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .correct-btn:hover {
+            background: var(--ap-success);
+            color: white;
+        }
+
+        .correct-btn.active {
+            background: var(--ap-success);
+            color: white;
+        }
+
+        /* Question List */
+        .questions-list {
+            margin-top: 2rem;
+        }
+
+        .question-item {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            box-shadow: var(--ap-shadow);
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .question-type-badge {
+            background: var(--ap-info);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .edit-btn {
+            background: var(--ap-warning);
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .question-text {
+            color: var(--ap-text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .question-options {
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-preview {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 6px;
+        }
+
+        .option-preview.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid var(--ap-success);
+        }
+
+        .option-letter {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .option-preview.correct .option-letter {
+            background: var(--ap-success);
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+            color: white;
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:disabled:hover {
+            transform: none !important;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-top: 2px solid var(--ap-border);
+            margin-top: 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 253, 244, 0.3));
+            border-radius: 0 0 var(--ap-radius-lg) var(--ap-radius-lg);
+        }
+
+        .actions-left,
+        .actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--ap-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--ap-radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow-lg);
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Preview Section */
+        .preview-container {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-info {
+            color: var(--ap-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .create-exam-container {
+                padding: 1rem 0.5rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .tab-nav {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                min-width: auto;
+                padding: 0.875rem 1rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .form-row.two-col,
+            .form-row.three-col {
+                grid-template-columns: 1fr;
+            }
+
+            .question-type-selector {
+                flex-direction: column;
+            }
+
+            .actions-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .actions-left,
+            .actions-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .mcq-option {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .option-input {
+                width: 100%;
+            }
+
+            .settings-section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .custom-checkbox {
+                padding: 0.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .checkbox-label {
+                font-size: 0.85rem;
+            }
+
+            .checkbox-description {
+                font-size: 0.75rem;
+            }
+
+            .form-select {
+                font-size: 0.85rem;
+            }
+
+            .points-display {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .points-card {
+                padding: 0.75rem 1rem;
+            }
+
+            .points-value {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .points-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .settings-section {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <a href="#" class="mobile-sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <div>
+                    <span style="color: var(--ap-primary); font-weight: 900;">e</span><span style="color: var(--bd-green); font-weight: 700;">Porikkha</span>
+                </div>
+            </a>
+            <button class="mobile-sidebar-close" id="mobileSidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-sidebar-user">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar">ড.</div>
+                <div class="mobile-user-details">
+                    <div class="mobile-user-name">Dr. Fatima Khan</div>
+                    <div class="mobile-user-role">Exam Instructor</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="mobile-sidebar-nav">
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link active">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <span>Create Exam</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <span>My Exams</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <span>My Contests</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span>Results</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <span>Evaluators</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Profile</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <span>Buy Points</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item" style="margin-top: 1rem; border-top: 1px solid var(--ap-border); padding-top: 1rem;">
+                <a href="#" class="mobile-nav-link" style="color: var(--ap-secondary);">
+                    <div class="mobile-nav-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--ap-secondary);">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" id="mobileNavToggler">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Create Exam</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Evaluators</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Analytics</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div style="position: relative;">
+                        <button class="notification-btn" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h6>Notifications</h6>
+                                <a href="#" style="font-size: 0.75rem; color: var(--ap-primary);">Mark all as read</a>
+                            </div>
+                            <div class="notification-list">
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #dcfce7; color: var(--ap-success);">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Exam Creation Tips</div>
+                                        <div class="notification-text">Check out our guide for creating effective exams</div>
+                                        <div class="notification-time">2 hours ago</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #fef3c7; color: var(--ap-warning);">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Low Points Warning</div>
+                                        <div class="notification-text">You have 15 points remaining</div>
+                                        <div class="notification-time">1 day ago</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">ড.</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Dr. Fatima Khan</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Exam Instructor</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li class="dropdown-header">
+                                <div class="user-info">
+                                    <div class="user-avatar-large">ড.</div>
+                                    <div class="user-details">
+                                        <div class="user-name">Dr. Fatima Khan</div>
+                                        <div class="user-email">fatima.khan@dhakauniv.edu.bd</div>
+                                        <div class="user-role">
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                            Instructor
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>My Analytics</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-coins"></i><span>Points History</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark"></i><span>Saved Templates</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle"></i><span>Help & Support</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="create-exam-container">
+        <!-- Page Header -->
+        <div class="page-header fade-in">
+            <h1 class="page-title">
+                <i class="fas fa-plus-circle"></i>
+                Create New Exam
+            </h1>
+            <p class="page-subtitle">
+                Design and customize your exam with multiple question types, scheduling options, and security features.
+            </p>
+            <div class="points-info">
+                <div class="points-cost">
+                    <i class="fas fa-coins"></i>
+                    Cost: 5 Points
+                </div>
+                <div class="points-available">
+                    Available Points: <strong>15</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Creation Tabs -->
+        <div class="exam-tabs fade-in">
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="details">
+                    <i class="fas fa-info-circle"></i>
+                    Exam Details
+                </button>
+                <button class="tab-btn" data-tab="questions">
+                    <i class="fas fa-question-circle"></i>
+                    Questions
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+                <button class="tab-btn" data-tab="preview">
+                    <i class="fas fa-eye"></i>
+                    Preview
+                </button>
+                <button class="tab-btn" data-tab="publish">
+                    <i class="fas fa-rocket"></i>
+                    Publish
+                </button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Exam Details Tab -->
+                <div class="tab-pane active" id="details">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            Basic Information
+                        </h3>
+                        <p class="section-subtitle">Provide essential details about your exam</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Exam Title <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="examTitle" placeholder="e.g., HSC Mathematics Final Exam" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Subject <span class="required">*</span></label>
+                                <select class="form-control" id="examSubject" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="bangla">বাংলা (Bangla)</option>
+                                    <option value="english">English</option>
+                                    <option value="mathematics">গণিত (Mathematics)</option>
+                                    <option value="physics">পদার্থবিজ্ঞান (Physics)</option>
+                                    <option value="chemistry">রসায়ন (Chemistry)</option>
+                                    <option value="biology">জীববিজ্ঞান (Biology)</option>
+                                    <option value="ict">ICT</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="examDescription" rows="3" placeholder="Brief description of the exam content and objectives"></textarea>
+                        </div>
+
+                        <div class="form-row three-col">
+                            <div class="form-group">
+                                <label class="form-label">Duration (minutes) <span class="required">*</span></label>
+                                <input type="number" class="form-control" id="examDuration" min="15" max="300" value="180" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Total Marks <span class="required">*</span></label>
+                                <input type="number" class="form-control" id="totalMarks" min="10" max="1000" value="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Pass Mark (%)</label>
+                                <input type="number" class="form-control" id="passMark" min="0" max="100" value="40">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            Schedule & Access
+                        </h3>
+                        <p class="section-subtitle">Configure when and how students can access the exam</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Start Date & Time <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="startDateTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">End Date & Time <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="endDateTime" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Access Code (Optional)</label>
+                                <input type="text" class="form-control" id="accessCode" placeholder="Leave empty for open access">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Maximum Attempts</label>
+                                <select class="form-control" id="maxAttempts">
+                                    <option value="1">1 Attempt</option>
+                                    <option value="2">2 Attempts</option>
+                                    <option value="3">3 Attempts</option>
+                                    <option value="unlimited">Unlimited</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions Tab -->
+                <div class="tab-pane" id="questions">
+                    <div class="questions-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-plus"></i>
+                            Add Questions
+                        </h3>
+                        <p class="section-subtitle">Create multiple choice and written questions for your exam</p>
+
+                        <!-- Question Type Selector -->
+                        <div class="question-type-selector">
+                            <div class="type-btn active" data-type="mcq">
+                                <i class="fas fa-list type-icon"></i>
+                                <div class="type-title">Multiple Choice</div>
+                                <div class="type-desc">Questions with 4 options</div>
+                            </div>
+                            <div class="type-btn" data-type="written">
+                                <i class="fas fa-edit type-icon"></i>
+                                <div class="type-title">Written Answer</div>
+                                <div class="type-desc">Essay or descriptive questions</div>
+                            </div>
+                        </div>
+
+                        <!-- MCQ Question Form -->
+                        <div class="question-form" id="mcqForm">
+                            <h4>Create Multiple Choice Question</h4>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Question Text <span class="required">*</span></label>
+                                <textarea class="form-control" id="mcqQuestion" rows="3" placeholder="Enter your question here..." required></textarea>
+                            </div>
+
+                            <div class="form-row two-col">
+                                <div class="form-group">
+                                    <label class="form-label">Marks <span class="required">*</span></label>
+                                    <input type="number" class="form-control" id="mcqMarks" min="1" max="20" value="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Difficulty Level</label>
+                                    <select class="form-control" id="mcqDifficulty">
+                                        <option value="easy">Easy</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mcq-options">
+                                <label class="form-label">Options (Click the checkmark to set correct answer) <span class="required">*</span></label>
+                                <div class="mcq-option">
+                                    <div class="option-label">ক</div>
+                                    <input type="text" class="option-input" placeholder="First option" required>
+                                    <button type="button" class="correct-btn" data-option="0">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                                <div class="mcq-option">
+                                    <div class="option-label">খ</div>
+                                    <input type="text" class="option-input" placeholder="Second option" required>
+                                    <button type="button" class="correct-btn" data-option="1">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                                <div class="mcq-option">
+                                    <div class="option-label">গ</div>
+                                    <input type="text" class="option-input" placeholder="Third option" required>
+                                    <button type="button" class="correct-btn" data-option="2">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                                <div class="mcq-option">
+                                    <div class="option-label">ঘ</div>
+                                    <input type="text" class="option-input" placeholder="Fourth option" required>
+                                    <button type="button" class="correct-btn" data-option="3">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 1.5rem;">
+                                <button type="button" class="btn btn-primary" onclick="addMCQQuestion()">
+                                    <i class="fas fa-plus"></i>
+                                    Add MCQ Question
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Written Question Form -->
+                        <div class="question-form hidden" id="writtenForm">
+                            <h4>Create Written Answer Question</h4>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Question Text <span class="required">*</span></label>
+                                <textarea class="form-control" id="writtenQuestion" rows="4" placeholder="Enter your question here..." required></textarea>
+                            </div>
+
+                            <div class="form-row two-col">
+                                <div class="form-group">
+                                    <label class="form-label">Marks <span class="required">*</span></label>
+                                    <input type="number" class="form-control" id="writtenMarks" min="1" max="50" value="10" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Expected Answer Length</label>
+                                    <select class="form-control" id="answerLength">
+                                        <option value="short">Short (1-2 sentences)</option>
+                                        <option value="medium" selected>Medium (1-2 paragraphs)</option>
+                                        <option value="long">Long (Essay format)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Sample Answer (Optional)</label>
+                                <textarea class="form-control" id="sampleAnswer" rows="3" placeholder="Provide a sample answer to help evaluators..."></textarea>
+                            </div>
+
+                            <div style="margin-top: 1.5rem;">
+                                <button type="button" class="btn btn-primary" onclick="addWrittenQuestion()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Written Question
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Questions List -->
+                        <div class="questions-list">
+                            <h4>Added Questions (<span id="questionCount">0</span>)</h4>
+                            <div id="questionsList">
+                                <!-- Questions will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-pane" id="settings">
+                    <div class="settings-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Security & Anti-Cheating
+                        </h3>
+                        <p class="section-subtitle">Configure security measures to prevent cheating</p>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="randomizeQuestions" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Randomize Question Order</div>
+                                    <div class="checkbox-description">Questions will appear in random order for each student</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="randomizeOptions" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Randomize MCQ Options</div>
+                                    <div class="checkbox-description">Multiple choice options will be shuffled for each student</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="preventCopyPaste" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Prevent Copy/Paste</div>
+                                    <div class="checkbox-description">Disable copy-paste functionality during the exam</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="fullscreenMode" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Force Fullscreen Mode</div>
+                                    <div class="checkbox-description">Exam will run in fullscreen mode to prevent distractions</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="cameraMonitoring">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Enable Camera Monitoring</div>
+                                    <div class="checkbox-description">
+                                        <span style="color: var(--bd-gold); font-weight: 600;">Premium Feature</span> - 
+                                        Monitor students through webcam during the exam
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="disableRightClick" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Disable Right Click</div>
+                                    <div class="checkbox-description">Prevent right-click context menu during the exam</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-users"></i>
+                            Student Access
+                        </h3>
+                        <p class="section-subtitle">Control who can take this exam</p>
+
+                        <div class="form-group">
+                            <label class="form-label">Access Type</label>
+                            <select class="form-select" id="accessType">
+                                <option value="public">Public - Anyone with link</option>
+                                <option value="code">Code Protected</option>
+                                <option value="invited">Invited Students Only</option>
+                                <option value="batch">Specific Batch/Class</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Student Instructions</label>
+                            <textarea class="form-control" rows="4" id="studentInstructions" placeholder="Enter instructions for students before they start the exam...
+
+Example:
+• Read all questions carefully before starting
+• Use of calculator is allowed for mathematical calculations
+• Contact the instructor if you face any technical issues
+• Ensure stable internet connection throughout the exam"></textarea>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="allowLateEntry">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Allow Late Entry</div>
+                                    <div class="checkbox-description">Students can join the exam even after it has started</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Results & Grading
+                        </h3>
+                        <p class="section-subtitle">Configure how results are calculated and displayed</p>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="showResultsImmediately">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Show Results Immediately After Submission</div>
+                                    <div class="checkbox-description">Students will see their scores right after completing the exam</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="showCorrectAnswers">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Show Correct Answers to Students</div>
+                                    <div class="checkbox-description">Display correct answers along with the results</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="allowReview" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Allow Students to Review Their Answers</div>
+                                    <div class="checkbox-description">Students can review their submitted answers and see detailed feedback</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Negative Marking</label>
+                            <select class="form-select" id="negativeMarking">
+                                <option value="none">No Negative Marking</option>
+                                <option value="0.25">-0.25 for wrong answer</option>
+                                <option value="0.5">-0.5 for wrong answer</option>
+                                <option value="1">-1 for wrong answer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Grade Display Format</label>
+                                <select class="form-select" id="gradeFormat">
+                                    <option value="percentage">Percentage (85%)</option>
+                                    <option value="points">Points (85/100)</option>
+                                    <option value="letter">Letter Grade (A+, A, B+)</option>
+                                    <option value="gpa">GPA (4.0, 3.7, 3.3)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Result Publication</label>
+                                <select class="form-select" id="resultPublication">
+                                    <option value="auto">Automatic after exam ends</option>
+                                    <option value="manual">Manual publication by instructor</option>
+                                    <option value="scheduled">Scheduled publication</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-clock"></i>
+                            Time Management
+                        </h3>
+                        <p class="section-subtitle">Configure time-related settings for the exam</p>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="showTimer" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Show Timer to Students</div>
+                                    <div class="checkbox-description">Display countdown timer during the exam</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="autoSubmit" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Auto-submit When Time Expires</div>
+                                    <div class="checkbox-description">Automatically submit the exam when time runs out</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Time Warning (minutes before end)</label>
+                                <select class="form-select" id="timeWarning">
+                                    <option value="0">No Warning</option>
+                                    <option value="5">5 minutes</option>
+                                    <option value="10" selected>10 minutes</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Grace Period (extra time)</label>
+                                <select class="form-select" id="gracePeriod">
+                                    <option value="0">No Grace Period</option>
+                                    <option value="1">1 minute</option>
+                                    <option value="2">2 minutes</option>
+                                    <option value="5">5 minutes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Tab -->
+                <div class="tab-pane" id="preview">
+                    <div class="preview-container">
+                        <div class="preview-header">
+                            <h3 class="preview-title" id="previewTitle">Exam Preview</h3>
+                            <div class="preview-info" id="previewInfo">
+                                Preview how your exam will appear to students
+                            </div>
+                        </div>
+
+                        <div id="previewContent">
+                            <!-- Preview content will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Publish Tab -->
+                <div class="tab-pane" id="publish">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-rocket"></i>
+                            Ready to Publish?
+                        </h3>
+                        <p class="section-subtitle">Review your exam details before publishing</p>
+
+                        <div id="publishSummary">
+                            <!-- Summary will be generated here -->
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="confirmPublish" required>
+                                I confirm that all exam details are correct and I want to publish this exam
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="deductPoints" required>
+                                I understand that 5 points will be deducted from my account
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="actions-bar">
+                <div class="actions-left">
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                        <i class="fas fa-save"></i>
+                        Save Draft
+                    </button>
+                </div>
+                <div class="actions-right">
+                    <button type="button" class="btn btn-secondary" id="prevTabBtn" onclick="previousTab()">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextTabBtn" onclick="nextTab()">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-success hidden" id="publishBtn" onclick="publishExam()">
+                        <i class="fas fa-rocket"></i>
+                        Publish Exam
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Indicator -->
+    <div class="auto-save-indicator" id="autoSaveIndicator">
+        <i class="fas fa-check-circle"></i>
+        Draft Saved
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থী ও শিক্ষকদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh's Education
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Instructor Guide</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let currentTab = 0;
+        let currentQuestionType = 'mcq';
+        let questions = [];
+        let questionCounter = 0;
+        let correctAnswerIndex = -1;
+
+        // Mobile Sidebar Navigation (COMPLETE ORIGINAL SYSTEM)
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggler = document.getElementById('mobileNavToggler');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+            const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+            
+            // Open mobile sidebar
+            function openMobileSidebar() {
+                mobileSidebar.classList.add('show');
+                mobileSidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close mobile sidebar
+            function closeMobileSidebar() {
+                mobileSidebar.classList.remove('show');
+                mobileSidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            
+            // Event listeners
+            if (mobileNavToggler) {
+                mobileNavToggler.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openMobileSidebar();
+                });
+            }
+            
+            if (mobileSidebarClose) {
+                mobileSidebarClose.addEventListener('click', closeMobileSidebar);
+            }
+            
+            if (mobileSidebarOverlay) {
+                mobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
+            }
+            
+            // Close sidebar when clicking on nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Update active states
+                    document.querySelectorAll('.mobile-nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close sidebar after a short delay
+                    setTimeout(closeMobileSidebar, 200);
+                });
+            });
+            
+            // Handle escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+            
+            // Close sidebar on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992 && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+        });
+
+        // Notification Dropdown (COMPLETE ORIGINAL SYSTEM)
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (!notificationDropdown.contains(e.target) && e.target !== notificationBtn) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        // Initialize Create Exam functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCreateExam();
+        });
+
+        function initializeCreateExam() {
+            // Set up tab navigation
+            setupTabNavigation();
+            
+            // Set up question type selection
+            setupQuestionTypeSelection();
+            
+            // Set up correct answer selection for MCQ
+            setupCorrectAnswerSelection();
+            
+            // Set up form validation
+            setupFormValidation();
+            
+            // Set up auto-save
+            setupAutoSave();
+            
+            // Set default datetime values
+            setDefaultDateTimes();
+            
+            console.log('Create Exam page initialized successfully!');
+        }
+
+        // Tab Navigation System
+        function setupTabNavigation() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    switchToTab(index);
+                });
+            });
+        }
+
+        function switchToTab(tabIndex) {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            // Remove active class from all tabs and panes
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to current tab and pane
+            tabBtns[tabIndex].classList.add('active');
+            tabPanes[tabIndex].classList.add('active');
+            
+            currentTab = tabIndex;
+            updateNavigationButtons();
+            
+            // Update preview when switching to preview tab
+            if (tabIndex === 3) {
+                updatePreview();
+            }
+            
+            // Update publish summary when switching to publish tab
+            if (tabIndex === 4) {
+                updatePublishSummary();
+            }
+        }
+
+        function nextTab() {
+            if (validateCurrentTab()) {
+                if (currentTab < 4) {
+                    switchToTab(currentTab + 1);
+                }
+            }
+        }
+
+        function previousTab() {
+            if (currentTab > 0) {
+                switchToTab(currentTab - 1);
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevTabBtn');
+            const nextBtn = document.getElementById('nextTabBtn');
+            const publishBtn = document.getElementById('publishBtn');
+            
+            prevBtn.style.display = currentTab === 0 ? 'none' : 'inline-flex';
+            
+            if (currentTab === 4) {
+                nextBtn.classList.add('hidden');
+                publishBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                publishBtn.classList.add('hidden');
+            }
+        }
+
+        // Question Type Selection
+        function setupQuestionTypeSelection() {
+            const typeBtns = document.querySelectorAll('.type-btn');
+            const mcqForm = document.getElementById('mcqForm');
+            const writtenForm = document.getElementById('writtenForm');
+
+            typeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.getAttribute('data-type');
+                    
+                    // Update active state
+                    typeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Show/hide forms
+                    if (type === 'mcq') {
+                        mcqForm.classList.remove('hidden');
+                        writtenForm.classList.add('hidden');
+                        currentQuestionType = 'mcq';
+                    } else {
+                        mcqForm.classList.add('hidden');
+                        writtenForm.classList.remove('hidden');
+                        currentQuestionType = 'written';
+                    }
+                });
+            });
+        }
+
+        // Correct Answer Selection for MCQ
+        function setupCorrectAnswerSelection() {
+            const correctBtns = document.querySelectorAll('.correct-btn');
+            
+            correctBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const optionIndex = parseInt(btn.getAttribute('data-option'));
+                    
+                    // Remove active class from all buttons
+                    correctBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.closest('.mcq-option').classList.remove('correct');
+                    });
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    btn.closest('.mcq-option').classList.add('correct');
+                    
+                    correctAnswerIndex = optionIndex;
+                });
+            });
+        }
+
+        // Add MCQ Question
+        function addMCQQuestion() {
+            const questionText = document.getElementById('mcqQuestion').value.trim();
+            const marks = document.getElementById('mcqMarks').value;
+            const difficulty = document.getElementById('mcqDifficulty').value;
+            const options = [];
+            
+            // Get all option inputs
+            const optionInputs = document.querySelectorAll('#mcqForm .option-input');
+            optionInputs.forEach(input => {
+                if (input.value.trim()) {
+                    options.push(input.value.trim());
+                }
+            });
+            
+            // Validation
+            if (!questionText) {
+                alert('Please enter the question text.');
+                return;
+            }
+            
+            if (options.length < 4) {
+                alert('Please fill in all 4 options.');
+                return;
+            }
+            
+            if (correctAnswerIndex === -1) {
+                alert('Please select the correct answer.');
+                return;
+            }
+            
+            // Create question object
+            const question = {
+                id: ++questionCounter,
+                type: 'mcq',
+                question: questionText,
+                options: options,
+                correctAnswer: correctAnswerIndex,
+                marks: parseInt(marks),
+                difficulty: difficulty
+            };
+            
+            // Add to questions array
+            questions.push(question);
+            
+            // Clear form
+            clearMCQForm();
+            
+            // Update questions list
+            updateQuestionsList();
+            
+            // Show success message
+            showAutoSaveIndicator();
+        }
+
+        // Add Written Question
+        function addWrittenQuestion() {
+            const questionText = document.getElementById('writtenQuestion').value.trim();
+            const marks = document.getElementById('writtenMarks').value;
+            const answerLength = document.getElementById('answerLength').value;
+            const sampleAnswer = document.getElementById('sampleAnswer').value.trim();
+            
+            // Validation
+            if (!questionText) {
+                alert('Please enter the question text.');
+                return;
+            }
+            
+            // Create question object
+            const question = {
+                id: ++questionCounter,
+                type: 'written',
+                question: questionText,
+                marks: parseInt(marks),
+                answerLength: answerLength,
+                sampleAnswer: sampleAnswer
+            };
+            
+            // Add to questions array
+            questions.push(question);
+            
+            // Clear form
+            clearWrittenForm();
+            
+            // Update questions list
+            updateQuestionsList();
+            
+            // Show success message
+            showAutoSaveIndicator();
+        }
+
+        // Clear forms
+        function clearMCQForm() {
+            document.getElementById('mcqQuestion').value = '';
+            document.getElementById('mcqMarks').value = '1';
+            document.getElementById('mcqDifficulty').value = 'medium';
+            
+            const optionInputs = document.querySelectorAll('#mcqForm .option-input');
+            optionInputs.forEach(input => input.value = '');
+            
+            const correctBtns = document.querySelectorAll('.correct-btn');
+            correctBtns.forEach(btn => {
+                btn.classList.remove('active');
+                btn.closest('.mcq-option').classList.remove('correct');
+            });
+            
+            correctAnswerIndex = -1;
+        }
+
+        function clearWrittenForm() {
+            document.getElementById('writtenQuestion').value = '';
+            document.getElementById('writtenMarks').value = '10';
+            document.getElementById('answerLength').value = 'medium';
+            document.getElementById('sampleAnswer').value = '';
+        }
+
+        // Update Questions List
+        function updateQuestionsList() {
+            const questionsList = document.getElementById('questionsList');
+            const questionCount = document.getElementById('questionCount');
+            
+            questionCount.textContent = questions.length;
+            
+            if (questions.length === 0) {
+                questionsList.innerHTML = '<p style="text-align: center; color: var(--ap-text-muted); padding: 2rem;">No questions added yet. Create your first question above.</p>';
+                return;
+            }
+            
+            let html = '';
+            questions.forEach((question, index) => {
+                html += `
+                    <div class="question-item" data-id="${question.id}">
+                        <div class="question-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="question-number">Q${index + 1}</div>
+                                <div class="question-type-badge">${question.type === 'mcq' ? 'MCQ' : 'Written'}</div>
+                                <span style="color: var(--ap-text-muted); font-size: 0.8rem;">${question.marks} mark(s)</span>
+                            </div>
+                            <div class="question-actions">
+                                <button class="action-btn edit-btn" onclick="editQuestion(${question.id})" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteQuestion(${question.id})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-text">${question.question}</div>
+                        
+                        ${question.type === 'mcq' ? `
+                            <div class="question-options">
+                                ${question.options.map((option, optIndex) => `
+                                    <div class="option-preview ${optIndex === question.correctAnswer ? 'correct' : ''}">
+                                        <div class="option-letter">${['ক', 'খ', 'গ', 'ঘ'][optIndex]}</div>
+                                        <span>${option}</span>
+                                        ${optIndex === question.correctAnswer ? '<i class="fas fa-check" style="color: var(--ap-success); margin-left: auto;"></i>' : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div style="background: rgba(5, 150, 105, 0.05); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem;">
+                                <strong>Answer Length:</strong> ${question.answerLength.charAt(0).toUpperCase() + question.answerLength.slice(1)}
+                                ${question.sampleAnswer ? `<br><strong>Sample Answer:</strong> ${question.sampleAnswer.substring(0, 100)}${question.sampleAnswer.length > 100 ? '...' : ''}` : ''}
+                            </div>
+                        `}
+                    </div>
+                `;
+            });
+            
+            questionsList.innerHTML = html;
+        }
+
+        // Edit Question
+        function editQuestion(questionId) {
+            const question = questions.find(q => q.id === questionId);
+            if (!question) return;
+            
+            if (question.type === 'mcq') {
+                // Switch to MCQ form
+                document.querySelector('.type-btn[data-type="mcq"]').click();
+                
+                // Fill form with question data
+                document.getElementById('mcqQuestion').value = question.question;
+                document.getElementById('mcqMarks').value = question.marks;
+                document.getElementById('mcqDifficulty').value = question.difficulty;
+                
+                // Fill options
+                const optionInputs = document.querySelectorAll('#mcqForm .option-input');
+                question.options.forEach((option, index) => {
+                    if (optionInputs[index]) {
+                        optionInputs[index].value = option;
+                    }
+                });
+                
+                // Set correct answer
+                const correctBtns = document.querySelectorAll('.correct-btn');
+                correctBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.closest('.mcq-option').classList.remove('correct');
+                });
+                
+                if (correctBtns[question.correctAnswer]) {
+                    correctBtns[question.correctAnswer].classList.add('active');
+                    correctBtns[question.correctAnswer].closest('.mcq-option').classList.add('correct');
+                }
+                
+                correctAnswerIndex = question.correctAnswer;
+            } else {
+                // Switch to Written form
+                document.querySelector('.type-btn[data-type="written"]').click();
+                
+                // Fill form with question data
+                document.getElementById('writtenQuestion').value = question.question;
+                document.getElementById('writtenMarks').value = question.marks;
+                document.getElementById('answerLength').value = question.answerLength;
+                document.getElementById('sampleAnswer').value = question.sampleAnswer || '';
+            }
+            
+            // Remove the question from array (it will be re-added when form is submitted)
+            questions = questions.filter(q => q.id !== questionId);
+            updateQuestionsList();
+            
+            // Scroll to form
+            document.querySelector('.question-form:not(.hidden)').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete Question
+        function deleteQuestion(questionId) {
+            if (confirm('Are you sure you want to delete this question?')) {
+                questions = questions.filter(q => q.id !== questionId);
+                updateQuestionsList();
+                showAutoSaveIndicator();
+            }
+        }
+
+        // Form Validation
+        function setupFormValidation() {
+            // Real-time validation for required fields
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', validateField);
+                field.addEventListener('input', validateField);
+            });
+        }
+
+        function validateField(event) {
+            const field = event.target;
+            
+            if (field.value.trim() === '') {
+                field.style.borderColor = 'var(--ap-secondary)';
+            } else {
+                field.style.borderColor = 'var(--ap-success)';
+            }
+        }
+
+        function validateCurrentTab() {
+            switch (currentTab) {
+                case 0: // Details tab
+                    return validateDetailsTab();
+                case 1: // Questions tab
+                    return validateQuestionsTab();
+                case 2: // Settings tab
+                    return true; // Settings are optional
+                case 3: // Preview tab
+                    return true; // Preview is read-only
+                case 4: // Publish tab
+                    return validatePublishTab();
+                default:
+                    return true;
+            }
+        }
+
+        function validateDetailsTab() {
+            const examTitle = document.getElementById('examTitle').value.trim();
+            const examSubject = document.getElementById('examSubject').value;
+            const examDuration = document.getElementById('examDuration').value;
+            const totalMarks = document.getElementById('totalMarks').value;
+            const startDateTime = document.getElementById('startDateTime').value;
+            const endDateTime = document.getElementById('endDateTime').value;
+            
+            if (!examTitle) {
+                alert('Please enter an exam title.');
+                document.getElementById('examTitle').focus();
+                return false;
+            }
+            
+            if (!examSubject) {
+                alert('Please select a subject.');
+                document.getElementById('examSubject').focus();
+                return false;
+            }
+            
+            if (!examDuration || examDuration < 15) {
+                alert('Please enter a valid duration (minimum 15 minutes).');
+                document.getElementById('examDuration').focus();
+                return false;
+            }
+            
+            if (!totalMarks || totalMarks < 10) {
+                alert('Please enter valid total marks (minimum 10).');
+                document.getElementById('totalMarks').focus();
+                return false;
+            }
+            
+            if (!startDateTime) {
+                alert('Please select a start date and time.');
+                document.getElementById('startDateTime').focus();
+                return false;
+            }
+            
+            if (!endDateTime) {
+                alert('Please select an end date and time.');
+                document.getElementById('endDateTime').focus();
+                return false;
+            }
+            
+            // Check if end time is after start time
+            if (new Date(endDateTime) <= new Date(startDateTime)) {
+                alert('End date and time must be after start date and time.');
+                document.getElementById('endDateTime').focus();
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateQuestionsTab() {
+            if (questions.length === 0) {
+                alert('Please add at least one question to the exam.');
+                return false;
+            }
+            
+            // Calculate total marks from questions
+            const questionMarks = questions.reduce((sum, q) => sum + q.marks, 0);
+            const examMarks = parseInt(document.getElementById('totalMarks').value);
+            
+            if (questionMarks !== examMarks) {
+                const proceed = confirm(`Total marks mismatch!\n\nExam Total Marks: ${examMarks}\nQuestions Total Marks: ${questionMarks}\n\nDo you want to update the exam total marks to ${questionMarks}?`);
+                
+                if (proceed) {
+                    document.getElementById('totalMarks').value = questionMarks;
+                    showAutoSaveIndicator();
+                } else {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function validatePublishTab() {
+            const confirmPublish = document.getElementById('confirmPublish').checked;
+            const deductPoints = document.getElementById('deductPoints').checked;
+            
+            if (!confirmPublish) {
+                alert('Please confirm that all exam details are correct.');
+                return false;
+            }
+            
+            if (!deductPoints) {
+                alert('Please confirm that you understand points will be deducted.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Auto-save functionality
+        function setupAutoSave() {
+            const formInputs = document.querySelectorAll('input, select, textarea');
+            
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    clearTimeout(window.autoSaveTimeout);
+                    window.autoSaveTimeout = setTimeout(saveDraft, 2000); // Auto-save after 2 seconds of inactivity
+                });
+            });
+        }
+
+        function saveDraft() {
+            const examData = {
+                title: document.getElementById('examTitle').value,
+                subject: document.getElementById('examSubject').value,
+                description: document.getElementById('examDescription').value,
+                duration: document.getElementById('examDuration').value,
+                totalMarks: document.getElementById('totalMarks').value,
+                passMark: document.getElementById('passMark').value,
+                startDateTime: document.getElementById('startDateTime').value,
+                endDateTime: document.getElementById('endDateTime').value,
+                accessCode: document.getElementById('accessCode').value,
+                maxAttempts: document.getElementById('maxAttempts').value,
+                questions: questions,
+                settings: {
+                    randomizeQuestions: document.getElementById('randomizeQuestions').checked,
+                    randomizeOptions: document.getElementById('randomizeOptions').checked,
+                    preventCopyPaste: document.getElementById('preventCopyPaste').checked,
+                    fullscreenMode: document.getElementById('fullscreenMode').checked,
+                    cameraMonitoring: document.getElementById('cameraMonitoring').checked,
+                    disableRightClick: document.getElementById('disableRightClick').checked,
+                    allowLateEntry: document.getElementById('allowLateEntry').checked,
+                    showResultsImmediately: document.getElementById('showResultsImmediately').checked,
+                    showCorrectAnswers: document.getElementById('showCorrectAnswers').checked,
+                    allowReview: document.getElementById('allowReview').checked,
+                    showTimer: document.getElementById('showTimer').checked,
+                    autoSubmit: document.getElementById('autoSubmit').checked,
+                    negativeMarking: document.getElementById('negativeMarking').value
+                },
+                accessType: document.getElementById('accessType').value,
+                studentInstructions: document.getElementById('studentInstructions').value,
+                gradeFormat: document.getElementById('gradeFormat').value,
+                resultPublication: document.getElementById('resultPublication').value,
+                timeWarning: document.getElementById('timeWarning').value,
+                gracePeriod: document.getElementById('gracePeriod').value,
+                lastSaved: new Date().toISOString()
+            };
+            
+            localStorage.setItem('examDraft', JSON.stringify(examData));
+            showAutoSaveIndicator();
+        }
+
+        function loadDraft() {
+            const savedDraft = localStorage.getItem('examDraft');
+            if (savedDraft) {
+                const examData = JSON.parse(savedDraft);
+                
+                // Fill form fields
+                Object.keys(examData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && typeof examData[key] !== 'object') {
+                        element.value = examData[key];
+                    }
+                });
+                
+                // Load questions
+                if (examData.questions) {
+                    questions = examData.questions;
+                    questionCounter = Math.max(...questions.map(q => q.id), 0);
+                    updateQuestionsList();
+                }
+                
+                // Load settings
+                if (examData.settings) {
+                    Object.keys(examData.settings).forEach(key => {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = examData.settings[key];
+                            } else {
+                                element.value = examData.settings[key];
+                            }
+                        }
+                    });
+                }
+
+                // Load additional settings
+                const additionalSettings = ['accessType', 'studentInstructions', 'gradeFormat', 'resultPublication', 'timeWarning', 'gracePeriod'];
+                additionalSettings.forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && examData[key] !== undefined) {
+                        element.value = examData[key];
+                    }
+                });
+                
+                console.log('Draft loaded successfully');
+            }
+        }
+
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Set default date times
+        function setDefaultDateTimes() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(9, 0, 0, 0); // 9:00 AM
+            
+            const endTime = new Date(tomorrow);
+            endTime.setHours(12, 0, 0, 0); // 12:00 PM
+            
+            document.getElementById('startDateTime').value = tomorrow.toISOString().slice(0, 16);
+            document.getElementById('endDateTime').value = endTime.toISOString().slice(0, 16);
+        }
+
+        // Preview functionality
+        function updatePreview() {
+            const previewContent = document.getElementById('previewContent');
+            const examTitle = document.getElementById('examTitle').value || 'Untitled Exam';
+            const examSubject = document.getElementById('examSubject').value || 'Subject not selected';
+            const duration = document.getElementById('examDuration').value || '0';
+            const totalMarks = document.getElementById('totalMarks').value || '0';
+            
+            let html = `
+                <div style="background: var(--ap-primary-light); padding: 1rem; border-radius: var(--ap-radius); margin-bottom: 2rem;">
+                    <h4 style="color: var(--ap-primary); margin-bottom: 0.5rem;">${examTitle}</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Subject:</strong> ${examSubject}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Duration:</strong> ${duration} minutes</p>
+                    <p style="margin-bottom: 0;"><strong>Total Marks:</strong> ${totalMarks}</p>
+                </div>
+            `;
+            
+            if (questions.length > 0) {
+                html += '<h4 style="margin-bottom: 1rem;">Questions Preview:</h4>';
+                
+                questions.forEach((question, index) => {
+                    html += `
+                        <div style="background: var(--ap-bg-card); border: 1px solid var(--ap-border); border-radius: var(--ap-radius); padding: 1.5rem; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                                <span style="background: var(--ap-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">
+                                    Question ${index + 1}
+                                </span>
+                                <span style="background: var(--ap-info); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">
+                                    ${question.type === 'mcq' ? 'MCQ' : 'Written'}
+                                </span>
+                                <span style="color: var(--ap-text-muted); font-size: 0.8rem;">
+                                    ${question.marks} mark(s)
+                                </span>
+                            </div>
+                            
+                            <p style="margin-bottom: 1rem; font-weight: 600;">${question.question}</p>
+                            
+                            ${question.type === 'mcq' ? `
+                                <div style="display: grid; gap: 0.5rem;">
+                                    ${question.options.map((option, optIndex) => `
+                                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: ${optIndex === question.correctAnswer ? 'rgba(34, 197, 94, 0.1)' : 'rgba(5, 150, 105, 0.05)'}; border-radius: 6px; ${optIndex === question.correctAnswer ? 'border-left: 3px solid var(--ap-success);' : ''}">
+                                            <span style="background: ${optIndex === question.correctAnswer ? 'var(--ap-success)' : 'var(--ap-primary)'}; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; min-width: 25px; text-align: center;">
+                                                ${['ক', 'খ', 'গ', 'ঘ'][optIndex]}
+                                            </span>
+                                            <span>${option}</span>
+                                            ${optIndex === question.correctAnswer ? '<i class="fas fa-check" style="color: var(--ap-success); margin-left: auto;"></i>' : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <div style="background: rgba(5, 150, 105, 0.05); padding: 1rem; border-radius: 6px;">
+                                    <p style="margin-bottom: 0.5rem;"><strong>Answer Length:</strong> ${question.answerLength.charAt(0).toUpperCase() + question.answerLength.slice(1)}</p>
+                                    ${question.sampleAnswer ? `<p style="margin-bottom: 0;"><strong>Sample Answer:</strong> ${question.sampleAnswer}</p>` : ''}
+                                </div>
+                            `}
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p style="text-align: center; color: var(--ap-text-muted); padding: 2rem;">No questions added yet.</p>';
+            }
+            
+            previewContent.innerHTML = html;
+        }
+
+        // Publish functionality
+        function updatePublishSummary() {
+            const summaryDiv = document.getElementById('publishSummary');
+            const examTitle = document.getElementById('examTitle').value || 'Untitled Exam';
+            const examSubject = document.getElementById('examSubject').value || 'Subject not selected';
+            const duration = document.getElementById('examDuration').value || '0';
+            const totalMarks = document.getElementById('totalMarks').value || '0';
+            const startDateTime = document.getElementById('startDateTime').value;
+            const endDateTime = document.getElementById('endDateTime').value;
+            
+            const html = `
+                <div style="background: var(--ap-primary-light); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: var(--ap-radius); padding: 1.5rem; margin-bottom: 2rem;">
+                    <h4 style="color: var(--ap-primary); margin-bottom: 1rem;">Exam Summary</h4>
+                    
+                    <div style="display: grid; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Title:</strong>
+                            <span>${examTitle}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Subject:</strong>
+                            <span>${examSubject}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Duration:</strong>
+                            <span>${duration} minutes</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Total Questions:</strong>
+                            <span>${questions.length}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Total Marks:</strong>
+                            <span>${totalMarks}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Start Time:</strong>
+                            <span>${startDateTime ? new Date(startDateTime).toLocaleString() : 'Not set'}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>End Time:</strong>
+                            <span>${endDateTime ? new Date(endDateTime).toLocaleString() : 'Not set'}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fef3c7; border: 1px solid var(--ap-warning); border-radius: var(--ap-radius); padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--ap-warning);"></i>
+                        <strong style="color: var(--ap-warning);">Important Notice</strong>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--ap-text-primary);">
+                        <li>5 points will be deducted from your account upon publishing</li>
+                        <li>Once published, you cannot modify the exam structure</li>
+                        <li>Students will be able to access the exam during the scheduled time</li>
+                        <li>You can monitor the exam in real-time from your dashboard</li>
+                    </ul>
+                </div>
+            `;
+            
+            summaryDiv.innerHTML = html;
+        }
+
+        function publishExam() {
+            if (!validateCurrentTab()) {
+                return;
+            }
+            
+            // Final confirmation
+            const confirmMessage = `Are you sure you want to publish this exam?\n\n` +
+                `This action will:\n` +
+                `• Deduct 5 points from your account\n` +
+                `• Make the exam available to students\n` +
+                `• Lock the exam structure (no major edits allowed)\n\n` +
+                `Do you want to proceed?`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // Simulate publishing process
+            const publishBtn = document.getElementById('publishBtn');
+            const originalText = publishBtn.innerHTML;
+            
+            publishBtn.disabled = true;
+            publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+            
+            setTimeout(() => {
+                // Clear draft
+                localStorage.removeItem('examDraft');
+                
+                // Show success message
+                alert('🎉 Exam published successfully!\n\n' +
+                      'Your exam is now live and available to students during the scheduled time.\n' +
+                      '5 points have been deducted from your account.\n\n' +
+                      'You can monitor the exam progress from your dashboard.');
+                
+                // Redirect to dashboard or exam management page
+                window.location.href = '#dashboard'; // Replace with actual dashboard URL
+                
+            }, 2000);
+        }
+
+        // Navigation link interactions
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Load draft on page load
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('examDraft')) {
+                if (confirm('You have a saved draft. Would you like to load it?')) {
+                    loadDraft();
+                }
+            }
+        });
+
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+            if (questions.length > 0 || document.getElementById('examTitle').value.trim()) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                return e.returnValue;
+            }
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + S to save draft
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveDraft();
+            }
+            
+            // Ctrl/Cmd + Enter to add question (when in question forms)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const activeForm = document.querySelector('.question-form:not(.hidden)');
+                if (activeForm) {
+                    e.preventDefault();
+                    if (activeForm.id === 'mcqForm') {
+                        addMCQQuestion();
+                    } else {
+                        addWrittenQuestion();
+                    }
+                }
+            }
+            
+            // Escape to close dropdowns
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.dropdown-menu.show, .notification-dropdown.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Create Exam Page Error:', e.error);
+            // In production, this would send error reports to monitoring service
+        });
+
+        console.log('ePorikkha Create Exam: Fully loaded and ready! 📝✨');
+    </script>
+</body>
+</html>

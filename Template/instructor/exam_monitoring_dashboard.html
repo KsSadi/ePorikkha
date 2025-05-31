@@ -1,0 +1,3033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Live Exam Monitoring</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING ORIGINAL DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COMPLETE ORIGINAL SYSTEM)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Sidebar Navigation - COMPLETE ORIGINAL SYSTEM */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            z-index: 1050;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .mobile-sidebar.show {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ap-border);
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+        }
+
+        .mobile-sidebar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--ap-text-primary);
+        }
+
+        .mobile-sidebar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .mobile-sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--ap-secondary);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .mobile-sidebar-close:hover {
+            background: var(--bd-red);
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--ap-text-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--ap-radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            transform: translateX(8px);
+        }
+
+        .mobile-nav-link:hover::before, .mobile-nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        .mobile-nav-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover .mobile-nav-icon {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .mobile-sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar-user {
+            margin: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.8));
+            border-radius: var(--ap-radius);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .mobile-user-details {
+            flex: 1;
+        }
+
+        .mobile-user-name {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-user-role {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Hide default navbar collapse on mobile */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                display: none !important;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0.5rem;
+                background: var(--ap-primary);
+                color: white;
+                border-radius: var(--ap-radius);
+                transition: all 0.3s ease;
+            }
+            
+            .navbar-toggler:hover {
+                background: var(--ap-primary-dark);
+                transform: scale(1.05);
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .mobile-sidebar,
+            .mobile-sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        /* USER DROPDOWN STYLES - COMPLETE ORIGINAL SYSTEM */
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.25rem;
+            border-bottom: 2px solid var(--ap-border);
+            margin-bottom: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .user-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .user-role i {
+            font-size: 0.7rem;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        .dropdown-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .dropdown-item.text-danger {
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #fef2f2;
+            color: var(--bd-red);
+        }
+
+        .dropdown-item i {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .dropdown-item:hover i {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown-item.text-danger i {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover i {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .dropdown-item span {
+            flex: 1;
+        }
+
+        /* Dropdown Divider */
+        .dropdown-divider {
+            height: 1px;
+            background: var(--ap-border);
+            margin: 0.5rem 1.25rem;
+            border: none;
+        }
+
+        /* ========================================
+           EXAM MONITORING DASHBOARD SPECIFIC STYLES
+           ======================================== */
+
+        .monitoring-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Live Exam Header */
+        .live-exam-header {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #2563eb 100%);
+            color: white;
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-exam-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bd-gold), #f59e0b, var(--ap-success));
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .live-exam-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .exam-header-content {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .exam-info h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--ap-secondary);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: livePulse 2s infinite;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .live-indicator i {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        .exam-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .exam-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .exam-timer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timer-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--bd-gold);
+            margin-bottom: 0.25rem;
+            font-family: 'Inter', monospace;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .exam-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem;
+            border-radius: var(--ap-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .control-btn.danger {
+            background: var(--ap-secondary);
+            border-color: var(--ap-secondary);
+        }
+
+        .control-btn.warning {
+            background: var(--ap-warning);
+            border-color: var(--ap-warning);
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--stat-color, var(--ap-primary));
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card.total { --stat-color: var(--ap-info); }
+        .stat-card.active { --stat-color: var(--ap-success); }
+        .stat-card.submitted { --stat-color: var(--ap-primary); }
+        .stat-card.pending { --stat-color: var(--ap-warning); }
+        .stat-card.flagged { --stat-color: var(--ap-secondary); }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            background: var(--stat-color, var(--ap-primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-trend {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-trend.down {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--ap-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-detail {
+            color: var(--ap-text-muted);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--ap-primary);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: var(--ap-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Question Analytics */
+        .questions-analytics {
+            height: 100%;
+        }
+
+        .question-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .question-item {
+            background: rgba(5, 150, 105, 0.03);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: var(--ap-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            background: rgba(5, 150, 105, 0.08);
+            border-color: rgba(5, 150, 105, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .question-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .question-type {
+            background: var(--ap-info);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .question-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .question-stat {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ap-radius);
+            border: 1px solid var(--ap-border);
+        }
+
+        .question-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .question-stat-label {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar-container {
+            margin-top: 0.75rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Live Activity Feed */
+        .activity-feed {
+            height: 100%;
+        }
+
+        .activity-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--ap-border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .activity-item:hover {
+            background: rgba(5, 150, 105, 0.03);
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--activity-color, var(--ap-primary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activity-item:hover::before {
+            opacity: 1;
+        }
+
+        .activity-item.submission { --activity-color: var(--ap-success); }
+        .activity-item.login { --activity-color: var(--ap-info); }
+        .activity-item.flag { --activity-color: var(--ap-secondary); }
+        .activity-item.warning { --activity-color: var(--ap-warning); }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--activity-color, var(--ap-primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .activity-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            color: var(--ap-text-muted);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Student List Section */
+        .student-management {
+            grid-column: 1 / -1;
+        }
+
+        .student-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .filter-btn:hover {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .students-table {
+            background: var(--ap-bg-primary);
+            border-radius: var(--ap-radius);
+            overflow: hidden;
+            border: 1px solid var(--ap-border);
+        }
+
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .students-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .students-table th {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            color: var(--ap-primary);
+            padding: 1rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: left;
+            border-bottom: 2px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .students-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--ap-border);
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .student-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--ap-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .student-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .student-status.online {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+        }
+
+        .student-status.away {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--ap-warning);
+        }
+
+        .student-status.offline {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+
+        .student-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: conic-gradient(var(--ap-primary) 0deg, var(--ap-primary) var(--progress, 0deg), rgba(5, 150, 105, 0.1) var(--progress, 0deg));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .progress-circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .student-action-btn {
+            background: transparent;
+            border: 1px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .student-action-btn:hover {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+        }
+
+        .student-action-btn.danger:hover {
+            background: var(--ap-secondary);
+            border-color: var(--ap-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .exam-header-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .monitoring-container {
+                padding: 0.5rem;
+            }
+
+            .live-exam-header {
+                padding: 1rem;
+            }
+
+            .exam-header-content {
+                gap: 0.75rem;
+            }
+
+            .exam-info h1 {
+                font-size: 1.25rem;
+            }
+
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-section {
+                padding: 1rem;
+            }
+
+            .question-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .student-filters {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .students-table th,
+            .students-table td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Utility Classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <a href="#" class="mobile-sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <div>
+                    <span style="color: var(--ap-primary); font-weight: 900;">e</span><span style="color: var(--bd-green); font-weight: 700;">Porikkha</span>
+                </div>
+            </a>
+            <button class="mobile-sidebar-close" id="mobileSidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-sidebar-user">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar">ড.</div>
+                <div class="mobile-user-details">
+                    <div class="mobile-user-name">Dr. Fatima Khan</div>
+                    <div class="mobile-user-role">Exam Instructor</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="mobile-sidebar-nav">
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <span>Create Exam</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <span>Create Contest</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link active">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <span>Live Monitoring</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <span>My Exams</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span>Results</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <span>Evaluators</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Profile</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item" style="margin-top: 1rem; border-top: 1px solid var(--ap-border); padding-top: 1rem;">
+                <a href="#" class="mobile-nav-link" style="color: var(--ap-secondary);">
+                    <div class="mobile-nav-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--ap-secondary);">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" id="mobileNavToggler">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Create Exam</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Create Contest</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Live Monitoring</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Analytics</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div style="position: relative;">
+                        <button class="notification-btn" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">5</span>
+                        </button>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">ড.</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Dr. Fatima Khan</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Exam Instructor</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li class="dropdown-header">
+                                <div class="user-info">
+                                    <div class="user-avatar-large">ড.</div>
+                                    <div class="user-details">
+                                        <div class="user-name">Dr. Fatima Khan</div>
+                                        <div class="user-email">fatima.khan@dhakauniv.edu.bd</div>
+                                        <div class="user-role">
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                            Exam Instructor
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>Exam Analytics</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-list"></i><span>My Exams</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle"></i><span>Help & Support</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="monitoring-container">
+        <!-- Live Exam Header -->
+        <div class="live-exam-header fade-in">
+            <div class="exam-header-content">
+                <div class="exam-info">
+                    <h1>
+                        <i class="fas fa-eye"></i>
+                        বাংলা ১ম পত্র - HSC Final Exam 2025
+                        <div class="live-indicator">
+                            <i class="fas fa-circle"></i>
+                            LIVE
+                        </div>
+                    </h1>
+                    <p class="exam-subtitle">Dhaka College | Science Group | 50 Questions | 3 Hours Duration</p>
+                    <div class="exam-meta">
+                        <span><i class="fas fa-calendar-alt"></i> Started: June 1, 2025 at 9:00 AM</span>
+                        <span><i class="fas fa-users"></i> 247 Students Registered</span>
+                        <span><i class="fas fa-clock"></i> Exam ID: HSC-BN-2025-F1</span>
+                    </div>
+                </div>
+                
+                <div class="exam-timer">
+                    <div class="timer-value" id="examTimer">02:15:23</div>
+                    <div class="timer-label">Time Remaining</div>
+                </div>
+                
+                <div class="exam-controls">
+                    <button class="control-btn" title="Refresh Data" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="control-btn" title="Export Data" onclick="exportData()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="control-btn warning" title="Send Announcement" onclick="sendAnnouncement()">
+                        <i class="fas fa-bullhorn"></i>
+                    </button>
+                    <button class="control-btn danger" title="End Exam Early" onclick="endExam()">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview fade-in">
+            <div class="stat-card total">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        +12
+                    </div>
+                </div>
+                <div class="stat-value" id="totalStudents">247</div>
+                <div class="stat-label">Total Students</div>
+                <div class="stat-detail">Registered participants</div>
+            </div>
+            
+            <div class="stat-card active">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        +8
+                    </div>
+                </div>
+                <div class="stat-value" id="activeStudents">189</div>
+                <div class="stat-label">Currently Active</div>
+                <div class="stat-detail">Online and answering</div>
+            </div>
+            
+            <div class="stat-card submitted">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        +15
+                    </div>
+                </div>
+                <div class="stat-value" id="submittedStudents">34</div>
+                <div class="stat-label">Submitted</div>
+                <div class="stat-detail">Completed examination</div>
+            </div>
+            
+            <div class="stat-card pending">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-down"></i>
+                        -5
+                    </div>
+                </div>
+                <div class="stat-value" id="pendingStudents">24</div>
+                <div class="stat-label">Not Started</div>
+                <div class="stat-detail">Yet to begin exam</div>
+            </div>
+            
+            <div class="stat-card flagged">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="stat-trend down">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Alert
+                    </div>
+                </div>
+                <div class="stat-value" id="flaggedStudents">7</div>
+                <div class="stat-label">Flagged</div>
+                <div class="stat-detail">Suspicious activity</div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid fade-in">
+            <!-- Question Analytics -->
+            <div class="dashboard-section questions-analytics">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Question-wise Analytics
+                    </h3>
+                    <div class="section-actions">
+                        <button class="action-btn" onclick="refreshQuestionData()">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                        <button class="action-btn" onclick="exportQuestionData()">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="question-list">
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="question-number">Q1</div>
+                                <div class="question-type">MCQ</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">1 Mark</div>
+                        </div>
+                        <div style="color: var(--ap-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">
+                            রবীন্দ্রনাথ ঠাকুরের 'অপরিচিতা' গল্পের মূল বিষয়বস্তু কী?
+                        </div>
+                        <div class="question-stats">
+                            <div class="question-stat">
+                                <div class="question-stat-value">156</div>
+                                <div class="question-stat-label">Answered</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">89</div>
+                                <div class="question-stat-label">Correct</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">67</div>
+                                <div class="question-stat-label">Wrong</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">91</div>
+                                <div class="question-stat-label">Pending</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-label">
+                                <span>Response Rate</span>
+                                <span>63%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 63%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="question-number">Q2</div>
+                                <div class="question-type">MCQ</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">1 Mark</div>
+                        </div>
+                        <div style="color: var(--ap-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">
+                            কাজী নজরুল ইসলামের 'আমার পথ' প্রবন্ধের মূল বক্তব্য কী?
+                        </div>
+                        <div class="question-stats">
+                            <div class="question-stat">
+                                <div class="question-stat-value">142</div>
+                                <div class="question-stat-label">Answered</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">95</div>
+                                <div class="question-stat-label">Correct</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">47</div>
+                                <div class="question-stat-label">Wrong</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">105</div>
+                                <div class="question-stat-label">Pending</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-label">
+                                <span>Response Rate</span>
+                                <span>57%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 57%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="question-number">Q3</div>
+                                <div class="question-type">MCQ</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">1 Mark</div>
+                        </div>
+                        <div style="color: var(--ap-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">
+                            'পদ্মা নদীর মাঝি' উপন্যাসের লেখক কে?
+                        </div>
+                        <div class="question-stats">
+                            <div class="question-stat">
+                                <div class="question-stat-value">128</div>
+                                <div class="question-stat-label">Answered</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">118</div>
+                                <div class="question-stat-label">Correct</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">10</div>
+                                <div class="question-stat-label">Wrong</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">119</div>
+                                <div class="question-stat-label">Pending</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-label">
+                                <span>Response Rate</span>
+                                <span>52%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 52%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="question-number">Q31</div>
+                                <div class="question-type" style="background: var(--ap-warning);">Written</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">10 Marks</div>
+                        </div>
+                        <div style="color: var(--ap-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">
+                            রবীন্দ্রনাথ ঠাকুরের 'সোনার তরী' কবিতার মূলভাব বিশ্লেষণ করুন।
+                        </div>
+                        <div class="question-stats">
+                            <div class="question-stat">
+                                <div class="question-stat-value">67</div>
+                                <div class="question-stat-label">Attempted</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">23</div>
+                                <div class="question-stat-label">Completed</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">44</div>
+                                <div class="question-stat-label">In Progress</div>
+                            </div>
+                            <div class="question-stat">
+                                <div class="question-stat-value">180</div>
+                                <div class="question-stat-label">Not Started</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-label">
+                                <span>Attempt Rate</span>
+                                <span>27%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 27%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Live Activity Feed -->
+            <div class="dashboard-section activity-feed">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-rss"></i>
+                        Live Activity Feed
+                    </h3>
+                    <div class="section-actions">
+                        <button class="action-btn" onclick="toggleAutoRefresh()">
+                            <i class="fas fa-play"></i>
+                            Auto Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="activity-list">
+                    <div class="activity-item submission">
+                        <div class="activity-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Exam Submitted</div>
+                            <div class="activity-description">Arman Hossain completed the exam with 42/50 answers</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                2 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item flag">
+                        <div class="activity-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Suspicious Activity Detected</div>
+                            <div class="activity-description">Rashida Begum switched tabs 3 times in last 5 minutes</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                3 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item login">
+                        <div class="activity-icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Student Joined</div>
+                            <div class="activity-description">Farid Ahmed started the examination</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                5 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item submission">
+                        <div class="activity-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Question Answered</div>
+                            <div class="activity-description">125 students answered Question 15 (MCQ)</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                7 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item warning">
+                        <div class="activity-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Connection Issue</div>
+                            <div class="activity-description">Sakib Rahman reported connectivity problems</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                8 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item submission">
+                        <div class="activity-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Exam Submitted</div>
+                            <div class="activity-description">Nasreen Akter completed the exam with 47/50 answers</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                12 minutes ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Management Section -->
+        <div class="dashboard-section student-management fade-in">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-users"></i>
+                    Student Management & Monitoring
+                </h3>
+                <div class="section-actions">
+                    <button class="action-btn" onclick="exportStudentData()">
+                        <i class="fas fa-download"></i>
+                        Export List
+                    </button>
+                    <button class="action-btn" onclick="sendBulkMessage()">
+                        <i class="fas fa-envelope"></i>
+                        Bulk Message
+                    </button>
+                </div>
+            </div>
+            
+            <div class="student-filters">
+                <button class="filter-btn active" data-filter="all">All Students (247)</button>
+                <button class="filter-btn" data-filter="active">Active (189)</button>
+                <button class="filter-btn" data-filter="submitted">Submitted (34)</button>
+                <button class="filter-btn" data-filter="flagged">Flagged (7)</button>
+                <button class="filter-btn" data-filter="offline">Offline (24)</button>
+            </div>
+            
+            <div class="students-table">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Current Question</th>
+                                <th>Time Spent</th>
+                                <th>Flags</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="student-avatar">আর</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Arman Hossain</div>
+                                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">ID: 2025001</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-status online">
+                                        <i class="fas fa-circle"></i>
+                                        Submitted
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-progress">
+                                        <div class="progress-circle" style="--progress: 360deg;">
+                                            <span>100%</span>
+                                        </div>
+                                        <span style="font-size: 0.8rem;">50/50</span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--ap-success); font-weight: 600;">Completed</td>
+                                <td>2h 34m</td>
+                                <td>
+                                    <span style="color: var(--ap-success);">
+                                        <i class="fas fa-check-circle"></i> Clean
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="student-actions">
+                                        <button class="student-action-btn" title="View Answers">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Send Message">
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="student-avatar">রা</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Rashida Begum</div>
+                                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">ID: 2025002</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-status online">
+                                        <i class="fas fa-circle"></i>
+                                        Active
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-progress">
+                                        <div class="progress-circle" style="--progress: 245deg;">
+                                            <span>68%</span>
+                                        </div>
+                                        <span style="font-size: 0.8rem;">34/50</span>
+                                    </div>
+                                </td>
+                                <td>Question 35</td>
+                                <td>1h 15m</td>
+                                <td>
+                                    <span style="color: var(--ap-warning);">
+                                        <i class="fas fa-exclamation-triangle"></i> 3 Flags
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="student-actions">
+                                        <button class="student-action-btn" title="Monitor">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Send Warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </button>
+                                        <button class="student-action-btn danger" title="Flag Student">
+                                            <i class="fas fa-flag"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="student-avatar">ফা</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Farid Ahmed</div>
+                                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">ID: 2025003</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-status online">
+                                        <i class="fas fa-circle"></i>
+                                        Active
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-progress">
+                                        <div class="progress-circle" style="--progress: 180deg;">
+                                            <span>50%</span>
+                                        </div>
+                                        <span style="font-size: 0.8rem;">25/50</span>
+                                    </div>
+                                </td>
+                                <td>Question 26</td>
+                                <td>45m</td>
+                                <td>
+                                    <span style="color: var(--ap-success);">
+                                        <i class="fas fa-check-circle"></i> Clean
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="student-actions">
+                                        <button class="student-action-btn" title="Monitor">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Send Message">
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="student-avatar">সা</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Sakib Rahman</div>
+                                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">ID: 2025004</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-status away">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Connection Issue
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-progress">
+                                        <div class="progress-circle" style="--progress: 144deg;">
+                                            <span>40%</span>
+                                        </div>
+                                        <span style="font-size: 0.8rem;">20/50</span>
+                                    </div>
+                                </td>
+                                <td>Question 21</td>
+                                <td>1h 8m</td>
+                                <td>
+                                    <span style="color: var(--ap-warning);">
+                                        <i class="fas fa-wifi"></i> Network
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="student-actions">
+                                        <button class="student-action-btn" title="Check Connection">
+                                            <i class="fas fa-wifi"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Contact Student">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Extend Time">
+                                            <i class="fas fa-clock"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="student-avatar">না</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Nasreen Akter</div>
+                                            <div style="font-size: 0.8rem; color: var(--ap-text-muted);">ID: 2025005</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-status online">
+                                        <i class="fas fa-circle"></i>
+                                        Submitted
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="student-progress">
+                                        <div class="progress-circle" style="--progress: 338deg;">
+                                            <span>94%</span>
+                                        </div>
+                                        <span style="font-size: 0.8rem;">47/50</span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--ap-success); font-weight: 600;">Completed</td>
+                                <td>2h 12m</td>
+                                <td>
+                                    <span style="color: var(--ap-success);">
+                                        <i class="fas fa-check-circle"></i> Clean
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="student-actions">
+                                        <button class="student-action-btn" title="View Answers">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="student-action-btn" title="Send Message">
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থীদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Live Exam Monitoring functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let autoRefreshEnabled = true;
+            let refreshInterval;
+            
+            // Initialize monitoring dashboard
+            initializeMonitoring();
+            
+            function initializeMonitoring() {
+                setupMobileNavigation();
+                setupRealTimeUpdates();
+                setupStudentFilters();
+                startExamTimer();
+                startLiveUpdates();
+                
+                console.log('ePorikkha Live Monitoring: Dashboard initialized! 👁️');
+            }
+            
+            // Mobile Navigation
+            function setupMobileNavigation() {
+                const mobileNavToggler = document.getElementById('mobileNavToggler');
+                const mobileSidebar = document.getElementById('mobileSidebar');
+                const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+                const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+                
+                function openMobileSidebar() {
+                    mobileSidebar.classList.add('show');
+                    mobileSidebarOverlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeMobileSidebar() {
+                    mobileSidebar.classList.remove('show');
+                    mobileSidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+                
+                if (mobileNavToggler) {
+                    mobileNavToggler.addEventListener('click', openMobileSidebar);
+                }
+                
+                if (mobileSidebarClose) {
+                    mobileSidebarClose.addEventListener('click', closeMobileSidebar);
+                }
+                
+                if (mobileSidebarOverlay) {
+                    mobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
+                }
+                
+                // Handle escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileSidebar.classList.contains('show')) {
+                        closeMobileSidebar();
+                    }
+                });
+            }
+            
+            // Real-time Updates
+            function setupRealTimeUpdates() {
+                refreshInterval = setInterval(() => {
+                    if (autoRefreshEnabled) {
+                        updateStatistics();
+                        updateQuestionAnalytics();
+                        updateActivityFeed();
+                        updateStudentStatuses();
+                    }
+                }, 5000); // Update every 5 seconds
+            }
+            
+            function updateStatistics() {
+                // Simulate real-time stat updates
+                const stats = {
+                    total: Math.floor(Math.random() * 3) + 245,
+                    active: Math.floor(Math.random() * 10) + 185,
+                    submitted: Math.floor(Math.random() * 5) + 32,
+                    pending: Math.floor(Math.random() * 3) + 22,
+                    flagged: Math.floor(Math.random() * 2) + 6
+                };
+                
+                animateNumber('totalStudents', stats.total);
+                animateNumber('activeStudents', stats.active);
+                animateNumber('submittedStudents', stats.submitted);
+                animateNumber('pendingStudents', stats.pending);
+                animateNumber('flaggedStudents', stats.flagged);
+            }
+            
+            function animateNumber(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                const currentValue = parseInt(element.textContent);
+                
+                if (currentValue !== newValue) {
+                    const increment = newValue > currentValue ? 1 : -1;
+                    let current = currentValue;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        element.textContent = current;
+                        
+                        if (current === newValue) {
+                            clearInterval(timer);
+                            
+                            // Add flash effect
+                            element.style.color = 'var(--ap-primary)';
+                            element.style.transform = 'scale(1.1)';
+                            setTimeout(() => {
+                                element.style.color = '';
+                                element.style.transform = '';
+                            }, 300);
+                        }
+                    }, 50);
+                }
+            }
+            
+            function updateQuestionAnalytics() {
+                // Simulate question progress updates
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach(bar => {
+                    const currentWidth = parseInt(bar.style.width) || 0;
+                    const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                    const newWidth = Math.max(0, Math.min(100, currentWidth + change));
+                    
+                    if (newWidth !== currentWidth) {
+                        bar.style.width = newWidth + '%';
+                        
+                        // Update the percentage text
+                        const label = bar.closest('.progress-bar-container').querySelector('.progress-label span:last-child');
+                        if (label) {
+                            label.textContent = newWidth + '%';
+                        }
+                    }
+                });
+            }
+            
+            function updateActivityFeed() {
+                // Add new activities occasionally
+                if (Math.random() < 0.3) { // 30% chance every 5 seconds
+                    addNewActivity();
+                }
+            }
+            
+            function addNewActivity() {
+                const activities = [
+                    {
+                        type: 'submission',
+                        icon: 'fas fa-paper-plane',
+                        title: 'Question Answered',
+                        description: `${Math.floor(Math.random() * 50) + 100} students answered Question ${Math.floor(Math.random() * 50) + 1}`,
+                        time: 'Just now'
+                    },
+                    {
+                        type: 'login',
+                        icon: 'fas fa-sign-in-alt',
+                        title: 'Student Activity',
+                        description: `${getRandomStudentName()} resumed the examination`,
+                        time: 'Just now'
+                    },
+                    {
+                        type: 'flag',
+                        icon: 'fas fa-exclamation-triangle',
+                        title: 'Alert Generated',
+                        description: `${getRandomStudentName()} exceeded time limit on Question ${Math.floor(Math.random() * 30) + 1}`,
+                        time: 'Just now'
+                    }
+                ];
+                
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const activityList = document.querySelector('.activity-list');
+                
+                const activityElement = document.createElement('div');
+                activityElement.className = `activity-item ${activity.type}`;
+                activityElement.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="${activity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-description">${activity.description}</div>
+                        <div class="activity-time">
+                            <i class="fas fa-clock"></i>
+                            ${activity.time}
+                        </div>
+                    </div>
+                `;
+                
+                // Add with animation
+                activityElement.style.opacity = '0';
+                activityElement.style.transform = 'translateX(-20px)';
+                activityList.insertBefore(activityElement, activityList.firstChild);
+                
+                setTimeout(() => {
+                    activityElement.style.opacity = '1';
+                    activityElement.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // Remove oldest activity to maintain list size
+                const activities_list = activityList.querySelectorAll('.activity-item');
+                if (activities_list.length > 10) {
+                    activityList.removeChild(activityList.lastChild);
+                }
+            }
+            
+            function getRandomStudentName() {
+                const names = [
+                    'Arif Hassan', 'Sultana Begum', 'Karim Ahmed', 'Rashida Khatun',
+                    'Mahmud Rahman', 'Fatema Akter', 'Rashed Ali', 'Nasreen Begum',
+                    'Shahid Ullah', 'Rahela Khatun', 'Jahangir Alam', 'Rokeya Begum'
+                ];
+                return names[Math.floor(Math.random() * names.length)];
+            }
+            
+            function updateStudentStatuses() {
+                // Simulate student status changes
+                const statusElements = document.querySelectorAll('.student-status');
+                statusElements.forEach(status => {
+                    if (Math.random() < 0.1) { // 10% chance to change status
+                        const currentStatus = status.textContent.trim();
+                        if (currentStatus === 'Active' && Math.random() < 0.3) {
+                            status.className = 'student-status away';
+                            status.innerHTML = '<i class="fas fa-pause"></i> Away';
+                        } else if (currentStatus === 'Away' && Math.random() < 0.7) {
+                            status.className = 'student-status online';
+                            status.innerHTML = '<i class="fas fa-circle"></i> Active';
+                        }
+                    }
+                });
+            }
+            
+            // Student Filters
+            function setupStudentFilters() {
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const filter = this.getAttribute('data-filter');
+                        filterStudents(filter);
+                    });
+                });
+            }
+            
+            function filterStudents(filter) {
+                const rows = document.querySelectorAll('.students-table tbody tr');
+                
+                rows.forEach(row => {
+                    const statusElement = row.querySelector('.student-status');
+                    const status = statusElement.textContent.toLowerCase().trim();
+                    
+                    let show = true;
+                    
+                    switch (filter) {
+                        case 'active':
+                            show = status.includes('active');
+                            break;
+                        case 'submitted':
+                            show = status.includes('submitted') || status.includes('completed');
+                            break;
+                        case 'flagged':
+                            show = row.textContent.includes('Flags') || row.textContent.includes('Flag');
+                            break;
+                        case 'offline':
+                            show = status.includes('offline') || status.includes('connection');
+                            break;
+                        case 'all':
+                        default:
+                            show = true;
+                            break;
+                    }
+                    
+                    row.style.display = show ? '' : 'none';
+                });
+                
+                showFilterNotification(filter);
+            }
+            
+            function showFilterNotification(filter) {
+                const filterName = filter.charAt(0).toUpperCase() + filter.slice(1);
+                showNotification(`Filtered to show: ${filterName} students`, 'info');
+            }
+            
+            // Exam Timer
+            function startExamTimer() {
+                const timerElement = document.getElementById('examTimer');
+                let timeRemaining = 8123; // 2:15:23 in seconds
+                
+                setInterval(() => {
+                    timeRemaining--;
+                    
+                    if (timeRemaining <= 0) {
+                        timerElement.textContent = '00:00:00';
+                        timerElement.style.color = 'var(--ap-secondary)';
+                        showNotification('Exam time has ended!', 'warning');
+                        return;
+                    }
+                    
+                    const hours = Math.floor(timeRemaining / 3600);
+                    const minutes = Math.floor((timeRemaining % 3600) / 60);
+                    const seconds = timeRemaining % 60;
+                    
+                    const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    timerElement.textContent = display;
+                    
+                    // Warning colors for last 30 minutes
+                    if (timeRemaining <= 1800) {
+                        timerElement.style.color = 'var(--ap-secondary)';
+                        timerElement.classList.add('timer-warning');
+                    }
+                }, 1000);
+            }
+            
+            function startLiveUpdates() {
+                // Update time stamps every minute
+                setInterval(() => {
+                    updateTimeStamps();
+                }, 60000);
+            }
+            
+            function updateTimeStamps() {
+                const timeElements = document.querySelectorAll('.activity-time');
+                timeElements.forEach(element => {
+                    const timeText = element.textContent;
+                    if (timeText.includes('minutes ago')) {
+                        const minutes = parseInt(timeText.match(/\d+/)[0]) + 1;
+                        element.innerHTML = `<i class="fas fa-clock"></i> ${minutes} minutes ago`;
+                    } else if (timeText.includes('Just now')) {
+                        element.innerHTML = '<i class="fas fa-clock"></i> 1 minute ago';
+                    }
+                });
+            }
+            
+            // Control Functions
+            window.refreshData = function() {
+                showNotification('Refreshing exam data...', 'info');
+                updateStatistics();
+                updateQuestionAnalytics();
+                updateActivityFeed();
+                updateStudentStatuses();
+                
+                setTimeout(() => {
+                    showNotification('Data refreshed successfully!', 'success');
+                }, 1000);
+            };
+            
+            window.exportData = function() {
+                showNotification('Exporting exam data...', 'info');
+                
+                // Simulate export process
+                setTimeout(() => {
+                    const csvContent = generateExamCSV();
+                    downloadCSV(csvContent, 'exam_monitoring_data.csv');
+                    showNotification('Data exported successfully!', 'success');
+                }, 1500);
+            };
+            
+            window.sendAnnouncement = function() {
+                const message = prompt('Enter announcement message for all students:');
+                if (message && message.trim()) {
+                    showNotification(`Announcement sent: "${message.trim()}"`, 'success');
+                    
+                    // Add to activity feed
+                    addCustomActivity('warning', 'fas fa-bullhorn', 'Announcement Sent', 
+                        `Instructor sent: "${message.trim()}"`, 'Just now');
+                }
+            };
+            
+            window.endExam = function() {
+                if (confirm('Are you sure you want to end the exam early? This will force-submit all active students.')) {
+                    showNotification('Ending exam for all students...', 'warning');
+                    
+                    setTimeout(() => {
+                        showNotification('Exam ended successfully. All answers have been submitted.', 'success');
+                        document.getElementById('examTimer').textContent = '00:00:00';
+                        document.getElementById('examTimer').style.color = 'var(--ap-secondary)';
+                    }, 2000);
+                }
+            };
+            
+            window.toggleAutoRefresh = function() {
+                autoRefreshEnabled = !autoRefreshEnabled;
+                const btn = event.target.closest('.action-btn');
+                
+                if (autoRefreshEnabled) {
+                    btn.innerHTML = '<i class="fas fa-pause"></i> Auto Refresh';
+                    showNotification('Auto-refresh enabled', 'success');
+                } else {
+                    btn.innerHTML = '<i class="fas fa-play"></i> Auto Refresh';
+                    showNotification('Auto-refresh disabled', 'info');
+                }
+            };
+            
+            window.refreshQuestionData = function() {
+                showNotification('Refreshing question analytics...', 'info');
+                updateQuestionAnalytics();
+                
+                setTimeout(() => {
+                    showNotification('Question data refreshed!', 'success');
+                }, 800);
+            };
+            
+            window.exportQuestionData = function() {
+                showNotification('Exporting question analytics...', 'info');
+                
+                setTimeout(() => {
+                    const csvContent = generateQuestionCSV();
+                    downloadCSV(csvContent, 'question_analytics.csv');
+                    showNotification('Question data exported!', 'success');
+                }, 1000);
+            };
+            
+            window.exportStudentData = function() {
+                showNotification('Exporting student data...', 'info');
+                
+                setTimeout(() => {
+                    const csvContent = generateStudentCSV();
+                    downloadCSV(csvContent, 'student_monitoring_data.csv');
+                    showNotification('Student data exported!', 'success');
+                }, 1200);
+            };
+            
+            window.sendBulkMessage = function() {
+                const message = prompt('Enter message to send to all active students:');
+                if (message && message.trim()) {
+                    showNotification(`Bulk message sent to all active students`, 'success');
+                    
+                    // Add to activity feed
+                    addCustomActivity('login', 'fas fa-envelope', 'Bulk Message Sent', 
+                        `Message sent to all active students: "${message.trim()}"`, 'Just now');
+                }
+            };
+            
+            // Utility Functions
+            function addCustomActivity(type, icon, title, description, time) {
+                const activityList = document.querySelector('.activity-list');
+                const activityElement = document.createElement('div');
+                activityElement.className = `activity-item ${type}`;
+                activityElement.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${title}</div>
+                        <div class="activity-description">${description}</div>
+                        <div class="activity-time">
+                            <i class="fas fa-clock"></i>
+                            ${time}
+                        </div>
+                    </div>
+                `;
+                
+                activityList.insertBefore(activityElement, activityList.firstChild);
+                
+                // Remove oldest if too many
+                const activities = activityList.querySelectorAll('.activity-item');
+                if (activities.length > 10) {
+                    activityList.removeChild(activityList.lastChild);
+                }
+            }
+            
+            function generateExamCSV() {
+                return `Exam,Total Students,Active,Submitted,Pending,Flagged,Time Remaining
+বাংলা ১ম পত্র - HSC Final Exam 2025,247,189,34,24,7,02:15:23
+Question 1,156,89,67,91,-,-
+Question 2,142,95,47,105,-,-
+Question 3,128,118,10,119,-,-`;
+            }
+            
+            function generateQuestionCSV() {
+                return `Question,Type,Answered,Correct,Wrong,Pending,Response Rate
+Q1,MCQ,156,89,67,91,63%
+Q2,MCQ,142,95,47,105,57%
+Q3,MCQ,128,118,10,119,52%
+Q31,Written,67,23,44,180,27%`;
+            }
+            
+            function generateStudentCSV() {
+                return `Student Name,ID,Status,Progress,Current Question,Time Spent,Flags
+Arman Hossain,2025001,Submitted,100%,Completed,2h 34m,Clean
+Rashida Begum,2025002,Active,68%,Question 35,1h 15m,3 Flags
+Farid Ahmed,2025003,Active,50%,Question 26,45m,Clean
+Sakib Rahman,2025004,Connection Issue,40%,Question 21,1h 8m,Network
+Nasreen Akter,2025005,Submitted,94%,Completed,2h 12m,Clean`;
+            }
+            
+            function downloadCSV(csvContent, filename) {
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            function showNotification(message, type = 'info') {
+                const colors = {
+                    success: 'var(--ap-success)',
+                    info: 'var(--ap-info)',
+                    warning: 'var(--ap-warning)',
+                    error: 'var(--ap-secondary)'
+                };
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    info: 'fas fa-info-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    error: 'fas fa-times-circle'
+                };
+                
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: var(--ap-radius);
+                    z-index: 9999;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    font-weight: 600;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease;
+                    max-width: 400px;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                `;
+                
+                notification.innerHTML = `<i class="${icons[type]}"></i>${message}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
+            
+            // Student Action Handlers
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.student-action-btn')) {
+                    const btn = e.target.closest('.student-action-btn');
+                    const row = btn.closest('tr');
+                    const studentName = row.querySelector('div[style*="font-weight: 600"]').textContent;
+                    
+                    if (btn.title === 'Monitor' || btn.title === 'View Answers') {
+                        showNotification(`Opening monitoring view for ${studentName}`, 'info');
+                    } else if (btn.title === 'Send Message' || btn.title === 'Contact Student') {
+                        const message = prompt(`Send message to ${studentName}:`);
+                        if (message && message.trim()) {
+                            showNotification(`Message sent to ${studentName}`, 'success');
+                        }
+                    } else if (btn.title === 'Send Warning') {
+                        if (confirm(`Send warning to ${studentName} for suspicious activity?`)) {
+                            showNotification(`Warning sent to ${studentName}`, 'warning');
+                        }
+                    } else if (btn.title === 'Flag Student') {
+                        if (confirm(`Flag ${studentName} for review?`)) {
+                            showNotification(`${studentName} has been flagged for review`, 'warning');
+                        }
+                    } else if (btn.title === 'Check Connection') {
+                        showNotification(`Checking connection status for ${studentName}...`, 'info');
+                    } else if (btn.title === 'Extend Time') {
+                        const extraTime = prompt('Enter additional time in minutes:');
+                        if (extraTime && !isNaN(extraTime)) {
+                            showNotification(`Extended ${extraTime} minutes for ${studentName}`, 'success');
+                        }
+                    }
+                }
+            });
+            
+            // Keyboard Shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    switch (e.key) {
+                        case 'r':
+                            e.preventDefault();
+                            refreshData();
+                            break;
+                        case 'e':
+                            e.preventDefault();
+                            exportData();
+                            break;
+                        case 'm':
+                            e.preventDefault();
+                            sendAnnouncement();
+                            break;
+                    }
+                }
+            });
+            
+            // Performance optimization: Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all elements that should animate
+            document.querySelectorAll('.stat-card, .dashboard-section').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Initialize keyboard shortcut hints
+            setTimeout(() => {
+                showNotification('Keyboard shortcuts: Ctrl+R (Refresh), Ctrl+E (Export), Ctrl+M (Announce)', 'info');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - বাংলা ১ম পত্র পরীক্ষার সম্পূর্ণ উত্তরপত্র</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COPIED FROM DASHBOARD)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           NEW CSS FOR PUBLIC ANSWER SHEET PAGE
+           ======================================== */
+
+        /* Answer Sheet Header */
+        .answer-sheet-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #dcfce7 100%);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-sheet-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        .exam-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .exam-subtitle {
+            font-size: 1.2rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .exam-meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ap-text-muted);
+            font-size: 0.95rem;
+        }
+
+        .meta-icon {
+            color: var(--ap-primary);
+        }
+
+        .public-notice {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--ap-info);
+            padding: 1rem 1.5rem;
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-info);
+            font-weight: 600;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* NEW CSS: Exam Statistics Section */
+        .exam-statistics {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            margin-bottom: 2rem;
+        }
+
+        .statistics-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .statistics-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .statistics-subtitle {
+            color: var(--ap-text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(5, 150, 105, 0.03);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--ap-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .stat-icon.participants {
+            background: linear-gradient(135deg, var(--ap-info), #1d4ed8);
+        }
+
+        .stat-icon.average {
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+        }
+
+        .stat-icon.highest {
+            background: linear-gradient(135deg, var(--bd-gold), #eab308);
+        }
+
+        .stat-icon.pass-rate {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+        }
+
+        /* NEW CSS: Quick Navigation */
+        .quick-navigation {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            margin-bottom: 2rem;
+        }
+
+        .navigation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .navigation-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin: 0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.9rem;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .section-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .section-nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-nav-btn:hover, .section-nav-btn.active {
+            background: var(--ap-primary);
+            color: white;
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        /* NEW CSS: Answer Sections */
+        .answer-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-info {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .questions-container {
+            padding: 0;
+        }
+
+        /* NEW CSS: Individual Question Cards */
+        .question-card {
+            border-bottom: 1px solid var(--ap-border);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-card:hover {
+            background: rgba(5, 150, 105, 0.02);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .question-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .question-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .question-marks {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .difficulty-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--ap-warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .difficulty-hard {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .question-content {
+            padding: 1rem 2rem 2rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ap-text-primary);
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background: rgba(5, 150, 105, 0.03);
+            border-radius: var(--ap-radius);
+            border-left: 4px solid var(--ap-primary);
+        }
+
+        /* NEW CSS: MCQ Options */
+        .mcq-options {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--ap-bg-primary);
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: var(--ap-success);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+        }
+
+        .mcq-option.incorrect {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .option-label {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .mcq-option.correct .option-label {
+            background: var(--ap-success);
+        }
+
+        .mcq-option.incorrect .option-label {
+            background: var(--ap-secondary);
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--ap-text-primary);
+        }
+
+        .option-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .option-status.correct {
+            color: var(--ap-success);
+        }
+
+        .option-status.incorrect {
+            color: var(--ap-secondary);
+        }
+
+        /* NEW CSS: Written Answer Template */
+        .written-answer-template {
+            background: rgba(5, 150, 105, 0.03);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .template-title {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .answer-content {
+            color: var(--ap-text-primary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .answer-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .answer-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: var(--ap-radius);
+            border: 1px solid var(--ap-border);
+        }
+
+        .point-number {
+            background: var(--ap-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* NEW CSS: Exam Analytics */
+        .analytics-section {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--ap-border);
+            margin-bottom: 2rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .difficulty-analysis {
+            background: rgba(5, 150, 105, 0.03);
+            padding: 1.5rem;
+            border-radius: var(--ap-radius);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .analysis-title {
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .analysis-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: var(--ap-radius);
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--ap-border);
+        }
+
+        .analysis-label {
+            font-weight: 500;
+            color: var(--ap-text-secondary);
+        }
+
+        .analysis-value {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Common utility classes from dashboard */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                text-align: center;
+            }
+
+            .exam-meta-info {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .navigation-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-box {
+                justify-content: center;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .section-nav {
+                justify-content: center;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .question-info {
+                justify-content: space-between;
+            }
+
+            .exam-title {
+                font-size: 1.5rem;
+            }
+
+            .answer-sheet-header {
+                padding: 1.5rem;
+                margin: 0.5rem 0 1.5rem 0;
+            }
+
+            .section-header,
+            .question-content {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Live Exams</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Answer Sheets</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-primary" onclick="downloadAnswerSheet()">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                    <button class="btn btn-outline-success" onclick="shareAnswerSheet()">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ap-container">
+        <!-- Answer Sheet Header -->
+        <div class="answer-sheet-header fade-in">
+            <div class="header-content">
+                <h1 class="exam-title">বাংলা ১ম পত্র - HSC Final Exam 2025</h1>
+                <div class="exam-subtitle">সম্পূর্ণ উত্তরপত্র ও প্রশ্ন বিশ্লেষণ</div>
+                <div class="exam-meta-info">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar-alt meta-icon"></i>
+                        <span>পরীক্ষার তারিখ: June 15, 2025</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock meta-icon"></i>
+                        <span>সময়: 10:00 AM - 1:00 PM</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-users meta-icon"></i>
+                        <span>মোট পরীক্ষার্থী: 45,247</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-question-circle meta-icon"></i>
+                        <span>মোট প্রশ্ন: 50টি</span>
+                    </div>
+                </div>
+                <div class="public-notice">
+                    <i class="fas fa-info-circle me-2"></i>
+                    এই উত্তরপত্র পরীক্ষা সম্পন্নের পর সবার জন্য উন্মুক্ত করা হয়েছে
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Statistics -->
+        <div class="exam-statistics fade-in">
+            <div class="statistics-header">
+                <h2 class="statistics-title">পরীক্ষার পরিসংখ্যান</h2>
+                <div class="statistics-subtitle">Overall exam performance and analytics</div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon participants">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="totalParticipants">45,247</div>
+                    <div class="stat-label">মোট অংশগ্রহণকারী</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon average">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value" id="averageScore">67.2</div>
+                    <div class="stat-label">গড় নম্বর</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon highest">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-value" id="highestScore">98</div>
+                    <div class="stat-label">সর্বোচ্চ নম্বর</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon pass-rate">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-value" id="passRate">82.4%</div>
+                    <div class="stat-label">পাশের হার</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="quick-navigation fade-in">
+            <div class="navigation-header">
+                <h3 class="navigation-title">দ্রুত নেভিগেশন</h3>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="প্রশ্ন নম্বর অনুসন্ধান..." id="questionSearch">
+                    <button class="btn btn-primary" onclick="searchQuestion()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section-nav">
+                <button class="section-nav-btn active" onclick="showSection('mcq')">
+                    <i class="fas fa-list-check me-2"></i>
+                    MCQ Questions (1-30)
+                </button>
+                <button class="section-nav-btn" onclick="showSection('written')">
+                    <i class="fas fa-edit me-2"></i>
+                    Written Questions (31-50)
+                </button>
+                <button class="section-nav-btn" onclick="showSection('analytics')">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Performance Analytics
+                </button>
+            </div>
+        </div>
+
+        <!-- MCQ Section -->
+        <div class="answer-section fade-in" id="mcqSection">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-list-check"></i>
+                    বহুনির্বাচনী প্রশ্ন (MCQ)
+                </h2>
+                <div class="section-info">প্রশ্ন ১-৩০ | প্রতিটি ১ নম্বর | ভুল উত্তরের জন্য ০.২৫ নম্বর কাটা</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Question 1 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <div class="question-number">প্রশ্ন ১</div>
+                            <div class="question-marks">১ নম্বর</div>
+                            <div class="difficulty-badge difficulty-easy">Easy</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-content">
+                        <div class="question-text">
+                            রবীন্দ্রনাথ ঠাকুরের 'অপরিচিতা' গল্পের মূল বিষয়বস্তু কী?
+                        </div>
+                        
+                        <div class="mcq-options">
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">ক</div>
+                                <div class="option-text">সামাজিক অনুষ্ঠানে নারী-পুরুষের পারস্পরিক মিলন</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                            <div class="mcq-option correct">
+                                <div class="option-label">খ</div>
+                                <div class="option-text">যৌতুকের বিরুদ্ধে প্রতিবাদ ও নারীর আত্মমর্যাদাবোধ</div>
+                                <div class="option-status correct">
+                                    <i class="fas fa-check"></i>
+                                    সঠিক উত্তর
+                                </div>
+                            </div>
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">গ</div>
+                                <div class="option-text">পারিবারিক কলহ ও বিচ্ছেদের কাহিনী</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">ঘ</div>
+                                <div class="option-text">প্রেম ও বিরহের মনোকাহিনী</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <div class="question-number">প্রশ্ন ২</div>
+                            <div class="question-marks">১ নম্বর</div>
+                            <div class="difficulty-badge difficulty-medium">Medium</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-content">
+                        <div class="question-text">
+                            কাজী নজরুল ইসলামের 'বিদ্রোহী' কবিতা কোন কাব্যগ্রন্থের অন্তর্গত?
+                        </div>
+                        
+                        <div class="mcq-options">
+                            <div class="mcq-option correct">
+                                <div class="option-label">ক</div>
+                                <div class="option-text">অগ্নিবীণা</div>
+                                <div class="option-status correct">
+                                    <i class="fas fa-check"></i>
+                                    সঠিক উত্তর
+                                </div>
+                            </div>
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">খ</div>
+                                <div class="option-text">বিষের বাঁশী</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">গ</div>
+                                <div class="option-text">সাম্যবাদী</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                            <div class="mcq-option incorrect">
+                                <div class="option-label">ঘ</div>
+                                <div class="option-text">সিন্ধু-হিন্দোল</div>
+                                <div class="option-status incorrect">
+                                    <i class="fas fa-times"></i>
+                                    ভুল
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional MCQ questions would continue here... -->
+                <div class="question-card">
+                    <div class="question-content">
+                        <div style="text-align: center; padding: 2rem; color: var(--ap-text-muted);">
+                            <i class="fas fa-ellipsis-h" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>প্রশ্ন ৩-৩০ একইভাবে প্রদর্শিত হবে...</p>
+                            <p style="font-size: 0.9rem;">সম্পূর্ণ উত্তরপত্র দেখতে স্ক্রল করুন</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Written Section -->
+        <div class="answer-section fade-in" id="writtenSection" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-edit"></i>
+                    রচনামূলক প্রশ্ন
+                </h2>
+                <div class="section-info">প্রশ্ন ৩১-৫০ | ৫-১০ নম্বর | বিস্তারিত উত্তর প্রয়োজন</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Written Question 1 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <div class="question-number">প্রশ্ন ৩১</div>
+                            <div class="question-marks">১০ নম্বর</div>
+                            <div class="difficulty-badge difficulty-hard">Hard</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-content">
+                        <div class="question-text">
+                            রবীন্দ্রনাথ ঠাকুরের 'সোনার তরী' কবিতার মূলভাব বিশ্লেষণ করুন। কবিতাটিতে কোন দর্শনের প্রতিফলন ঘটেছে?
+                        </div>
+                        
+                        <div class="written-answer-template">
+                            <div class="template-header">
+                                <div class="template-title">
+                                    <i class="fas fa-lightbulb"></i>
+                                    নমুনা উত্তর
+                                </div>
+                            </div>
+                            
+                            <div class="answer-content">
+                                <p><strong>মূলভাব:</strong> 'সোনার তরী' কবিতাটি রবীন্দ্রনাথ ঠাকুরের একটি গভীর দার্শনিক কবিতা। এই কবিতায় জীবনের ক্ষণস্থায়িত্ব ও কর্মের স্থায়িত্বের বিষয়টি প্রতিফলিত হয়েছে।</p>
+                            </div>
+                            
+                            <ul class="answer-points">
+                                <li>
+                                    <div class="point-number">১</div>
+                                    <div>
+                                        <strong>কবিতার পটভূমি:</strong> কবি একটি ধানক্ষেতের পাশে দাঁড়িয়ে সোনালি ফসল কাটার দৃশ্য দেখছেন।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">২</div>
+                                    <div>
+                                        <strong>রূপক অর্থ:</strong> 'সোনার তরী' মানব জীবনের প্রতীক। ধান হচ্ছে মানুষের কর্ম ও সৃষ্টি।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">৩</div>
+                                    <div>
+                                        <strong>মূল বার্তা:</strong> মানুষ মরণশীল কিন্তু তার কর্ম ও সৃষ্টি অমর। কবি চলে যান কিন্তু তার কবিতা থেকে যায়।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">৪</div>
+                                    <div>
+                                        <strong>দার্শনিক তাৎপর্য:</strong> কর্মবাদ ও অমরত্বের দর্শন প্রতিফলিত। গীতার কর্মযোগের ছায়া।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">৫</div>
+                                    <div>
+                                        <strong>সমাপনী:</strong> এভাবে কবিতাটি জীবন ও মৃত্যুর গভীর তত্ত্বকে তুলে ধরেছে।
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Written Question 2 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <div class="question-number">প্রশ্ন ৩২</div>
+                            <div class="question-marks">৫ নম্বর</div>
+                            <div class="difficulty-badge difficulty-medium">Medium</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-content">
+                        <div class="question-text">
+                            মানিক বন্দ্যোপাধ্যায়ের 'মাসি-পিসি' গল্পে নারী চরিত্রের বৈশিষ্ট্য আলোচনা করুন।
+                        </div>
+                        
+                        <div class="written-answer-template">
+                            <div class="template-header">
+                                <div class="template-title">
+                                    <i class="fas fa-lightbulb"></i>
+                                    নমুনা উত্তর
+                                </div>
+                            </div>
+                            
+                            <div class="answer-content">
+                                <p>মানিক বন্দ্যোপাধ্যায়ের 'মাসি-পিসি' গল্পে নারী চরিত্রগুলি সমাজের বিভিন্ন স্তরের প্রতিনিধিত্ব করে।</p>
+                            </div>
+                            
+                            <ul class="answer-points">
+                                <li>
+                                    <div class="point-number">১</div>
+                                    <div>
+                                        <strong>ঐতিহ্যবাহী নারী:</strong> মাসি-পিসিরা পুরাতন মূল্যবোধে বিশ্বাসী।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">২</div>
+                                    <div>
+                                        <strong>আধুনিক দৃষ্টিভঙ্গি:</strong> নতুন প্রজন্মের নারীরা শিক্ষিত ও স্বাধীনচেতা।
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="point-number">৩</div>
+                                    <div>
+                                        <strong>দ্বন্দ্ব:</strong> পুরাতন ও নতুনের মধ্যে সংঘাত।
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More written questions placeholder -->
+                <div class="question-card">
+                    <div class="question-content">
+                        <div style="text-align: center; padding: 2rem; color: var(--ap-text-muted);">
+                            <i class="fas fa-ellipsis-h" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>প্রশ্ন ৩৩-৫০ একইভাবে প্রদর্শিত হবে...</p>
+                            <p style="font-size: 0.9rem;">বিস্তারিত উত্তর ও ব্যাখ্যাসহ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section fade-in" id="analyticsSection" style="display: none;">
+            <div class="statistics-header">
+                <h2 class="statistics-title">পারফরম্যান্স অ্যানালিটিক্স</h2>
+                <div class="statistics-subtitle">Detailed performance analysis and insights</div>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="difficulty-analysis">
+                    <h4 class="analysis-title">
+                        <i class="fas fa-chart-pie"></i>
+                        কঠিনতা অনুযায়ী বিশ্লেষণ
+                    </h4>
+                    
+                    <div class="analysis-item">
+                        <span class="analysis-label">Easy Questions (15)</span>
+                        <span class="analysis-value" style="color: var(--ap-success);">94.2% সঠিক</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Medium Questions (25)</span>
+                        <span class="analysis-value" style="color: var(--ap-warning);">67.8% সঠিক</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Hard Questions (10)</span>
+                        <span class="analysis-value" style="color: var(--ap-secondary);">41.5% সঠিক</span>
+                    </div>
+                </div>
+                
+                <div class="difficulty-analysis">
+                    <h4 class="analysis-title">
+                        <i class="fas fa-clock"></i>
+                        সময় বিশ্লেষণ
+                    </h4>
+                    
+                    <div class="analysis-item">
+                        <span class="analysis-label">গড় সময়</span>
+                        <span class="analysis-value" style="color: var(--ap-info);">2 ঘন্টা 15 মিনিট</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">দ্রুততম সমাপনী</span>
+                        <span class="analysis-value" style="color: var(--ap-success);">1 ঘন্টা 45 মিনিট</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">সর্বোচ্চ সময়</span>
+                        <span class="analysis-value" style="color: var(--ap-warning);">2 ঘন্টা 58 মিনিট</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Answer Sheet functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnswerSheet();
+        });
+
+        function initializeAnswerSheet() {
+            // Animate statistics on page load
+            animateStatistics();
+            
+            // Setup search functionality
+            setupSearch();
+            
+            // Initialize section navigation
+            setupSectionNavigation();
+        }
+
+        function animateStatistics() {
+            const statElements = [
+                { id: 'totalParticipants', value: 45247 },
+                { id: 'averageScore', value: 67.2 },
+                { id: 'highestScore', value: 98 },
+                { id: 'passRate', value: 82.4 }
+            ];
+
+            statElements.forEach((stat, index) => {
+                const element = document.getElementById(stat.id);
+                let currentValue = 0;
+                const increment = stat.value / 50;
+                const isDecimal = stat.value % 1 !== 0;
+                const hasPercent = stat.id === 'passRate';
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= stat.value) {
+                        if (isDecimal) {
+                            element.textContent = stat.value.toFixed(1) + (hasPercent ? '%' : '');
+                        } else {
+                            element.textContent = stat.value.toLocaleString() + (hasPercent ? '%' : '');
+                        }
+                        clearInterval(timer);
+                    } else {
+                        if (isDecimal) {
+                            element.textContent = currentValue.toFixed(1) + (hasPercent ? '%' : '');
+                        } else {
+                            element.textContent = Math.floor(currentValue).toLocaleString() + (hasPercent ? '%' : '');
+                        }
+                    }
+                }, 30 + index * 10);
+            });
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('questionSearch');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchQuestion();
+                }
+            });
+        }
+
+        function searchQuestion() {
+            const searchTerm = document.getElementById('questionSearch').value;
+            const questionNumber = parseInt(searchTerm);
+            
+            if (questionNumber >= 1 && questionNumber <= 50) {
+                // Navigate to the appropriate section
+                if (questionNumber <= 30) {
+                    showSection('mcq');
+                } else {
+                    showSection('written');
+                }
+                
+                // Scroll to question (simplified for demo)
+                const notification = showNotification('info', 'Navigation', `Scrolling to Question ${questionNumber}...`);
+                setTimeout(() => notification.remove(), 2000);
+            } else {
+                showNotification('error', 'Search Error', 'Please enter a valid question number (1-50)');
+            }
+        }
+
+        function setupSectionNavigation() {
+            // Initially show MCQ section
+            showSection('mcq');
+        }
+
+        function showSection(sectionType) {
+            // Hide all sections
+            document.getElementById('mcqSection').style.display = 'none';
+            document.getElementById('writtenSection').style.display = 'none';
+            document.getElementById('analyticsSection').style.display = 'none';
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.section-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and mark nav button as active
+            switch(sectionType) {
+                case 'mcq':
+                    document.getElementById('mcqSection').style.display = 'block';
+                    document.querySelector('.section-nav-btn[onclick="showSection(\'mcq\')"]').classList.add('active');
+                    break;
+                case 'written':
+                    document.getElementById('writtenSection').style.display = 'block';
+                    document.querySelector('.section-nav-btn[onclick="showSection(\'written\')"]').classList.add('active');
+                    break;
+                case 'analytics':
+                    document.getElementById('analyticsSection').style.display = 'block';
+                    document.querySelector('.section-nav-btn[onclick="showSection(\'analytics\')"]').classList.add('active');
+                    break;
+            }
+            
+            // Smooth scroll to section
+            document.querySelector(`#${sectionType}Section, #analyticsSection`).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function downloadAnswerSheet() {
+            showNotification('info', 'Download Started', 'Answer sheet PDF download is starting...');
+            
+            // Simulate download process
+            setTimeout(() => {
+                showNotification('success', 'Download Complete', 'Answer sheet downloaded successfully!');
+            }, 2000);
+        }
+
+        function shareAnswerSheet() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'বাংলা ১ম পত্র - HSC Final Exam 2025 Answer Sheet',
+                    text: 'Check out the complete answer sheet for HSC Bengali 1st Paper exam',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('success', 'Link Copied', 'Answer sheet link copied to clipboard!');
+                });
+            }
+        }
+
+        function showNotification(type, title, message) {
+            const colors = {
+                success: 'var(--ap-success)',
+                info: 'var(--ap-info)',
+                warning: 'var(--ap-warning)',
+                error: 'var(--ap-secondary)'
+            };
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--ap-radius);
+                z-index: 9999;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                font-weight: 600;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `<strong>${title}</strong><br><small>${message}</small>`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+            
+            return notification;
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.question-card, .stat-card, .analysis-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Make sections globally accessible
+        window.showSection = showSection;
+        window.searchQuestion = searchQuestion;
+        window.downloadAnswerSheet = downloadAnswerSheet;
+        window.shareAnswerSheet = shareAnswerSheet;
+
+        console.log('ePorikkha Public Answer Sheet: Ready! 📋✅');
+    </script>
+</body>
+</html>

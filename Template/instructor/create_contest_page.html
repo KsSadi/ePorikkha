@@ -1,0 +1,3816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePorikkha - Create Programming Contest</title>
+    
+    <!-- Bootstrap 5.3.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           REUSING ORIGINAL DASHBOARD CSS VARIABLES & BASE STYLES
+           ======================================== */
+        
+        :root {
+            /* Bangladesh-inspired Colors */
+            --bd-green: #006a4e;
+            --bd-green-light: #10b981;
+            --bd-red: #f42a41;
+            --bd-gold: #ffd700;
+            
+            /* Primary Brand Colors */
+            --ap-primary: #059669;
+            --ap-primary-light: #d1fae5;
+            --ap-primary-dark: #047857;
+            --ap-secondary: #ef4444;
+            --ap-accent: #0891b2;
+            --ap-success: #22c55e;
+            --ap-warning: #f59e0b;
+            --ap-danger: #ef4444;
+            --ap-info: #3b82f6;
+            
+            /* Text Colors */
+            --ap-text-primary: #0f172a;
+            --ap-text-secondary: #64748b;
+            --ap-text-muted: #94a3b8;
+            
+            /* Background Colors */
+            --ap-bg-primary: #ffffff;
+            --ap-bg-secondary: #f8fafc;
+            --ap-bg-light: #f1f5f9;
+            --ap-bg-gradient: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --ap-bg-card: #ffffff;
+            
+            /* Border & Shadow */
+            --ap-border: #e2e8f0;
+            --ap-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --ap-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --ap-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --ap-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --ap-radius: 12px;
+            --ap-radius-lg: 16px;
+            --ap-radius-xl: 20px;
+            
+            /* Spacing */
+            --ap-space-xs: 0.5rem;
+            --ap-space-sm: 1rem;
+            --ap-space-md: 1.5rem;
+            --ap-space-lg: 2rem;
+            --ap-space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: var(--ap-text-primary);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ========================================
+           ENHANCED NAVIGATION (COMPLETE ORIGINAL SYSTEM)
+           ======================================== */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--ap-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+
+        .logo-text .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+            font-size: 1.9rem;
+        }
+
+        .logo-text .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--ap-text-secondary) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--ap-primary) !important;
+            background: var(--ap-primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Sidebar Navigation - COMPLETE ORIGINAL SYSTEM */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            z-index: 1050;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .mobile-sidebar.show {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ap-border);
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+        }
+
+        .mobile-sidebar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--ap-text-primary);
+        }
+
+        .mobile-sidebar-brand i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .mobile-sidebar-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--ap-secondary);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .mobile-sidebar-close:hover {
+            background: var(--bd-red);
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .mobile-nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--ap-text-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--ap-radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            transform: translateX(8px);
+        }
+
+        .mobile-nav-link:hover::before, .mobile-nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        .mobile-nav-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover .mobile-nav-icon {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .mobile-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .mobile-sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar-user {
+            margin: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.8));
+            border-radius: var(--ap-radius);
+            border: 2px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mobile-user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .mobile-user-details {
+            flex: 1;
+        }
+
+        .mobile-user-name {
+            font-weight: 700;
+            color: var(--ap-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-user-role {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Hide default navbar collapse on mobile */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                display: none !important;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0.5rem;
+                background: var(--ap-primary);
+                color: white;
+                border-radius: var(--ap-radius);
+                transition: all 0.3s ease;
+            }
+            
+            .navbar-toggler:hover {
+                background: var(--ap-primary-dark);
+                transform: scale(1.05);
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .mobile-sidebar,
+            .mobile-sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        .notification-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--ap-border);
+            color: var(--ap-text-secondary);
+            font-size: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: var(--ap-secondary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        /* Notification Dropdown */
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 350px;
+            background: var(--ap-bg-primary);
+            border-radius: var(--ap-radius);
+            box-shadow: var(--ap-shadow-lg);
+            border: 1px solid var(--ap-border);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+        }
+        
+        .notification-header h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .notification-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--ap-border);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .notification-item:hover {
+            background: var(--ap-primary-light);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-text {
+            font-size: 0.75rem;
+            color: var(--ap-text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--ap-text-muted);
+        }
+        
+        .notification-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 1px solid var(--ap-border);
+        }
+        
+        .notification-footer a {
+            text-decoration: none;
+            color: var(--ap-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* USER DROPDOWN STYLES - COMPLETE ORIGINAL SYSTEM */
+        .user-dropdown {
+            border: 2px solid var(--ap-border);
+            background: var(--ap-bg-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--ap-radius);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown:hover {
+            background: var(--ap-primary-light);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--ap-shadow);
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow-xl);
+            background: var(--ap-bg-primary);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            padding: 1.25rem;
+            border-bottom: 2px solid var(--ap-border);
+            margin-bottom: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--ap-text-secondary);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .user-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .user-role i {
+            font-size: 0.7rem;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ap-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            transform: translateX(8px);
+        }
+
+        .dropdown-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .dropdown-item.text-danger {
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #fef2f2;
+            color: var(--bd-red);
+        }
+
+        .dropdown-item i {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 6px;
+            color: var(--ap-primary);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .dropdown-item:hover i {
+            background: var(--ap-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .dropdown-item.text-danger i {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+        }
+
+        .dropdown-item.text-danger:hover i {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .dropdown-item span {
+            flex: 1;
+        }
+
+        /* Dropdown Divider */
+        .dropdown-divider {
+            height: 1px;
+            background: var(--ap-border);
+            margin: 0.5rem 1.25rem;
+            border: none;
+        }
+
+        /* ========================================
+           CREATE CONTEST PAGE SPECIFIC STYLES
+           ======================================== */
+
+        .create-contest-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
+            color: white;
+            border-radius: var(--ap-radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--ap-border);
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green), var(--bd-gold));
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--bd-gold);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title i {
+            color: var(--ap-primary);
+            text-shadow: 0 0 20px rgba(5, 150, 105, 0.5);
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .points-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .points-cost {
+            background: var(--bd-gold);
+            color: #1a1a1a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+        }
+
+        .points-available {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Tab Navigation */
+        .contest-tabs {
+            background: var(--ap-bg-card);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: var(--ap-shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--ap-border);
+        }
+
+        .tab-nav {
+            display: flex;
+            background: linear-gradient(135deg, var(--ap-primary-light), rgba(255, 255, 255, 0.9));
+            border-bottom: 2px solid var(--ap-border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--ap-text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            min-width: 150px;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--ap-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--ap-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--ap-primary);
+            color: white;
+        }
+
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+
+        .tab-content {
+            padding: 2rem;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            border-radius: 2px;
+        }
+
+        .section-title i {
+            color: var(--ap-primary);
+            font-size: 1.1rem;
+        }
+
+        .section-subtitle {
+            color: var(--ap-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--ap-text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--ap-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .form-control:invalid {
+            border-color: var(--ap-secondary);
+        }
+
+        .form-row {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Contest Type Selection */
+        .contest-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-card {
+            padding: 1.5rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            background: var(--ap-bg-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ap-primary), var(--bd-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .type-card:hover {
+            border-color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            transform: translateY(-4px);
+            box-shadow: var(--ap-shadow-lg);
+        }
+
+        .type-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .type-card.active {
+            border-color: var(--ap-primary);
+            background: var(--ap-primary-light);
+            box-shadow: var(--ap-shadow-lg);
+        }
+
+        .type-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .type-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--ap-primary);
+        }
+
+        .type-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--ap-text-primary);
+        }
+
+        .type-desc {
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+            line-height: 1.4;
+        }
+
+        /* Problem Management */
+        .problems-section {
+            margin-bottom: 2rem;
+        }
+
+        .problem-form {
+            background: rgba(236, 72, 153, 0.05);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            border-radius: var(--ap-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .problem-form.hidden {
+            display: none;
+        }
+
+        .problem-form h4 {
+            color: var(--ap-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Code Editor */
+        .code-editor {
+            background: #1a1a2e;
+            color: #f8f8f2;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            resize: vertical;
+            min-height: 150px;
+            overflow-x: auto;
+            white-space: pre;
+            overflow-wrap: normal;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Test Cases */
+        .test-cases-section {
+            margin-top: 1.5rem;
+        }
+
+        .test-case {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-case-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .test-case-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .test-case-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .test-case-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-input,
+        .test-output {
+            background: #f8fafc;
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Difficulty Levels */
+        .difficulty-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid;
+            border-radius: 20px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .difficulty-btn.easy {
+            border-color: var(--ap-success);
+            color: var(--ap-success);
+        }
+
+        .difficulty-btn.easy.active {
+            background: var(--ap-success);
+            color: white;
+        }
+
+        .difficulty-btn.medium {
+            border-color: var(--ap-warning);
+            color: var(--ap-warning);
+        }
+
+        .difficulty-btn.medium.active {
+            background: var(--ap-warning);
+            color: white;
+        }
+
+        .difficulty-btn.hard {
+            border-color: var(--ap-secondary);
+            color: var(--ap-secondary);
+        }
+
+        .difficulty-btn.hard.active {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        /* Problems List */
+        .problems-list {
+            margin-top: 2rem;
+        }
+
+        .problem-item {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-item:hover {
+            box-shadow: var(--ap-shadow);
+            transform: translateY(-2px);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .problem-number {
+            background: var(--ap-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .problem-difficulty-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .problem-difficulty-badge.easy {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--ap-success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .problem-difficulty-badge.medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--ap-warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .problem-difficulty-badge.hard {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--ap-secondary);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .edit-btn {
+            background: var(--ap-warning);
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--ap-secondary);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .problem-text {
+            color: var(--ap-text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .problem-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--ap-text-muted);
+        }
+
+        /* Custom Checkbox Styles */
+        .checkbox-group {
+            margin-bottom: 1rem;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(5, 150, 105, 0.03);
+            border: 1px solid rgba(5, 150, 105, 0.1);
+            border-radius: var(--ap-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .custom-checkbox:hover {
+            background: rgba(5, 150, 105, 0.08);
+            border-color: rgba(5, 150, 105, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            background: var(--ap-bg-primary);
+            border: 2px solid var(--ap-border);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+            background: var(--ap-primary);
+            border-color: var(--ap-primary);
+        }
+
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked ~ .checkmark::after {
+            display: block;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            color: var(--ap-text-primary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .checkbox-description {
+            font-size: 0.8rem;
+            color: var(--ap-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Enhanced Select Styles */
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--ap-bg-primary);
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 12px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--ap-primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--ap-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            color: white;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ap-text-secondary);
+            border-color: var(--ap-border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ap-primary-light);
+            color: var(--ap-primary);
+            border-color: var(--ap-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--ap-success), #16a34a);
+            color: white;
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--ap-warning), #d97706);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:disabled:hover {
+            transform: none !important;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-top: 2px solid var(--ap-border);
+            margin-top: 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 253, 244, 0.3));
+            border-radius: 0 0 var(--ap-radius-lg) var(--ap-radius-lg);
+        }
+
+        .actions-left,
+        .actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--ap-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--ap-radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: var(--ap-shadow-lg);
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Preview Section */
+        .preview-container {
+            background: var(--ap-bg-card);
+            border: 1px solid var(--ap-border);
+            border-radius: var(--ap-radius);
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ap-border);
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ap-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-info {
+            color: var(--ap-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .create-contest-container {
+                padding: 1rem 0.5rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .tab-nav {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                min-width: auto;
+                padding: 0.875rem 1rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .form-row.two-col,
+            .form-row.three-col {
+                grid-template-columns: 1fr;
+            }
+
+            .contest-type-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .actions-left,
+            .actions-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .test-case-row {
+                grid-template-columns: 1fr;
+            }
+
+            .difficulty-selector {
+                flex-direction: column;
+            }
+
+            .form-section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .custom-checkbox {
+                padding: 0.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .checkbox-label {
+                font-size: 0.85rem;
+            }
+
+            .checkbox-description {
+                font-size: 0.75rem;
+            }
+
+            .form-select {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .points-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .form-section {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Utility Classes */
+        .ap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--ap-space-sm);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-top: 3px solid var(--ap-primary);
+            border-radius: var(--ap-radius-lg) var(--ap-radius-lg) 0 0;
+            padding: 2rem 0;
+            margin: 3rem 1rem 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo i {
+            background: linear-gradient(135deg, var(--ap-primary), var(--bd-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .footer-logo .e-letter {
+            color: var(--ap-primary);
+            font-weight: 900;
+        }
+
+        .footer-logo .porikkha-text {
+            color: var(--bd-green);
+            font-weight: 700;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-description {
+            color: var(--ap-text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--ap-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--ap-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--ap-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--ap-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <a href="#" class="mobile-sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <div>
+                    <span style="color: var(--ap-primary); font-weight: 900;">e</span><span style="color: var(--bd-green); font-weight: 700;">Porikkha</span>
+                </div>
+            </a>
+            <button class="mobile-sidebar-close" id="mobileSidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-sidebar-user">
+            <div class="mobile-user-info">
+                <div class="mobile-user-avatar">ড.</div>
+                <div class="mobile-user-details">
+                    <div class="mobile-user-name">Dr. Fatima Khan</div>
+                    <div class="mobile-user-role">Contest Creator</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="mobile-sidebar-nav">
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <span>Create Exam</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link active">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <span>Create Contest</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <span>My Contests</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span>Results</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <span>Evaluators</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span>Analytics</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Profile</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <span>Buy Points</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link">
+                    <div class="mobile-nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="mobile-nav-item" style="margin-top: 1rem; border-top: 1px solid var(--ap-border); padding-top: 1rem;">
+                <a href="#" class="mobile-nav-link" style="color: var(--ap-secondary);">
+                    <div class="mobile-nav-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--ap-secondary);">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="logo-text">
+                    <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" id="mobileNavToggler">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Create Exam</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Create Contest</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Contests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Evaluators</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Analytics</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div style="position: relative;">
+                        <button class="notification-btn" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">2</span>
+                        </button>
+                        
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h6>Notifications</h6>
+                                <a href="#" style="font-size: 0.75rem; color: var(--ap-primary);">Mark all as read</a>
+                            </div>
+                            <div class="notification-list">
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #dcfce7; color: var(--ap-success);">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Contest Tips</div>
+                                        <div class="notification-text">Best practices for creating competitive programming contests</div>
+                                        <div class="notification-time">1 hour ago</div>
+                                    </div>
+                                </a>
+                                <a href="#" class="notification-item">
+                                    <div class="notification-icon" style="background: #fef3c7; color: var(--ap-warning);">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Point Balance Low</div>
+                                        <div class="notification-text">You have 8 points remaining for contest creation</div>
+                                        <div class="notification-time">3 hours ago</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="user-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">ড.</div>
+                            <div class="d-none d-md-block text-start">
+                                <div class="fw-bold" style="font-size: 0.875rem;">Dr. Fatima Khan</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Contest Creator</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li class="dropdown-header">
+                                <div class="user-info">
+                                    <div class="user-avatar-large">ড.</div>
+                                    <div class="user-details">
+                                        <div class="user-name">Dr. Fatima Khan</div>
+                                        <div class="user-email">fatima.khan@dhakauniv.edu.bd</div>
+                                        <div class="user-role">
+                                            <i class="fas fa-trophy"></i>
+                                            Contest Creator
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i><span>Contest Analytics</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-coins"></i><span>Points History</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark"></i><span>Problem Templates</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle"></i><span>Help & Support</span></a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="create-contest-container">
+        <!-- Page Header -->
+        <div class="page-header fade-in">
+            <h1 class="page-title">
+                <i class="fas fa-trophy"></i>
+                Create Programming Contest
+            </h1>
+            <p class="page-subtitle">
+                Design competitive programming contests with algorithmic problems, real-time leaderboards, and automatic judging.
+            </p>
+            <div class="points-info">
+                <div class="points-cost">
+                    <i class="fas fa-coins"></i>
+                    Cost: 8 Points
+                </div>
+                <div class="points-available">
+                    Available Points: <strong>15</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contest Creation Tabs -->
+        <div class="contest-tabs fade-in">
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="details">
+                    <i class="fas fa-info-circle"></i>
+                    Contest Details
+                </button>
+                <button class="tab-btn" data-tab="problems">
+                    <i class="fas fa-code"></i>
+                    Problems
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+                <button class="tab-btn" data-tab="preview">
+                    <i class="fas fa-eye"></i>
+                    Preview
+                </button>
+                <button class="tab-btn" data-tab="publish">
+                    <i class="fas fa-rocket"></i>
+                    Publish
+                </button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Contest Details Tab -->
+                <div class="tab-pane active" id="details">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-trophy"></i>
+                            Contest Information
+                        </h3>
+                        <p class="section-subtitle">Provide essential details about your programming contest</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Contest Title <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="contestTitle" placeholder="e.g., Inter-College Programming Contest 2025" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contest Type <span class="required">*</span></label>
+                                <select class="form-control" id="contestType" required>
+                                    <option value="">Select Contest Type</option>
+                                    <option value="acm">ACM-ICPC Style</option>
+                                    <option value="codeforces">Codeforces Style</option>
+                                    <option value="atcoder">AtCoder Style</option>
+                                    <option value="olympiad">Programming Olympiad</option>
+                                    <option value="beginner">Beginner Friendly</option>
+                                    <option value="custom">Custom Rules</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contest Description</label>
+                            <textarea class="form-control" id="contestDescription" rows="4" placeholder="Describe the contest, its objectives, and any special rules or themes...
+
+Example:
+This is an inter-college programming contest focusing on algorithmic problem solving and data structures. Students will solve coding challenges within the time limit. The contest follows ACM-ICPC style rules with penalty for wrong submissions."></textarea>
+                        </div>
+
+                        <div class="form-row three-col">
+                            <div class="form-group">
+                                <label class="form-label">Duration (hours) <span class="required">*</span></label>
+                                <select class="form-control" id="contestDuration" required>
+                                    <option value="">Select Duration</option>
+                                    <option value="1">1 Hour</option>
+                                    <option value="1.5">1.5 Hours</option>
+                                    <option value="2">2 Hours</option>
+                                    <option value="2.5">2.5 Hours</option>
+                                    <option value="3">3 Hours</option>
+                                    <option value="4">4 Hours</option>
+                                    <option value="5">5 Hours</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Max Participants</label>
+                                <input type="number" class="form-control" id="maxParticipants" min="10" max="1000" placeholder="e.g., 200">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Registration Fee (৳)</label>
+                                <input type="number" class="form-control" id="registrationFee" min="0" placeholder="0 for free">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            Schedule & Access
+                        </h3>
+                        <p class="section-subtitle">Configure when and how participants can join the contest</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Registration Start <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="registrationStart" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Registration End <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="registrationEnd" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Contest Start <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="contestStart" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contest End <span class="required">*</span></label>
+                                <input type="datetime-local" class="form-control" id="contestEnd" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Access Level</label>
+                                <select class="form-control" id="accessLevel">
+                                    <option value="public">Public - Anyone can register</option>
+                                    <option value="invite">Invitation Only</option>
+                                    <option value="institution">Institution Specific</option>
+                                    <option value="password">Password Protected</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contest Password (if protected)</label>
+                                <input type="text" class="form-control" id="contestPassword" placeholder="Leave empty for public access">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-award"></i>
+                            Prizes & Recognition
+                        </h3>
+                        <p class="section-subtitle">Configure awards and recognition for participants</p>
+
+                        <div class="form-row three-col">
+                            <div class="form-group">
+                                <label class="form-label">1st Prize (৳)</label>
+                                <input type="number" class="form-control" id="firstPrize" min="0" placeholder="e.g., 10000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">2nd Prize (৳)</label>
+                                <input type="number" class="form-control" id="secondPrize" min="0" placeholder="e.g., 5000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">3rd Prize (৳)</label>
+                                <input type="number" class="form-control" id="thirdPrize" min="0" placeholder="e.g., 2000">
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="digitalCertificates" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Provide Digital Certificates</div>
+                                    <div class="checkbox-description">All participants will receive participation certificates, winners get special certificates</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problems Tab -->
+                <div class="tab-pane" id="problems">
+                    <div class="problems-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-code"></i>
+                            Contest Problems
+                        </h3>
+                        <p class="section-subtitle">Create algorithmic programming problems for your contest</p>
+
+                        <!-- Contest Type Selector -->
+                        <div class="contest-type-selector">
+                            <div class="type-card active" data-type="algorithm">
+                                <i class="fas fa-brain type-icon"></i>
+                                <div class="type-title">Algorithmic Problem</div>
+                                <div class="type-desc">Classic competitive programming problems requiring algorithm design and optimization</div>
+                            </div>
+                            <div class="type-card" data-type="data-structure">
+                                <i class="fas fa-sitemap type-icon"></i>
+                                <div class="type-title">Data Structures</div>
+                                <div class="type-desc">Problems focusing on efficient data structure usage and implementation</div>
+                            </div>
+                            <div class="type-card" data-type="mathematical">
+                                <i class="fas fa-calculator type-icon"></i>
+                                <div class="type-title">Mathematical</div>
+                                <div class="type-desc">Number theory, combinatorics, and mathematical computation problems</div>
+                            </div>
+                        </div>
+
+                        <!-- Problem Form -->
+                        <div class="problem-form" id="problemForm">
+                            <h4>
+                                <i class="fas fa-plus-circle"></i>
+                                Create Problem
+                            </h4>
+                            
+                            <div class="form-row two-col">
+                                <div class="form-group">
+                                    <label class="form-label">Problem Title <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="problemTitle" placeholder="e.g., Maximum Subarray Sum" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Problem ID</label>
+                                    <input type="text" class="form-control" id="problemId" placeholder="e.g., A, B, C... (auto-generated if empty)">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Problem Statement <span class="required">*</span></label>
+                                <textarea class="form-control" id="problemStatement" rows="6" placeholder="Write a clear and detailed problem statement...
+
+Example:
+Given an array of integers, find the contiguous subarray with the maximum sum.
+
+Input:
+The first line contains an integer n (1 ≤ n ≤ 100000), the size of the array.
+The second line contains n integers a[i] (-1000 ≤ a[i] ≤ 1000).
+
+Output:
+Print the maximum sum of any contiguous subarray.
+
+Example:
+Input:
+5
+-2 1 -3 4 5
+
+Output:
+9
+
+Explanation:
+The subarray [4, 5] has the maximum sum of 9." required></textarea>
+                            </div>
+
+                            <div class="form-row three-col">
+                                <div class="form-group">
+                                    <label class="form-label">Points <span class="required">*</span></label>
+                                    <select class="form-control" id="problemPoints" required>
+                                        <option value="">Select Points</option>
+                                        <option value="100">100 points</option>
+                                        <option value="200">200 points</option>
+                                        <option value="300">300 points</option>
+                                        <option value="400">400 points</option>
+                                        <option value="500">500 points</option>
+                                        <option value="600">600 points</option>
+                                        <option value="700">700 points</option>
+                                        <option value="800">800 points</option>
+                                        <option value="900">900 points</option>
+                                        <option value="1000">1000 points</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Time Limit (seconds)</label>
+                                    <select class="form-control" id="timeLimit">
+                                        <option value="1" selected>1 second</option>
+                                        <option value="2">2 seconds</option>
+                                        <option value="3">3 seconds</option>
+                                        <option value="5">5 seconds</option>
+                                        <option value="10">10 seconds</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Memory Limit (MB)</label>
+                                    <select class="form-control" id="memoryLimit">
+                                        <option value="256" selected>256 MB</option>
+                                        <option value="512">512 MB</option>
+                                        <option value="1024">1024 MB</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Difficulty Level</label>
+                                <div class="difficulty-selector">
+                                    <button type="button" class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
+                                    <button type="button" class="difficulty-btn medium" data-difficulty="medium">Medium</button>
+                                    <button type="button" class="difficulty-btn hard" data-difficulty="hard">Hard</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Tags (comma-separated)</label>
+                                <input type="text" class="form-control" id="problemTags" placeholder="e.g., dynamic programming, arrays, greedy">
+                            </div>
+
+                            <!-- Test Cases Section -->
+                            <div class="test-cases-section">
+                                <h5 style="color: var(--ap-primary); margin-bottom: 1rem;">
+                                    <i class="fas fa-vial"></i>
+                                    Test Cases
+                                </h5>
+                                
+                                <div id="testCasesList">
+                                    <div class="test-case">
+                                        <div class="test-case-header">
+                                            <div class="test-case-number">Test Case 1</div>
+                                            <div class="test-case-actions">
+                                                <button type="button" class="action-btn delete-btn" onclick="removeTestCase(this)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="test-case-row">
+                                            <div class="form-group">
+                                                <label class="form-label">Input</label>
+                                                <textarea class="test-input" placeholder="Sample input..." required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Expected Output</label>
+                                                <textarea class="test-output" placeholder="Expected output..." required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-secondary" onclick="addTestCase()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Test Case
+                                </button>
+                            </div>
+
+                            <div style="margin-top: 2rem;">
+                                <button type="button" class="btn btn-primary" onclick="addProblem()">
+                                    <i class="fas fa-plus"></i>
+                                    Add Problem to Contest
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Problems List -->
+                        <div class="problems-list">
+                            <h4>Contest Problems (<span id="problemCount">0</span>)</h4>
+                            <div id="problemsList">
+                                <!-- Problems will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-pane" id="settings">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-gavel"></i>
+                            Contest Rules & Judging
+                        </h3>
+                        <p class="section-subtitle">Configure contest rules, scoring system, and judging parameters</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Scoring System</label>
+                                <select class="form-select" id="scoringSystem">
+                                    <option value="acm">ACM-ICPC Style (Solved problems + time penalty)</option>
+                                    <option value="codeforces">Codeforces Style (Points with time decay)</option>
+                                    <option value="atcoder">AtCoder Style (Fixed points per problem)</option>
+                                    <option value="ioi">IOI Style (Partial scoring)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Wrong Answer Penalty</label>
+                                <select class="form-select" id="wrongPenalty">
+                                    <option value="20">20 minutes (ACM Style)</option>
+                                    <option value="10">10 minutes</option>
+                                    <option value="5">5 minutes</option>
+                                    <option value="0">No penalty</option>
+                                    <option value="50">50 points reduction (Codeforces Style)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="showRealTimeResults" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Show Real-time Leaderboard</div>
+                                    <div class="checkbox-description">Participants can see live rankings and scores during the contest</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="freezeLeaderboard">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Freeze Leaderboard (Last Hour)</div>
+                                    <div class="checkbox-description">Hide ranking updates in the final hour to maintain suspense</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="allowMultipleSubmissions" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Allow Multiple Submissions</div>
+                                    <div class="checkbox-description">Participants can submit multiple solutions for the same problem</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="showTestResults" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Show Test Case Results</div>
+                                    <div class="checkbox-description">Participants can see which test cases passed/failed</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-code"></i>
+                            Programming Languages
+                        </h3>
+                        <p class="section-subtitle">Select which programming languages are allowed in the contest</p>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-cpp" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">C++ (g++)</div>
+                                    <div class="checkbox-description">Most popular for competitive programming</div>
+                                </div>
+                            </label>
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-java" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Java (OpenJDK)</div>
+                                    <div class="checkbox-description">Object-oriented programming language</div>
+                                </div>
+                            </label>
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-python" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Python 3</div>
+                                    <div class="checkbox-description">High-level interpreted language</div>
+                                </div>
+                            </label>
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-c">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">C (gcc)</div>
+                                    <div class="checkbox-description">Low-level procedural language</div>
+                                </div>
+                            </label>
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-csharp">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">C# (.NET)</div>
+                                    <div class="checkbox-description">Microsoft's object-oriented language</div>
+                                </div>
+                            </label>
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="lang-javascript">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">JavaScript (Node.js)</div>
+                                    <div class="checkbox-description">Dynamic scripting language</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Security & Anti-Cheating
+                        </h3>
+                        <p class="section-subtitle">Configure security measures to ensure fair competition</p>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="preventTabSwitch" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Monitor Tab Switching</div>
+                                    <div class="checkbox-description">Track when participants switch browser tabs during the contest</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="preventCopyPaste" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Disable Copy/Paste</div>
+                                    <div class="checkbox-description">Prevent copying and pasting in the code editor</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="requireFullscreen" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Force Fullscreen Mode</div>
+                                    <div class="checkbox-description">Contest interface runs in fullscreen to minimize distractions</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="ipRestriction">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">IP Address Restrictions</div>
+                                    <div class="checkbox-description">Limit participation to specific IP ranges (for on-site contests)</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="proctoring">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Enable Webcam Proctoring</div>
+                                    <div class="checkbox-description">
+                                        <span style="color: var(--bd-gold); font-weight: 600;">Premium Feature</span> - 
+                                        Monitor participants through webcam during the contest
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-users"></i>
+                            Participant Management
+                        </h3>
+                        <p class="section-subtitle">Control participant registration and team formation</p>
+
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Team Formation</label>
+                                <select class="form-select" id="teamFormation">
+                                    <option value="individual">Individual Participants</option>
+                                    <option value="team">Team of 3 (ACM Style)</option>
+                                    <option value="team2">Team of 2</option>
+                                    <option value="flexible">Flexible Team Size</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Registration Approval</label>
+                                <select class="form-select" id="registrationApproval">
+                                    <option value="automatic">Automatic Approval</option>
+                                    <option value="manual">Manual Approval Required</option>
+                                    <option value="institution">Institution Verification</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="requireVerification">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Require Email Verification</div>
+                                    <div class="checkbox-description">Participants must verify their email before joining</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="requireStudentId">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">Require Student ID</div>
+                                    <div class="checkbox-description">Participants must provide valid student identification</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Tab -->
+                <div class="tab-pane" id="preview">
+                    <div class="preview-container">
+                        <div class="preview-header">
+                            <h3 class="preview-title" id="previewTitle">Contest Preview</h3>
+                            <div class="preview-info" id="previewInfo">
+                                Preview how your programming contest will appear to participants
+                            </div>
+                        </div>
+
+                        <div id="previewContent">
+                            <!-- Preview content will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Publish Tab -->
+                <div class="tab-pane" id="publish">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-rocket"></i>
+                            Ready to Launch?
+                        </h3>
+                        <p class="section-subtitle">Review your contest details before publishing</p>
+
+                        <div id="publishSummary">
+                            <!-- Summary will be generated here -->
+                        </div>
+
+                        <div class="form-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="confirmPublish" required>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">I confirm that all contest details are correct and I want to publish this contest</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="deductPoints" required>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">I understand that 8 points will be deducted from my account for creating this contest</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div class="checkbox-label">I agree to monitor the contest and ensure fair play during the competition</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="actions-bar">
+                <div class="actions-left">
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                        <i class="fas fa-save"></i>
+                        Save Draft
+                    </button>
+                </div>
+                <div class="actions-right">
+                    <button type="button" class="btn btn-secondary" id="prevTabBtn" onclick="previousTab()">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextTabBtn" onclick="nextTab()">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-success hidden" id="publishBtn" onclick="publishContest()">
+                        <i class="fas fa-rocket"></i>
+                        Publish Contest
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Indicator -->
+    <div class="auto-save-indicator" id="autoSaveIndicator">
+        <i class="fas fa-check-circle"></i>
+        Draft Saved
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="ap-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <span class="e-letter">e</span><span class="porikkha-text">Porikkha</span>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    বাংলাদেশের শিক্ষার্থী ও শিক্ষকদের জন্য সর্বাধুনিক ডিজিটাল পরীক্ষা প্ল্যাটফর্ম। Programming contests, HSC, SSC এবং বিভিন্ন প্রতিযোগিতামূলক পরীক্ষার জন্য সম্পূর্ণ সমাধান।
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2025 ePorikkha. All rights reserved. | Made with ❤️ for Bangladesh's Coders
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Contest Rules</a>
+                        <a href="#">Judge API</a>
+                        <a href="#">Support</a>
+                        <a href="#">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let currentTab = 0;
+        let problems = [];
+        let problemCounter = 0;
+        let testCaseCounter = 1;
+        let selectedDifficulty = 'easy';
+
+        // Mobile Sidebar Navigation (COMPLETE ORIGINAL SYSTEM)
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggler = document.getElementById('mobileNavToggler');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+            const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+            
+            // Open mobile sidebar
+            function openMobileSidebar() {
+                mobileSidebar.classList.add('show');
+                mobileSidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close mobile sidebar
+            function closeMobileSidebar() {
+                mobileSidebar.classList.remove('show');
+                mobileSidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            
+            // Event listeners
+            if (mobileNavToggler) {
+                mobileNavToggler.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openMobileSidebar();
+                });
+            }
+            
+            if (mobileSidebarClose) {
+                mobileSidebarClose.addEventListener('click', closeMobileSidebar);
+            }
+            
+            if (mobileSidebarOverlay) {
+                mobileSidebarOverlay.addEventListener('click', closeMobileSidebar);
+            }
+            
+            // Close sidebar when clicking on nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Update active states
+                    document.querySelectorAll('.mobile-nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close sidebar after a short delay
+                    setTimeout(closeMobileSidebar, 200);
+                });
+            });
+            
+            // Handle escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+            
+            // Close sidebar on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992 && mobileSidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                }
+            });
+        });
+
+        // Notification Dropdown (COMPLETE ORIGINAL SYSTEM)
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (!notificationDropdown.contains(e.target) && e.target !== notificationBtn) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        // Initialize Create Contest functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCreateContest();
+        });
+
+        function initializeCreateContest() {
+            // Set up tab navigation
+            setupTabNavigation();
+            
+            // Set up problem type selection
+            setupProblemTypeSelection();
+            
+            // Set up difficulty selection
+            setupDifficultySelection();
+            
+            // Set up form validation
+            setupFormValidation();
+            
+            // Set up auto-save
+            setupAutoSave();
+            
+            // Set default datetime values
+            setDefaultDateTimes();
+            
+            console.log('Create Contest page initialized successfully!');
+        }
+
+        // Tab Navigation System
+        function setupTabNavigation() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    switchToTab(index);
+                });
+            });
+        }
+
+        function switchToTab(tabIndex) {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            // Remove active class from all tabs and panes
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to current tab and pane
+            tabBtns[tabIndex].classList.add('active');
+            tabPanes[tabIndex].classList.add('active');
+            
+            currentTab = tabIndex;
+            updateNavigationButtons();
+            
+            // Update preview when switching to preview tab
+            if (tabIndex === 3) {
+                updatePreview();
+            }
+            
+            // Update publish summary when switching to publish tab
+            if (tabIndex === 4) {
+                updatePublishSummary();
+            }
+        }
+
+        function nextTab() {
+            if (validateCurrentTab()) {
+                if (currentTab < 4) {
+                    switchToTab(currentTab + 1);
+                }
+            }
+        }
+
+        function previousTab() {
+            if (currentTab > 0) {
+                switchToTab(currentTab - 1);
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevTabBtn');
+            const nextBtn = document.getElementById('nextTabBtn');
+            const publishBtn = document.getElementById('publishBtn');
+            
+            prevBtn.style.display = currentTab === 0 ? 'none' : 'inline-flex';
+            
+            if (currentTab === 4) {
+                nextBtn.classList.add('hidden');
+                publishBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                publishBtn.classList.add('hidden');
+            }
+        }
+
+        // Problem Type Selection
+        function setupProblemTypeSelection() {
+            const typeCards = document.querySelectorAll('.type-card');
+
+            typeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Update active state
+                    typeCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+        }
+
+        // Difficulty Selection
+        function setupDifficultySelection() {
+            const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+            
+            difficultyBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const difficulty = btn.getAttribute('data-difficulty');
+                    
+                    // Remove active class from all buttons
+                    difficultyBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    selectedDifficulty = difficulty;
+                });
+            });
+        }
+
+        // Test Case Management
+        function addTestCase() {
+            testCaseCounter++;
+            const testCasesList = document.getElementById('testCasesList');
+            
+            const testCaseHtml = `
+                <div class="test-case">
+                    <div class="test-case-header">
+                        <div class="test-case-number">Test Case ${testCaseCounter}</div>
+                        <div class="test-case-actions">
+                            <button type="button" class="action-btn delete-btn" onclick="removeTestCase(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="test-case-row">
+                        <div class="form-group">
+                            <label class="form-label">Input</label>
+                            <textarea class="test-input" placeholder="Sample input..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected Output</label>
+                            <textarea class="test-output" placeholder="Expected output..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            testCasesList.insertAdjacentHTML('beforeend', testCaseHtml);
+        }
+
+        function removeTestCase(button) {
+            const testCase = button.closest('.test-case');
+            if (document.querySelectorAll('.test-case').length > 1) {
+                testCase.remove();
+                updateTestCaseNumbers();
+            } else {
+                alert('At least one test case is required.');
+            }
+        }
+
+        function updateTestCaseNumbers() {
+            const testCases = document.querySelectorAll('.test-case');
+            testCases.forEach((testCase, index) => {
+                const numberElement = testCase.querySelector('.test-case-number');
+                numberElement.textContent = `Test Case ${index + 1}`;
+            });
+            testCaseCounter = testCases.length;
+        }
+
+        // Add Problem
+        function addProblem() {
+            const problemTitle = document.getElementById('problemTitle').value.trim();
+            const problemId = document.getElementById('problemId').value.trim() || String.fromCharCode(65 + problems.length);
+            const problemStatement = document.getElementById('problemStatement').value.trim();
+            const problemPoints = document.getElementById('problemPoints').value;
+            const timeLimit = document.getElementById('timeLimit').value;
+            const memoryLimit = document.getElementById('memoryLimit').value;
+            const problemTags = document.getElementById('problemTags').value.trim();
+            
+            // Get test cases
+            const testCases = [];
+            const testCaseElements = document.querySelectorAll('.test-case');
+            
+            testCaseElements.forEach(testCaseEl => {
+                const input = testCaseEl.querySelector('.test-input').value.trim();
+                const output = testCaseEl.querySelector('.test-output').value.trim();
+                
+                if (input && output) {
+                    testCases.push({ input, output });
+                }
+            });
+            
+            // Validation
+            if (!problemTitle) {
+                alert('Please enter the problem title.');
+                return;
+            }
+            
+            if (!problemStatement) {
+                alert('Please enter the problem statement.');
+                return;
+            }
+            
+            if (!problemPoints) {
+                alert('Please select problem points.');
+                return;
+            }
+            
+            if (testCases.length === 0) {
+                alert('Please add at least one test case.');
+                return;
+            }
+            
+            // Create problem object
+            const problem = {
+                id: problemId,
+                title: problemTitle,
+                statement: problemStatement,
+                points: parseInt(problemPoints),
+                timeLimit: parseInt(timeLimit),
+                memoryLimit: parseInt(memoryLimit),
+                difficulty: selectedDifficulty,
+                tags: problemTags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                testCases: testCases,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to problems array
+            problems.push(problem);
+            problemCounter++;
+            
+            // Clear form
+            clearProblemForm();
+            
+            // Update problems list
+            updateProblemsList();
+            
+            // Show success message
+            showAutoSaveIndicator();
+        }
+
+        // Clear problem form
+        function clearProblemForm() {
+            document.getElementById('problemTitle').value = '';
+            document.getElementById('problemId').value = '';
+            document.getElementById('problemStatement').value = '';
+            document.getElementById('problemPoints').value = '';
+            document.getElementById('timeLimit').value = '1';
+            document.getElementById('memoryLimit').value = '256';
+            document.getElementById('problemTags').value = '';
+            
+            // Reset difficulty to easy
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.difficulty-btn.easy').classList.add('active');
+            selectedDifficulty = 'easy';
+            
+            // Reset test cases to just one
+            const testCasesList = document.getElementById('testCasesList');
+            testCasesList.innerHTML = `
+                <div class="test-case">
+                    <div class="test-case-header">
+                        <div class="test-case-number">Test Case 1</div>
+                        <div class="test-case-actions">
+                            <button type="button" class="action-btn delete-btn" onclick="removeTestCase(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="test-case-row">
+                        <div class="form-group">
+                            <label class="form-label">Input</label>
+                            <textarea class="test-input" placeholder="Sample input..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected Output</label>
+                            <textarea class="test-output" placeholder="Expected output..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            testCaseCounter = 1;
+        }
+
+        // Update Problems List
+        function updateProblemsList() {
+            const problemsList = document.getElementById('problemsList');
+            const problemCount = document.getElementById('problemCount');
+            
+            problemCount.textContent = problems.length;
+            
+            if (problems.length === 0) {
+                problemsList.innerHTML = '<p style="text-align: center; color: var(--ap-text-muted); padding: 2rem;">No problems added yet. Create your first problem above.</p>';
+                return;
+            }
+            
+            let html = '';
+            problems.forEach((problem, index) => {
+                html += `
+                    <div class="problem-item" data-id="${problem.id}">
+                        <div class="problem-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <div class="problem-number">${problem.id}</div>
+                                <div class="problem-difficulty-badge ${problem.difficulty}">${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}</div>
+                                <span style="color: var(--ap-text-muted); font-size: 0.8rem;">${problem.points} points</span>
+                            </div>
+                            <div class="problem-actions">
+                                <button class="action-btn edit-btn" onclick="editProblem('${problem.id}')" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteProblem('${problem.id}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <h4 class="problem-text">${problem.title}</h4>
+                        
+                        <div class="problem-meta">
+                            <span><strong>Time Limit:</strong> ${problem.timeLimit}s</span>
+                            <span><strong>Memory:</strong> ${problem.memoryLimit}MB</span>
+                            <span><strong>Test Cases:</strong> ${problem.testCases.length}</span>
+                            ${problem.tags.length > 0 ? `<span><strong>Tags:</strong> ${problem.tags.join(', ')}</span>` : ''}
+                        </div>
+                        
+                        <div style="background: rgba(5, 150, 105, 0.05); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem;">
+                            <div style="font-size: 0.85rem; color: var(--ap-text-secondary); line-height: 1.4;">
+                                ${problem.statement.length > 200 ? problem.statement.substring(0, 200) + '...' : problem.statement}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            problemsList.innerHTML = html;
+        }
+
+        // Edit Problem
+        function editProblem(problemId) {
+            const problem = problems.find(p => p.id === problemId);
+            if (!problem) return;
+            
+            // Fill form with problem data
+            document.getElementById('problemTitle').value = problem.title;
+            document.getElementById('problemId').value = problem.id;
+            document.getElementById('problemStatement').value = problem.statement;
+            document.getElementById('problemPoints').value = problem.points;
+            document.getElementById('timeLimit').value = problem.timeLimit;
+            document.getElementById('memoryLimit').value = problem.memoryLimit;
+            document.getElementById('problemTags').value = problem.tags.join(', ');
+            
+            // Set difficulty
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.difficulty-btn.${problem.difficulty}`).classList.add('active');
+            selectedDifficulty = problem.difficulty;
+            
+            // Fill test cases
+            const testCasesList = document.getElementById('testCasesList');
+            testCasesList.innerHTML = '';
+            
+            problem.testCases.forEach((testCase, index) => {
+                const testCaseHtml = `
+                    <div class="test-case">
+                        <div class="test-case-header">
+                            <div class="test-case-number">Test Case ${index + 1}</div>
+                            <div class="test-case-actions">
+                                <button type="button" class="action-btn delete-btn" onclick="removeTestCase(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="test-case-row">
+                            <div class="form-group">
+                                <label class="form-label">Input</label>
+                                <textarea class="test-input" required>${testCase.input}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Expected Output</label>
+                                <textarea class="test-output" required>${testCase.output}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                testCasesList.insertAdjacentHTML('beforeend', testCaseHtml);
+            });
+            
+            testCaseCounter = problem.testCases.length;
+            
+            // Remove the problem from array (it will be re-added when form is submitted)
+            problems = problems.filter(p => p.id !== problemId);
+            updateProblemsList();
+            
+            // Scroll to form
+            document.getElementById('problemForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete Problem
+        function deleteProblem(problemId) {
+            if (confirm('Are you sure you want to delete this problem?')) {
+                problems = problems.filter(p => p.id !== problemId);
+                updateProblemsList();
+                showAutoSaveIndicator();
+            }
+        }
+
+        // Form Validation
+        function setupFormValidation() {
+            // Real-time validation for required fields
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', validateField);
+                field.addEventListener('input', validateField);
+            });
+        }
+
+        function validateField(event) {
+            const field = event.target;
+            
+            if (field.value.trim() === '') {
+                field.style.borderColor = 'var(--ap-secondary)';
+            } else {
+                field.style.borderColor = 'var(--ap-success)';
+            }
+        }
+
+        function validateCurrentTab() {
+            switch (currentTab) {
+                case 0: // Details tab
+                    return validateDetailsTab();
+                case 1: // Problems tab
+                    return validateProblemsTab();
+                case 2: // Settings tab
+                    return true; // Settings are optional
+                case 3: // Preview tab
+                    return true; // Preview is read-only
+                case 4: // Publish tab
+                    return validatePublishTab();
+                default:
+                    return true;
+            }
+        }
+
+        function validateDetailsTab() {
+            const contestTitle = document.getElementById('contestTitle').value.trim();
+            const contestType = document.getElementById('contestType').value;
+            const contestDuration = document.getElementById('contestDuration').value;
+            const registrationStart = document.getElementById('registrationStart').value;
+            const registrationEnd = document.getElementById('registrationEnd').value;
+            const contestStart = document.getElementById('contestStart').value;
+            const contestEnd = document.getElementById('contestEnd').value;
+            
+            if (!contestTitle) {
+                alert('Please enter a contest title.');
+                document.getElementById('contestTitle').focus();
+                return false;
+            }
+            
+            if (!contestType) {
+                alert('Please select a contest type.');
+                document.getElementById('contestType').focus();
+                return false;
+            }
+            
+            if (!contestDuration) {
+                alert('Please select contest duration.');
+                document.getElementById('contestDuration').focus();
+                return false;
+            }
+            
+            if (!registrationStart || !registrationEnd || !contestStart || !contestEnd) {
+                alert('Please set all date and time fields.');
+                return false;
+            }
+            
+            // Check date logic
+            const regStart = new Date(registrationStart);
+            const regEnd = new Date(registrationEnd);
+            const contStart = new Date(contestStart);
+            const contEnd = new Date(contestEnd);
+            
+            if (regEnd <= regStart) {
+                alert('Registration end time must be after start time.');
+                return false;
+            }
+            
+            if (contStart <= regEnd) {
+                alert('Contest start time should be after registration end time.');
+                return false;
+            }
+            
+            if (contEnd <= contStart) {
+                alert('Contest end time must be after start time.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateProblemsTab() {
+            if (problems.length === 0) {
+                alert('Please add at least one problem to the contest.');
+                return false;
+            }
+            
+            if (problems.length < 3) {
+                const proceed = confirm(`You have only ${problems.length} problem(s). Most contests have at least 3-5 problems. Do you want to continue anyway?`);
+                if (!proceed) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function validatePublishTab() {
+            const confirmPublish = document.getElementById('confirmPublish').checked;
+            const deductPoints = document.getElementById('deductPoints').checked;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!confirmPublish) {
+                alert('Please confirm that all contest details are correct.');
+                return false;
+            }
+            
+            if (!deductPoints) {
+                alert('Please confirm that you understand points will be deducted.');
+                return false;
+            }
+            
+            if (!agreeTerms) {
+                alert('Please agree to monitor the contest and ensure fair play.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Auto-save functionality
+        function setupAutoSave() {
+            const formInputs = document.querySelectorAll('input, select, textarea');
+            
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    clearTimeout(window.autoSaveTimeout);
+                    window.autoSaveTimeout = setTimeout(saveDraft, 2000);
+                });
+            });
+        }
+
+        function saveDraft() {
+            const contestData = {
+                title: document.getElementById('contestTitle').value,
+                type: document.getElementById('contestType').value,
+                description: document.getElementById('contestDescription').value,
+                duration: document.getElementById('contestDuration').value,
+                maxParticipants: document.getElementById('maxParticipants').value,
+                registrationFee: document.getElementById('registrationFee').value,
+                registrationStart: document.getElementById('registrationStart').value,
+                registrationEnd: document.getElementById('registrationEnd').value,
+                contestStart: document.getElementById('contestStart').value,
+                contestEnd: document.getElementById('contestEnd').value,
+                accessLevel: document.getElementById('accessLevel').value,
+                contestPassword: document.getElementById('contestPassword').value,
+                firstPrize: document.getElementById('firstPrize').value,
+                secondPrize: document.getElementById('secondPrize').value,
+                thirdPrize: document.getElementById('thirdPrize').value,
+                problems: problems,
+                settings: {
+                    scoringSystem: document.getElementById('scoringSystem').value,
+                    wrongPenalty: document.getElementById('wrongPenalty').value,
+                    showRealTimeResults: document.getElementById('showRealTimeResults').checked,
+                    freezeLeaderboard: document.getElementById('freezeLeaderboard').checked,
+                    allowMultipleSubmissions: document.getElementById('allowMultipleSubmissions').checked,
+                    showTestResults: document.getElementById('showTestResults').checked,
+                    digitalCertificates: document.getElementById('digitalCertificates').checked,
+                    // Language settings
+                    'lang-cpp': document.getElementById('lang-cpp').checked,
+                    'lang-java': document.getElementById('lang-java').checked,
+                    'lang-python': document.getElementById('lang-python').checked,
+                    'lang-c': document.getElementById('lang-c').checked,
+                    'lang-csharp': document.getElementById('lang-csharp').checked,
+                    'lang-javascript': document.getElementById('lang-javascript').checked,
+                    // Security settings
+                    preventTabSwitch: document.getElementById('preventTabSwitch').checked,
+                    preventCopyPaste: document.getElementById('preventCopyPaste').checked,
+                    requireFullscreen: document.getElementById('requireFullscreen').checked,
+                    ipRestriction: document.getElementById('ipRestriction').checked,
+                    proctoring: document.getElementById('proctoring').checked,
+                    // Participant settings
+                    teamFormation: document.getElementById('teamFormation').value,
+                    registrationApproval: document.getElementById('registrationApproval').value,
+                    requireVerification: document.getElementById('requireVerification').checked,
+                    requireStudentId: document.getElementById('requireStudentId').checked
+                },
+                lastSaved: new Date().toISOString()
+            };
+            
+            localStorage.setItem('contestDraft', JSON.stringify(contestData));
+            showAutoSaveIndicator();
+        }
+
+        function loadDraft() {
+            const savedDraft = localStorage.getItem('contestDraft');
+            if (savedDraft) {
+                const contestData = JSON.parse(savedDraft);
+                
+                // Fill form fields
+                Object.keys(contestData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && typeof contestData[key] !== 'object') {
+                        element.value = contestData[key];
+                    }
+                });
+                
+                // Load problems
+                if (contestData.problems) {
+                    problems = contestData.problems;
+                    problemCounter = problems.length;
+                    updateProblemsList();
+                }
+                
+                // Load settings
+                if (contestData.settings) {
+                    Object.keys(contestData.settings).forEach(key => {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = contestData.settings[key];
+                            } else {
+                                element.value = contestData.settings[key];
+                            }
+                        }
+                    });
+                }
+                
+                console.log('Contest draft loaded successfully');
+            }
+        }
+
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Set default date times
+        function setDefaultDateTimes() {
+            const now = new Date();
+            
+            // Registration starts tomorrow
+            const regStart = new Date(now);
+            regStart.setDate(regStart.getDate() + 1);
+            regStart.setHours(9, 0, 0, 0);
+            
+            // Registration ends 2 days later
+            const regEnd = new Date(regStart);
+            regEnd.setDate(regEnd.getDate() + 2);
+            regEnd.setHours(23, 59, 0, 0);
+            
+            // Contest starts 3 days later
+            const contStart = new Date(regStart);
+            contStart.setDate(contStart.getDate() + 3);
+            contStart.setHours(14, 0, 0, 0); // 2 PM
+            
+            // Contest ends based on duration (default 3 hours)
+            const contEnd = new Date(contStart);
+            contEnd.setHours(contStart.getHours() + 3);
+            
+            document.getElementById('registrationStart').value = regStart.toISOString().slice(0, 16);
+            document.getElementById('registrationEnd').value = regEnd.toISOString().slice(0, 16);
+            document.getElementById('contestStart').value = contStart.toISOString().slice(0, 16);
+            document.getElementById('contestEnd').value = contEnd.toISOString().slice(0, 16);
+        }
+
+        // Update contest end time when duration changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const durationSelect = document.getElementById('contestDuration');
+            const contestStartInput = document.getElementById('contestStart');
+            const contestEndInput = document.getElementById('contestEnd');
+            
+            function updateContestEndTime() {
+                const duration = parseFloat(durationSelect.value);
+                const startTime = new Date(contestStartInput.value);
+                
+                if (duration && !isNaN(startTime)) {
+                    const endTime = new Date(startTime);
+                    endTime.setHours(startTime.getHours() + Math.floor(duration));
+                    endTime.setMinutes(startTime.getMinutes() + (duration % 1) * 60);
+                    
+                    contestEndInput.value = endTime.toISOString().slice(0, 16);
+                }
+            }
+            
+            durationSelect.addEventListener('change', updateContestEndTime);
+            contestStartInput.addEventListener('change', updateContestEndTime);
+        });
+
+        // Preview functionality
+        function updatePreview() {
+            const previewContent = document.getElementById('previewContent');
+            const contestTitle = document.getElementById('contestTitle').value || 'Untitled Contest';
+            const contestType = document.getElementById('contestType').value || 'Contest type not selected';
+            const duration = document.getElementById('contestDuration').value || '0';
+            const contestStart = document.getElementById('contestStart').value;
+            
+            let html = `
+                <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%); color: white; padding: 1.5rem; border-radius: var(--ap-radius); margin-bottom: 2rem;">
+                    <h4 style="color: var(--bd-gold); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-trophy"></i>
+                        ${contestTitle}
+                    </h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Type:</strong> ${contestType}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Duration:</strong> ${duration} hours</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Problems:</strong> ${problems.length}</p>
+                    <p style="margin-bottom: 0;"><strong>Start Time:</strong> ${contestStart ? new Date(contestStart).toLocaleString() : 'Not set'}</p>
+                </div>
+            `;
+            
+            if (problems.length > 0) {
+                html += '<h4 style="margin-bottom: 1rem; color: var(--ap-primary);">Problems Preview:</h4>';
+                
+                problems.forEach((problem, index) => {
+                    html += `
+                        <div style="background: var(--ap-bg-card); border: 1px solid var(--ap-border); border-radius: var(--ap-radius); padding: 1.5rem; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                                <span style="background: var(--ap-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">
+                                    Problem ${problem.id}
+                                </span>
+                                <span style="background: ${problem.difficulty === 'easy' ? 'var(--ap-success)' : problem.difficulty === 'medium' ? 'var(--ap-warning)' : 'var(--ap-secondary)'}; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">
+                                    ${problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                                </span>
+                                <span style="color: var(--ap-text-muted); font-size: 0.8rem;">
+                                    ${problem.points} points
+                                </span>
+                            </div>
+                            
+                            <h5 style="margin-bottom: 1rem; color: var(--ap-text-primary);">${problem.title}</h5>
+                            
+                            <div style="background: rgba(5, 150, 105, 0.05); padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                                <p style="margin-bottom: 0.5rem; color: var(--ap-text-secondary); line-height: 1.6;">${problem.statement.substring(0, 300)}${problem.statement.length > 300 ? '...' : ''}</p>
+                            </div>
+                            
+                            <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; color: var(--ap-text-muted);">
+                                <span><strong>Time:</strong> ${problem.timeLimit}s</span>
+                                <span><strong>Memory:</strong> ${problem.memoryLimit}MB</span>
+                                <span><strong>Test Cases:</strong> ${problem.testCases.length}</span>
+                                ${problem.tags.length > 0 ? `<span><strong>Tags:</strong> ${problem.tags.join(', ')}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p style="text-align: center; color: var(--ap-text-muted); padding: 2rem;">No problems added yet.</p>';
+            }
+            
+            previewContent.innerHTML = html;
+        }
+
+        // Publish functionality
+        function updatePublishSummary() {
+            const summaryDiv = document.getElementById('publishSummary');
+            const contestTitle = document.getElementById('contestTitle').value || 'Untitled Contest';
+            const contestType = document.getElementById('contestType').value || 'Contest type not selected';
+            const duration = document.getElementById('contestDuration').value || '0';
+            const maxParticipants = document.getElementById('maxParticipants').value || 'Unlimited';
+            const registrationStart = document.getElementById('registrationStart').value;
+            const contestStart = document.getElementById('contestStart').value;
+            
+            // Count enabled languages
+            const enabledLanguages = [];
+            const languages = ['cpp', 'java', 'python', 'c', 'csharp', 'javascript'];
+            languages.forEach(lang => {
+                const checkbox = document.getElementById(`lang-${lang}`);
+                if (checkbox && checkbox.checked) {
+                    enabledLanguages.push(lang.charAt(0).toUpperCase() + lang.slice(1));
+                }
+            });
+            
+            const html = `
+                <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%); color: white; border: 1px solid var(--ap-border); border-radius: var(--ap-radius); padding: 1.5rem; margin-bottom: 2rem;">
+                    <h4 style="color: var(--bd-gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-trophy"></i>
+                        Contest Summary
+                    </h4>
+                    
+                    <div style="display: grid; gap: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Title:</strong>
+                            <span>${contestTitle}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Type:</strong>
+                            <span>${contestType}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Duration:</strong>
+                            <span>${duration} hours</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Problems:</strong>
+                            <span>${problems.length}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Max Participants:</strong>
+                            <span>${maxParticipants}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Registration Starts:</strong>
+                            <span>${registrationStart ? new Date(registrationStart).toLocaleString() : 'Not set'}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Contest Starts:</strong>
+                            <span>${contestStart ? new Date(contestStart).toLocaleString() : 'Not set'}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Allowed Languages:</strong>
+                            <span>${enabledLanguages.join(', ')}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fef3c7; border: 1px solid var(--ap-warning); border-radius: var(--ap-radius); padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--ap-warning);"></i>
+                        <strong style="color: var(--ap-warning);">Important Notice</strong>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--ap-text-primary);">
+                        <li>8 points will be deducted from your account upon publishing</li>
+                        <li>Once published, you cannot modify the contest structure or problems</li>
+                        <li>You are responsible for monitoring the contest and ensuring fair play</li>
+                        <li>Participants will be able to register during the specified time period</li>
+                        <li>The online judge will automatically evaluate submissions</li>
+                    </ul>
+                </div>
+            `;
+            
+            summaryDiv.innerHTML = html;
+        }
+
+        function publishContest() {
+            if (!validateCurrentTab()) {
+                return;
+            }
+            
+            // Final confirmation
+            const confirmMessage = `Are you sure you want to publish this programming contest?\n\n` +
+                `This action will:\n` +
+                `• Deduct 8 points from your account\n` +
+                `• Make the contest available for registration\n` +
+                `• Lock the contest structure and problems\n` +
+                `• Start the automatic judging system\n\n` +
+                `Do you want to proceed?`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // Simulate publishing process
+            const publishBtn = document.getElementById('publishBtn');
+            const originalText = publishBtn.innerHTML;
+            
+            publishBtn.disabled = true;
+            publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing Contest...';
+            
+            setTimeout(() => {
+                // Clear draft
+                localStorage.removeItem('contestDraft');
+                
+                // Show success message
+                alert('🏆 Programming Contest published successfully!\n\n' +
+                      'Your contest is now live and participants can register during the specified time.\n' +
+                      '8 points have been deducted from your account.\n\n' +
+                      'The automatic judging system is ready and will evaluate submissions in real-time.\n' +
+                      'You can monitor the contest progress from your dashboard.');
+                
+                // Redirect to dashboard or contest management page
+                window.location.href = '#dashboard'; // Replace with actual dashboard URL
+                
+            }, 3000);
+        }
+
+        // Navigation link interactions
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Load draft on page load
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('contestDraft')) {
+                if (confirm('You have a saved contest draft. Would you like to load it?')) {
+                    loadDraft();
+                }
+            }
+        });
+
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+            if (problems.length > 0 || document.getElementById('contestTitle').value.trim()) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                return e.returnValue;
+            }
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + S to save draft
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveDraft();
+            }
+            
+            // Ctrl/Cmd + Enter to add problem (when in problem form)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const problemForm = document.getElementById('problemForm');
+                if (problemForm && !problemForm.classList.contains('hidden')) {
+                    e.preventDefault();
+                    addProblem();
+                }
+            }
+            
+            // Escape to close dropdowns
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.dropdown-menu.show, .notification-dropdown.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Create Contest Page Error:', e.error);
+            // In production, this would send error reports to monitoring service
+        });
+
+        console.log('ePorikkha Create Contest: Fully loaded and ready! 🏆💻');
+    </script>
+</body>
+</html>
