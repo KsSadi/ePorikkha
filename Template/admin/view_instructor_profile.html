@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Profile - ePorikkha</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #059669;
+            --primary-light: #10b981;
+            --secondary-color: #dc2626;
+            --accent-color: #0891b2;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --dark-color: #1e293b;
+            --light-gray: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Bengali', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-brand {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand i {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        .brand-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-close:hover {
+            background: var(--light-gray);
+            color: var(--text-dark);
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+
+        .nav-item {
+            margin: 2px 12px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-dark);
+            background: var(--light-gray);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background: rgba(5, 150, 105, 0.1);
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* Multi-level Menu */
+        .nav-item.has-submenu > .nav-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 12px;
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.has-submenu.open > .nav-link::after {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--light-gray);
+            margin: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .submenu.open {
+            max-height: 300px;
+            margin-bottom: 8px;
+        }
+
+        .submenu .nav-link {
+            padding: 10px 16px 10px 42px;
+            font-size: 0.8rem;
+            margin: 2px 4px;
+            color: var(--text-muted);
+        }
+
+        .submenu .nav-link:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .submenu .nav-link.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .admin-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Header */
+        .admin-header {
+            background: white;
+            height: var(--header-height);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: 16px;
+        }
+
+        .header-breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .header-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 280px;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: var(--light-gray);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .notification-btn:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger-color);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: var(--light-gray);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: white;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+        }
+
+        /* Dropdowns */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-4px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light-gray);
+            color: var(--primary-color);
+        }
+
+        /* Content */
+        .admin-content {
+            padding: 24px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .profile-cover {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            position: relative;
+        }
+
+        .profile-info {
+            padding: 0 32px 32px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            border: 6px solid white;
+            position: absolute;
+            top: -60px;
+            left: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-details {
+            margin-left: 150px;
+            padding-top: 80px;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .profile-title {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .profile-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-role {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .badge-status {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .badge-verified {
+            background: rgba(8, 145, 178, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(8, 145, 178, 0.2);
+        }
+
+        .profile-actions {
+            position: absolute;
+            top: 40px;
+            right: 32px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-secondary-custom {
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary-custom:hover {
+            background: white;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-danger-custom {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            color: var(--danger-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-danger-custom:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stats-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 32px 24px;
+            position: relative;
+        }
+
+        .stat-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: white;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card.primary .stat-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .stat-card.success .stat-icon {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+        }
+
+        .stat-card.info .stat-icon {
+            background: linear-gradient(135deg, var(--accent-color), #0ea5e9);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--text-dark), #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-change.positive {
+            color: var(--success-color);
+            background: rgba(5, 150, 105, 0.1);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .stat-change.negative {
+            color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Points Card */
+        .points-card {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(8, 145, 178, 0.05));
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .points-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .points-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .points-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .points-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+        }
+
+        .points-details {
+            flex: 1;
+        }
+
+        .points-balance {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .points-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .points-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .points-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .points-stat {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .points-stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .points-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Activity List */
+        .activity-item {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: rgba(5, 150, 105, 0.02);
+            margin: 0 -16px;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-icon.exam {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .activity-icon.question {
+            background: linear-gradient(135deg, var(--accent-color), #0ea5e9);
+        }
+
+        .activity-icon.contest {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .activity-icon.points {
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        .activity-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .activity-meta {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .activity-points {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-completed {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-draft {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--text-muted);
+        }
+
+        /* Tabs */
+        .profile-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--light-gray);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-dark);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar-close {
+                display: flex;
+            }
+
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .admin-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: block;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-header {
+                padding: 0 16px;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .admin-content {
+                padding: 16px;
+            }
+
+            .profile-info {
+                padding: 0 20px 24px;
+            }
+
+            .profile-avatar {
+                left: 20px;
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+
+            .profile-details {
+                margin-left: 0;
+                padding-top: 120px;
+                text-align: center;
+            }
+
+            .profile-actions {
+                position: static;
+                margin-top: 20px;
+                justify-content: center;
+            }
+
+            .profile-name {
+                font-size: 1.5rem;
+            }
+
+            .stat-card {
+                padding: 24px 20px;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .points-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .points-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .points-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-title {
+                font-size: 1.25rem;
+            }
+
+            .header-breadcrumb {
+                display: none;
+            }
+
+            .profile-badges {
+                justify-content: center;
+            }
+
+            .points-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .activity-meta {
+                align-self: stretch;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span class="brand-text">ePorikkha</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-item has-submenu open">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+                <div class="submenu open">
+                    <a href="#" class="nav-link">
+                        <span>All Users Overview</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Admin Management</span>
+                    </a>
+                    <a href="#" class="nav-link active">
+                        <span>Instructor Management</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Evaluator Management</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Student Management</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Porikkha Management</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Create New Exam</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>All Exams</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Question Papers</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Scheduled Exams</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-coins"></i>
+                    <span>Points Management</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Points Overview</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Assign Points</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Transaction History</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Contests</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Create Contest</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Active Contests</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Results</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Leaderboard</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Question Bank</span>
+                </a>
+            </div>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports & Analytics</span>
+                </a>
+                <div class="submenu">
+                    <a href="#" class="nav-link">
+                        <span>Exam Reports</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span>Performance Analytics</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="header-title">Instructor Profile</h1>
+                <div class="header-breadcrumb">
+                    <a href="#">User Management</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="#">Instructors</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Dr. Rashida Begum</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="position-relative">
+                    <button class="notification-btn" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <div class="dropdown-menu" id="notificationDropdown">
+                        <div class="dropdown-header">
+                            <div style="font-weight: 600; color: var(--text-dark);">Notifications</div>
+                        </div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user-plus"></i>
+                            <span>New instructor registered</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="position-relative">
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-avatar">MR</div>
+                        <span class="user-name">Md. Rahman</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    
+                    <div class="dropdown-menu" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div style="font-weight: 600;">Md. Rahman</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">admin@eporikkha.edu.bd</div>
+                        </div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <div class="profile-avatar">DR</div>
+                    <div class="profile-details">
+                        <h1 class="profile-name">Dr. Rashida Begum</h1>
+                        <p class="profile-title">Associate Professor of Mathematics - Dhaka College</p>
+                        <div class="profile-badges">
+                            <span class="profile-badge badge-role">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                Instructor
+                            </span>
+                            <span class="profile-badge badge-status">
+                                <i class="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                            <span class="profile-badge badge-verified">
+                                <i class="fas fa-shield-alt"></i>
+                                Verified
+                            </span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 0.875rem;">
+                            <i class="fas fa-calendar-alt"></i>
+                            Member since March 2023 • Last active 2 hours ago
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn-primary-custom">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                        <button class="btn-secondary-custom">
+                            <i class="fas fa-envelope"></i>
+                            Send Message
+                        </button>
+                        <button class="btn-danger-custom">
+                            <i class="fas fa-ban"></i>
+                            Suspend
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-number">23</div>
+                        <div class="stat-label">Exams Created</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5 this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="stat-number">487</div>
+                        <div class="stat-label">Questions Added</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+32 this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card stat-card info">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number">1,284</div>
+                        <div class="stat-label">Students Reached</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+127 this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stats-card stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-number">4.8</div>
+                        <div class="stat-label">Average Rating</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+0.2 improvement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Points Overview -->
+            <div class="points-card">
+                <div class="points-header">
+                    <div class="points-info">
+                        <div class="points-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="points-details">
+                            <div class="points-balance">1,485</div>
+                            <div class="points-label">Available Points</div>
+                        </div>
+                    </div>
+                    <div class="points-actions">
+                        <button class="btn-primary-custom">
+                            <i class="fas fa-plus"></i>
+                            Add Points
+                        </button>
+                        <button class="btn-secondary-custom">
+                            <i class="fas fa-history"></i>
+                            View History
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="points-stats">
+                    <div class="points-stat">
+                        <div class="points-stat-number">2,750</div>
+                        <div class="points-stat-label">Total Earned</div>
+                    </div>
+                    <div class="points-stat">
+                        <div class="points-stat-number">1,265</div>
+                        <div class="points-stat-label">Points Spent</div>
+                    </div>
+                    <div class="points-stat">
+                        <div class="points-stat-number">54</div>
+                        <div class="points-stat-label">Per Exam Avg.</div>
+                    </div>
+                    <div class="points-stat">
+                        <div class="points-stat-number">5,000</div>
+                        <div class="points-stat-label">Points Limit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-user"></i>
+                    <span>Overview</span>
+                </button>
+                <button class="tab-btn" data-tab="activity">
+                    <i class="fas fa-clock"></i>
+                    <span>Activity</span>
+                </button>
+                <button class="tab-btn" data-tab="exams">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Exams</span>
+                </button>
+                <button class="tab-btn" data-tab="performance">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Performance</span>
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content active" id="overview">
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="info-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">
+                                    <i class="fas fa-user"></i>
+                                    Personal Information
+                                </h5>
+                                <button class="btn-secondary-custom">
+                                    <i class="fas fa-edit"></i>
+                                    Edit
+                                </button>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Full Name</div>
+                                    <div class="info-value">Dr. Rashida Begum</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Email Address</div>
+                                    <div class="info-value">dr.rashida@dhakacolege.edu.bd</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Phone Number</div>
+                                    <div class="info-value">+880 1712-345678</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Date of Birth</div>
+                                    <div class="info-value">March 15, 1985</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Gender</div>
+                                    <div class="info-value">Female</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Address</div>
+                                    <div class="info-value">House 42, Road 8, Dhanmondi, Dhaka 1205</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="info-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    Professional Details
+                                </h5>
+                                <button class="btn-secondary-custom">
+                                    <i class="fas fa-edit"></i>
+                                    Edit
+                                </button>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Institution</div>
+                                    <div class="info-value">Dhaka College</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Department</div>
+                                    <div class="info-value">Mathematics</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Job Title</div>
+                                    <div class="info-value">Associate Professor</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Experience</div>
+                                    <div class="info-value">8 years</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Qualification</div>
+                                    <div class="info-value">PhD in Mathematics</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">University</div>
+                                    <div class="info-value">University of Dhaka</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="info-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">
+                                    <i class="fas fa-cog"></i>
+                                    Account Settings
+                                </h5>
+                                <button class="btn-secondary-custom">
+                                    <i class="fas fa-edit"></i>
+                                    Manage
+                                </button>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Account Status</div>
+                                    <div class="info-value">
+                                        <span style="color: var(--success-color); font-weight: 600;">
+                                            <i class="fas fa-check-circle"></i> Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Login Access</div>
+                                    <div class="info-value">
+                                        <span style="color: var(--success-color); font-weight: 600;">
+                                            <i class="fas fa-check"></i> Enabled
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Exam Creation</div>
+                                    <div class="info-value">
+                                        <span style="color: var(--success-color); font-weight: 600;">
+                                            <i class="fas fa-check"></i> Allowed
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Question Bank Access</div>
+                                    <div class="info-value">
+                                        <span style="color: var(--success-color); font-weight: 600;">
+                                            <i class="fas fa-check"></i> Full Access
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Email Notifications</div>
+                                    <div class="info-value">
+                                        <span style="color: var(--success-color); font-weight: 600;">
+                                            <i class="fas fa-check"></i> Enabled
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Last Login</div>
+                                    <div class="info-value">Today, 10:30 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="activity">
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <h5 class="card-title">
+                            <i class="fas fa-clock"></i>
+                            Recent Activity
+                        </h5>
+                        <button class="btn-secondary-custom">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon exam">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Created HSC Mathematics Final Exam</div>
+                            <div class="activity-desc">Chapter: Calculus - 50 questions, 3 hours duration</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                <span>2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="activity-points">-75 points</div>
+                            <div class="activity-status status-completed">Published</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon question">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Added 15 questions to Question Bank</div>
+                            <div class="activity-desc">Subject: Advanced Calculus - Multiple choice questions</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                <span>5 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="activity-points">-30 points</div>
+                            <div class="activity-status status-completed">Approved</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon points">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Points allocation received</div>
+                            <div class="activity-desc">Monthly points allocation from administration</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                <span>1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="activity-points">+500 points</div>
+                            <div class="activity-status status-completed">Credited</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon contest">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Participated in Inter-College Math Contest</div>
+                            <div class="activity-desc">Created contest questions for regional competition</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                <span>3 days ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="activity-points">-120 points</div>
+                            <div class="activity-status status-completed">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon exam">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Drafted SSC Algebra Practice Test</div>
+                            <div class="activity-desc">Chapter: Linear Equations - 30 questions, pending review</div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                <span>5 days ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="activity-points">-45 points</div>
+                            <div class="activity-status status-draft">Draft</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="exams">
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <h5 class="card-title">
+                            <i class="fas fa-file-alt"></i>
+                            Created Exams
+                        </h5>
+                        <button class="btn-secondary-custom">
+                            <i class="fas fa-plus"></i>
+                            Create New
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: var(--light-gray); border-bottom: 1px solid var(--border-color);">
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Exam Title</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Subject</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Questions</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Duration</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Status</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-dark);">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.5);">
+                                    <td style="padding: 12px; font-weight: 500;">HSC Mathematics Final Exam</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">Advanced Mathematics</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">50</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">3 hours</td>
+                                    <td style="padding: 12px;">
+                                        <span class="activity-status status-completed">Published</span>
+                                    </td>
+                                    <td style="padding: 12px;">
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.5);">
+                                    <td style="padding: 12px; font-weight: 500;">SSC Algebra Practice Test</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">Algebra</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">30</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">2 hours</td>
+                                    <td style="padding: 12px;">
+                                        <span class="activity-status status-draft">Draft</span>
+                                    </td>
+                                    <td style="padding: 12px;">
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(226, 232, 240, 0.5);">
+                                    <td style="padding: 12px; font-weight: 500;">Calculus Chapter Test</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">Calculus</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">25</td>
+                                    <td style="padding: 12px; color: var(--text-muted);">1.5 hours</td>
+                                    <td style="padding: 12px;">
+                                        <span class="activity-status status-completed">Published</span>
+                                    </td>
+                                    <td style="padding: 12px;">
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button style="background: none; border: 1px solid var(--border-color); padding: 6px 8px; border-radius: 4px; margin-right: 4px; cursor: pointer;">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="performance">
+                <div class="row">
+                    <div class="col-lg-8 mb-4">
+                        <div class="info-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">
+                                    <i class="fas fa-chart-line"></i>
+                                    Performance Metrics
+                                </h5>
+                                <button class="btn-secondary-custom">
+                                    <i class="fas fa-download"></i>
+                                    Export
+                                </button>
+                            </div>
+                            
+                            <div style="height: 300px; display: flex; align-items: center; justify-content: center; background: var(--light-gray); border-radius: 8px; margin-bottom: 20px;">
+                                <div style="text-align: center; color: var(--text-muted);">
+                                    <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 12px; opacity: 0.3;"></i>
+                                    <div>Performance chart would be displayed here</div>
+                                    <div style="font-size: 0.8rem;">Chart showing exam creation trends, student performance, etc.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">Average Exam Score</div>
+                                    <div class="info-value">87.5%</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Student Satisfaction</div>
+                                    <div class="info-value">4.8/5.0</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Question Accuracy</div>
+                                    <div class="info-value">94.2%</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Exam Completion Rate</div>
+                                    <div class="info-value">96.7%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 mb-4">
+                        <div class="info-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">
+                                    <i class="fas fa-trophy"></i>
+                                    Achievements
+                                </h5>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #ffd700, #ffed4e); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-medal" style="color: white; font-size: 1.1rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.875rem;">Top Performer</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">Best instructor this month</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--success-color), #22c55e); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-check-circle" style="color: white; font-size: 1.1rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.875rem;">Quality Creator</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">100+ quality questions</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--accent-color), #0ea5e9); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-users" style="color: white; font-size: 1.1rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.875rem;">Popular Educator</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">1000+ students reached</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const userProfile = document.getElementById('userProfile');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            // Tab elements
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Mobile menu functions
+            function openSidebar() {
+                sidebar.classList.add('show');
+                overlay.classList.add('show');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+
+            // Mobile menu events
+            mobileMenuBtn.addEventListener('click', openSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+
+            // Submenu functionality
+            document.querySelectorAll('.nav-item.has-submenu').forEach(item => {
+                const link = item.querySelector('.nav-link');
+                const submenu = item.querySelector('.submenu');
+                
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Close other submenus
+                    document.querySelectorAll('.nav-item.has-submenu').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('open');
+                            otherItem.querySelector('.submenu').classList.remove('open');
+                        }
+                    });
+                    
+                    // Toggle current submenu
+                    item.classList.toggle('open');
+                    submenu.classList.toggle('open');
+                });
+            });
+
+            // Notification dropdown
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('show');
+                userDropdown.classList.remove('show');
+            });
+
+            // User profile dropdown
+            userProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+                notificationDropdown.classList.remove('show');
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                notificationDropdown.classList.remove('show');
+                userDropdown.classList.remove('show');
+            });
+
+            // Navigation active states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const hasSubmenu = this.closest('.nav-item.has-submenu') && 
+                                     this.closest('.nav-item.has-submenu').querySelector('.nav-link') === this;
+                    
+                    if (!hasSubmenu) {
+                        e.preventDefault();
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Close mobile menu
+                        if (window.innerWidth <= 768) {
+                            closeSidebar();
+                        }
+                    }
+                });
+            });
+
+            // Tab functionality
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    
+                    // Remove active class from all tabs and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // Close sidebar on window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
