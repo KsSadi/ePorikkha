@@ -13,4 +13,12 @@ class DashboardController
         return view('Dashboard::participant.dashboard');
 
     }
+
+
+    public function adminIndex(){
+
+        return view('Dashboard::admin.dashboard');
+
+    }
+
 }
