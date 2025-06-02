@@ -1,5 +1,71 @@
 @extends('layouts.admin.app')
 
+@push('styles')
+    <style>
+
+        /* Enhanced Action Cards */
+        .action-btn {
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.03), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-color);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+
+        .action-btn i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .action-btn:hover i {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        @media (max-width: 768px) {
+            .action-btn {
+                padding: 24px 20px;
+            }
+
+            .action-btn i {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+@endpush
 
 @section('content')
     <!-- Statistics Cards -->

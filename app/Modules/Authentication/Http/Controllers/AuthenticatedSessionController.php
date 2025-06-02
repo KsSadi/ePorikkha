@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
             $user = Auth::user();
 
             // Get redirect URL based on user role
-            $redirectUrl = $this->getRedirectUrl($user);
+            $redirectUrl = $this->getRedirectUrl($user->role);
 
             return response()->json([
                 'success' => true,
@@ -70,16 +70,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Get redirect URL based on user role
      */
-    private function getRedirectUrl($user)
+    private function getRedirectUrl($role)
     {
-        if ($user->isAdmin()) {
-            return route('admin.dashboard');
-        } elseif ($user->isOrganizer()) {
-            return route('organizer.dashboard');
-        } elseif ($user->isEvaluator()) {
-            return route('evaluator.dashboard');
-        } else {
-            return route('participant.dashboard');
-        }
+        $dashboards = [
+            'admin' => 'admin.dashboard',
+            'instructor' => 'instructor.dashboard',
+            'evaluator' => 'evaluator.dashboard',
+            'student' => 'student.dashboard'
+        ];
+
+        $route = $dashboards[$role] ?? 'student.dashboard';
+
+        return route($route);
+
     }
 }
