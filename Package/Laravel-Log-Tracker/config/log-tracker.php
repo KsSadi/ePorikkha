@@ -39,6 +39,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Theme Selection
+    |--------------------------------------------------------------------------
+    |
+    | Choose the theme for the log viewer UI.
+    | Available options:
+    | - 'LiteFlow' : Minimal, clean log view.
+    | - 'GlowStack': Modern, colorful, enhanced visual log view.
+    |
+    | Default: 'GlowStack'
+    |
+    */
+
+    'theme' => 'GlowStack',
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Log Levels Configuration
     |--------------------------------------------------------------------------
     |

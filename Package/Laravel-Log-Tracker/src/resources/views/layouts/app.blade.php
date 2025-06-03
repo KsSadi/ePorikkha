@@ -466,7 +466,6 @@
             </div>
             <span>Log Tracker</span>
         </a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -485,6 +484,13 @@
                        href="{{ route('log-tracker.index') }}">
                         <i class="fas fa-list"></i>
                         <span>Log Files</span>
+                    </a>
+                </li>
+                <li class="nav-item modern-nav-item">
+                    <a class="modern-nav-link {{ request()->routeIs('log-tracker.export.form') ? 'active' : '' }}"
+                       href="{{ route('log-tracker.export.form') }}">
+                        <i class="fas fa-list"></i>
+                        <span>Export</span>
                     </a>
                 </li>
             </ul>

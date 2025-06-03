@@ -800,7 +800,6 @@
             }
         </style>
     @endpush
-
     <!-- Live Status Indicator -->
     <div class="live-status" id="liveStatus">
         <div class="status-dot"></div>

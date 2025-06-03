@@ -1263,7 +1263,7 @@
                 Recent Activity
             </h5>
             <div class="logs-actions">
-                <a href="#" class="action-btn primary">
+                <a href="{{route('log-tracker.export.form')}}" class="action-btn primary">
                     <i class="fas fa-download"></i>
                     Export All
                 </a>

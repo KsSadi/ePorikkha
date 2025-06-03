@@ -785,12 +785,6 @@
                         </a>
                     @endif
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                        <i class="fas fa-download"></i>
-                        Export
-                    </a>
-                </li>
             </ul>
         </div>
     </div>

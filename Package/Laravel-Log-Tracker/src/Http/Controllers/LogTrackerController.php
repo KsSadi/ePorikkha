@@ -10,7 +10,26 @@ use Illuminate\Http\Request;
 
 class LogTrackerController extends Controller
 {
+    protected $theme;
 
+    public function __construct()
+    {
+        $allowedThemes = ['GlowStack', 'LiteFlow'];
+        $configuredTheme = config('log-tracker.theme', 'GlowStack');
+
+        // Check only against allowed theme names
+        if (in_array($configuredTheme, $allowedThemes)) {
+            $this->theme = $configuredTheme;
+        } else {
+            \Log::warning("LogTracker: Invalid theme '{$configuredTheme}' configured. Using default 'GlowStack'.");
+            $this->theme = 'GlowStack';
+        }
+    }
+
+    protected function themedView($view, $data = [])
+    {
+        return view("log-tracker::theme.{$this->theme}.{$view}", $data);
+    }
 
     public function dashboard()
     {
@@ -114,7 +133,7 @@ class LogTrackerController extends Controller
         // Get only the last 5 logs
         $lastFiveLogs = array_slice($recentLogs, 0, 5);
 
-        return view('log-tracker::dashboard', compact(
+        return $this->themedView('dashboard', compact(
             'summary',
             'dates',
             'logTypesCount',
@@ -295,7 +314,7 @@ class LogTrackerController extends Controller
             ];
         }
 
-        return view('log-tracker::logs', compact('logFiles', 'counts', 'totalFiles', 'fileSizes', 'formattedFileNames', 'logLevels'));
+        return $this->themedView('logs', compact('logFiles', 'counts', 'totalFiles', 'fileSizes', 'formattedFileNames', 'logLevels'));
     }
 
 
@@ -346,10 +365,8 @@ class LogTrackerController extends Controller
             ];
         }
 
-        return view('log-tracker::log-details', compact('logFiles', 'logName', 'entries', 'counts', 'logLevels'));
+        return $this->themedView('log-details', compact('logFiles', 'logName', 'entries', 'counts', 'logLevels'));
     }
-
-
 
     public function download($logName)
     {
@@ -391,7 +408,7 @@ class LogTrackerController extends Controller
         $logFiles = LogTracker::getLogFiles();
         rsort($logFiles);
 
-        return view('log-tracker::export', compact('logFiles'));
+        return $this->themedView('export', compact('logFiles'));
     }
 
     /**

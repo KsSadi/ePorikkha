@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Md. Rahman',
-                'email' => 'admin@eporikkha.edu.bd',
+                'email' => 'sadi@gmail.com',
                 'role' => 'admin',
                 'status' => 'active',
                 'institution' => 'System Admin',
@@ -70,7 +70,7 @@ class UserSeeder extends Seeder
 
         foreach ($users as $userData) {
             User::create(array_merge($userData, [
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('password'),
                 'email_verified_at' => now()
             ]));
         }
