@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'theme' => 'GlowStack',
+    'theme' => 'LiteFlow',
 
 
     /*

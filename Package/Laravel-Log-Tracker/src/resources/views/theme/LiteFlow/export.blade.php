@@ -1,96 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Export Logs - Log Tracker</title>
-    <!-- Bootstrap 5.3.3 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+@extends('log-tracker::theme.LiteFlow.layouts.app')
+
+@section('title', 'Export Log - Log Tracker')
+
+@push('styles')
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --info-color: #0284c7;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --border-radius: 8px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.2s ease-in-out;
-        }
-
-        body {
-            background-color: var(--gray-50);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            color: var(--gray-900);
-            line-height: 1.6;
-        }
-
-        /* Clean Navigation */
-        .navbar {
-            background-color: white;
-            border-bottom: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
-            color: var(--gray-900) !important;
-            font-weight: 600;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--gray-600) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            margin: 0 0.25rem;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
-            background-color: var(--gray-100);
-        }
-
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color) !important;
-            background-color: #dbeafe;
-        }
-
-        .navbar-toggler {
-            border: 1px solid var(--gray-300);
-            padding: 0.25rem 0.5rem;
-        }
 
         /* Modern Breadcrumb */
         .breadcrumb-container {
@@ -732,425 +645,354 @@
             opacity: 1;
         }
     </style>
-</head>
-<body>
-<!-- Clean Navigation -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        @if(Route::has('log-tracker.dashboard'))
-            <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
-        @else
-            <a class="navbar-brand" href="#">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
-        @endif
+@endpush
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+@section('content')
+    <!-- Main Content -->
+    <div class="container my-4 page-content">
+        <!-- Modern Breadcrumb -->
+        <div class="breadcrumb-container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
                     @if(Route::has('log-tracker.dashboard'))
-                        <a class="nav-link" href="{{ route('log-tracker.dashboard') }}">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
+                        <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
                     @else
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
+                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                     @endif
-                </li>
-                <li class="nav-item">
                     @if(Route::has('log-tracker.index'))
-                        <a class="nav-link" href="{{ route('log-tracker.index') }}">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
+                        <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
                     @else
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
+                        <li class="breadcrumb-item"><a href="#">Log Files</a></li>
                     @endif
-                </li>
-            </ul>
+                    <li class="breadcrumb-item active">Export</li>
+                </ol>
+            </nav>
         </div>
-    </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container my-4 page-content">
-    <!-- Modern Breadcrumb -->
-    <div class="breadcrumb-container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                @if(Route::has('log-tracker.dashboard'))
-                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
-                @else
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                @endif
-                @if(Route::has('log-tracker.index'))
-                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
-                @else
-                    <li class="breadcrumb-item"><a href="#">Log Files</a></li>
-                @endif
-                <li class="breadcrumb-item active">Export</li>
-            </ol>
-        </nav>
-    </div>
-
-    <!-- Enhanced Header -->
-    <div class="page-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h1 class="header-title">
-                    <i class="fas fa-download"></i>
-                    Export Your Logs
-                </h1>
-                <p class="header-subtitle">
-                    Generate professional reports in multiple formats with advanced filtering options
-                </p>
-            </div>
-            <div class="header-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-        </div>
-    </div>
-
-    <form action="{{ route('log-tracker.export') }}" method="POST" id="exportForm">
-        @csrf
-
-        <!-- Format Selection -->
-        <div class="content-card">
-            <div class="content-header">
-                <h5 class="content-title">
-                    <i class="fas fa-file-alt"></i>
-                    Choose Export Format
-                </h5>
-            </div>
-            <div class="content-body">
-                <div class="format-grid">
-                    <div class="format-card" data-format="csv">
-                        <input type="radio" name="format" value="csv" id="csv" style="display: none;">
-                        <i class="fas fa-table icon"></i>
-                        <h6>CSV</h6>
-                        <small>Excel compatible format</small>
-                    </div>
-                    <div class="format-card" data-format="json">
-                        <input type="radio" name="format" value="json" id="json" style="display: none;">
-                        <i class="fas fa-code icon"></i>
-                        <h6>JSON</h6>
-                        <small>API friendly structure</small>
-                    </div>
-                    <div class="format-card" data-format="excel">
-                        <input type="radio" name="format" value="excel" id="excel" style="display: none;">
-                        <i class="fas fa-file-excel icon"></i>
-                        <h6>Excel</h6>
-                        <small>Native Excel format</small>
-                    </div>
-                    <div class="format-card" data-format="pdf">
-                        <input type="radio" name="format" value="pdf" id="pdf" style="display: none;">
-                        <i class="fas fa-file-pdf icon"></i>
-                        <h6>PDF</h6>
-                        <small>Print ready reports</small>
-                    </div>
+        <!-- Enhanced Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="header-title">
+                        <i class="fas fa-download"></i>
+                        Export Your Logs
+                    </h1>
+                    <p class="header-subtitle">
+                        Generate professional reports in multiple formats with advanced filtering options
+                    </p>
+                </div>
+                <div class="header-icon">
+                    <i class="fas fa-chart-line"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Main Grid Layout -->
-        <div class="main-grid">
-            <!-- Filters Panel -->
-            <div class="filters-panel">
-                <!-- Date Range -->
-                <div class="filter-section">
-                    <div class="filter-title">
-                        <i class="fas fa-calendar"></i>
-                        Date Range
-                    </div>
-                    <div class="date-inputs">
-                        <div>
-                            <label class="form-label">From</label>
-                            <input type="date" name="date_from" class="form-control">
+        <form action="{{ route('log-tracker.export') }}" method="POST" id="exportForm">
+            @csrf
+
+            <!-- Format Selection -->
+            <div class="content-card">
+                <div class="content-header">
+                    <h5 class="content-title">
+                        <i class="fas fa-file-alt"></i>
+                        Choose Export Format
+                    </h5>
+                </div>
+                <div class="content-body">
+                    <div class="format-grid">
+                        <div class="format-card" data-format="csv">
+                            <input type="radio" name="format" value="csv" id="csv" style="display: none;">
+                            <i class="fas fa-table icon"></i>
+                            <h6>CSV</h6>
+                            <small>Excel compatible format</small>
                         </div>
-                        <div>
-                            <label class="form-label">To</label>
-                            <input type="date" name="date_to" class="form-control">
+                        <div class="format-card" data-format="json">
+                            <input type="radio" name="format" value="json" id="json" style="display: none;">
+                            <i class="fas fa-code icon"></i>
+                            <h6>JSON</h6>
+                            <small>API friendly structure</small>
+                        </div>
+                        <div class="format-card" data-format="excel">
+                            <input type="radio" name="format" value="excel" id="excel" style="display: none;">
+                            <i class="fas fa-file-excel icon"></i>
+                            <h6>Excel</h6>
+                            <small>Native Excel format</small>
+                        </div>
+                        <div class="format-card" data-format="pdf">
+                            <input type="radio" name="format" value="pdf" id="pdf" style="display: none;">
+                            <i class="fas fa-file-pdf icon"></i>
+                            <h6>PDF</h6>
+                            <small>Print ready reports</small>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Log Levels -->
-                <div class="filter-section">
-                    <div class="filter-title">
-                        <i class="fas fa-layer-group"></i>
-                        Log Levels
+            <!-- Main Grid Layout -->
+            <div class="main-grid">
+                <!-- Filters Panel -->
+                <div class="filters-panel">
+                    <!-- Date Range -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-calendar"></i>
+                            Date Range
+                        </div>
+                        <div class="date-inputs">
+                            <div>
+                                <label class="form-label">From</label>
+                                <input type="date" name="date_from" class="form-control">
+                            </div>
+                            <div>
+                                <label class="form-label">To</label>
+                                <input type="date" name="date_to" class="form-control">
+                            </div>
+                        </div>
                     </div>
-                    <div class="level-badges">
-                        @foreach(config('log-tracker.log_levels', []) as $level => $config)
-                            @if($level !== 'total')
-                                <label class="level-badge">
-                                    <input type="checkbox" name="levels[]" value="{{ $level }}" checked>
-                                    <span class="badge" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+
+                    <!-- Log Levels -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-layer-group"></i>
+                            Log Levels
+                        </div>
+                        <div class="level-badges">
+                            @foreach(config('log-tracker.log_levels', []) as $level => $config)
+                                @if($level !== 'total')
+                                    <label class="level-badge">
+                                        <input type="checkbox" name="levels[]" value="{{ $level }}" checked>
+                                        <span class="badge" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
                                         <i class="{{ $config['icon'] ?? 'fas fa-circle' }}"></i>
                                         {{ ucfirst($level) }}
                                     </span>
-                                </label>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-
-                <!-- Search -->
-                <div class="filter-section">
-                    <div class="filter-title">
-                        <i class="fas fa-search"></i>
-                        Search
-                    </div>
-                    <input type="text" name="search" class="form-control" placeholder="Search in log messages...">
-                </div>
-            </div>
-
-            <!-- Files Panel -->
-            <div class="files-panel">
-                <div class="files-header">
-                    <h5 class="content-title">
-                        <i class="fas fa-list"></i>
-                        Select Log Files
-                    </h5>
-                    <div class="select-buttons">
-                        <button type="button" class="btn-outline-primary" onclick="selectAll()">Select All</button>
-                        <button type="button" class="btn-outline-primary" onclick="deselectAll()">Deselect All</button>
-                    </div>
-                </div>
-
-                <div class="files-list">
-                    @forelse($logFiles ?? [] as $file)
-                        <div class="file-item" onclick="toggleFile(this)">
-                            <input type="checkbox" name="log_files[]" value="{{ $file }}" class="file-checkbox" checked>
-                            <div class="file-info">
-                                <div class="file-name">{{ $file }}</div>
-                                @if(file_exists(storage_path('logs/' . $file)))
-                                    <div class="file-size">{{ round(filesize(storage_path('logs/' . $file)) / 1024, 2) }} KB</div>
-                                @else
-                                    <div class="file-size">0 KB</div>
+                                    </label>
                                 @endif
-                            </div>
+                            @endforeach
                         </div>
-                    @empty
-                        <div class="text-center py-4">
-                            <div class="text-muted">
-                                <i class="fas fa-inbox fa-3x mb-3"></i>
-                                <h5>No Log Files Found</h5>
-                                <p>There are no log files available for export.</p>
-                            </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-search"></i>
+                            Search
                         </div>
-                    @endforelse
+                        <input type="text" name="search" class="form-control" placeholder="Search in log messages...">
+                    </div>
+                </div>
+
+                <!-- Files Panel -->
+                <div class="files-panel">
+                    <div class="files-header">
+                        <h5 class="content-title">
+                            <i class="fas fa-list"></i>
+                            Select Log Files
+                        </h5>
+                        <div class="select-buttons">
+                            <button type="button" class="btn-outline-primary" onclick="selectAll()">Select All</button>
+                            <button type="button" class="btn-outline-primary" onclick="deselectAll()">Deselect All</button>
+                        </div>
+                    </div>
+
+                    <div class="files-list">
+                        @forelse($logFiles ?? [] as $file)
+                            <div class="file-item" onclick="toggleFile(this)">
+                                <input type="checkbox" name="log_files[]" value="{{ $file }}" class="file-checkbox" checked>
+                                <div class="file-info">
+                                    <div class="file-name">{{ $file }}</div>
+                                    @if(file_exists(storage_path('logs/' . $file)))
+                                        <div class="file-size">{{ round(filesize(storage_path('logs/' . $file)) / 1024, 2) }} KB</div>
+                                    @else
+                                        <div class="file-size">0 KB</div>
+                                    @endif
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <h5>No Log Files Found</h5>
+                                    <p>There are no log files available for export.</p>
+                                </div>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Export Actions -->
-        <div class="export-actions">
-            <div class="export-info">
-                <i class="fas fa-info-circle"></i>
-                <span>Export will include filtered log entries based on your selections above</span>
+            <!-- Export Actions -->
+            <div class="export-actions">
+                <div class="export-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Export will include filtered log entries based on your selections above</span>
+                </div>
+                <button type="submit" class="export-btn" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    <span>Export Logs</span>
+                </button>
             </div>
-            <button type="submit" class="export-btn" id="exportBtn">
-                <i class="fas fa-download"></i>
-                <span>Export Logs</span>
-            </button>
-        </div>
-    </form>
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <p class="mb-0">
-                © <span id="year">{{ date('Y') }}</span>
-                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
-                    Log Tracker
-                </a>
-                - Efficient logging, effortless insights.
-            </p>
-        </div>
+        </form>
     </div>
-</footer>
 
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+@endsection
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Format card selection
-        document.querySelectorAll('.format-card').forEach(card => {
-            card.addEventListener('click', function() {
-                // Remove selected class from all cards
-                document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format card selection
+            document.querySelectorAll('.format-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
 
-                // Add selected class to clicked card
-                this.classList.add('selected');
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
 
-                // Set the radio button
-                const format = this.dataset.format;
-                document.getElementById(format).checked = true;
+                    // Set the radio button
+                    const format = this.dataset.format;
+                    document.getElementById(format).checked = true;
+                });
             });
-        });
 
-        // File selection
-        document.querySelectorAll('.file-item').forEach(item => {
-            const checkbox = item.querySelector('.file-checkbox');
+            // File selection
+            document.querySelectorAll('.file-item').forEach(item => {
+                const checkbox = item.querySelector('.file-checkbox');
 
-            // Set initial state
-            if (checkbox && checkbox.checked) {
-                item.classList.add('selected');
-            }
+                // Set initial state
+                if (checkbox && checkbox.checked) {
+                    item.classList.add('selected');
+                }
 
-            if (checkbox) {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        item.classList.add('selected');
-                    } else {
-                        item.classList.remove('selected');
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            item.classList.add('selected');
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+                }
+            });
+
+            // Form submission with enhanced loading
+            const exportForm = document.getElementById('exportForm');
+            const exportBtn = document.getElementById('exportBtn');
+            const originalBtnContent = exportBtn.innerHTML;
+
+            if (exportForm && exportBtn) {
+                exportForm.addEventListener('submit', function(e) {
+                    // Validate format selection
+                    const format = document.querySelector('input[name="format"]:checked');
+                    if (!format) {
+                        e.preventDefault();
+                        showNotification('Please select an export format', 'warning');
+                        return false;
                     }
+
+                    // Validate file selection
+                    const files = document.querySelectorAll('input[name="log_files[]"]:checked');
+                    if (files.length === 0) {
+                        e.preventDefault();
+                        showNotification('Please select at least one log file', 'warning');
+                        return false;
+                    }
+
+                    // Start export process
+                    startExportProcess(format.value);
                 });
             }
-        });
 
-        // Form submission with enhanced loading
-        const exportForm = document.getElementById('exportForm');
-        const exportBtn = document.getElementById('exportBtn');
-        const originalBtnContent = exportBtn.innerHTML;
+            function startExportProcess(format) {
+                const steps = [
+                    'Preparing export...',
+                    'Processing log files...',
+                    `Generating ${format.toUpperCase()} file...`,
+                    'Starting download...'
+                ];
 
-        if (exportForm && exportBtn) {
-            exportForm.addEventListener('submit', function(e) {
-                // Validate format selection
-                const format = document.querySelector('input[name="format"]:checked');
-                if (!format) {
-                    e.preventDefault();
-                    showNotification('Please select an export format', 'warning');
-                    return false;
+                let currentStep = 0;
+                exportBtn.disabled = true;
+                exportBtn.style.background = '#6b7280';
+
+                function updateStep() {
+                    if (currentStep < steps.length) {
+                        exportBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>${steps[currentStep]}</span>`;
+                        currentStep++;
+                        setTimeout(updateStep, 1000);
+                    } else {
+                        setTimeout(() => {
+                            exportBtn.innerHTML = originalBtnContent;
+                            exportBtn.disabled = false;
+                            exportBtn.style.background = '';
+                            showNotification('Export completed successfully!', 'success');
+                        }, 1000);
+                    }
                 }
 
-                // Validate file selection
-                const files = document.querySelectorAll('input[name="log_files[]"]:checked');
-                if (files.length === 0) {
-                    e.preventDefault();
-                    showNotification('Please select at least one log file', 'warning');
-                    return false;
-                }
-
-                // Start export process
-                startExportProcess(format.value);
-            });
-        }
-
-        function startExportProcess(format) {
-            const steps = [
-                'Preparing export...',
-                'Processing log files...',
-                `Generating ${format.toUpperCase()} file...`,
-                'Starting download...'
-            ];
-
-            let currentStep = 0;
-            exportBtn.disabled = true;
-            exportBtn.style.background = '#6b7280';
-
-            function updateStep() {
-                if (currentStep < steps.length) {
-                    exportBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>${steps[currentStep]}</span>`;
-                    currentStep++;
-                    setTimeout(updateStep, 1000);
-                } else {
-                    setTimeout(() => {
-                        exportBtn.innerHTML = originalBtnContent;
-                        exportBtn.disabled = false;
-                        exportBtn.style.background = '';
-                        showNotification('Export completed successfully!', 'success');
-                    }, 1000);
-                }
+                updateStep();
             }
 
-            updateStep();
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
                 <span>${message}</span>
             `;
 
-            document.body.appendChild(notification);
+                document.body.appendChild(notification);
 
-            // Animate in
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            // Remove after 4 seconds
-            setTimeout(() => {
-                notification.classList.remove('show');
+                // Animate in
                 setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 4000);
+                    notification.classList.add('show');
+                }, 100);
+
+                // Remove after 4 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+
+            // Make showNotification globally available
+            window.showNotification = showNotification;
+        });
+
+        function selectAll() {
+            document.querySelectorAll('.file-checkbox').forEach(cb => {
+                cb.checked = true;
+                const item = cb.closest('.file-item');
+                if (item) {
+                    item.classList.add('selected');
+                }
+            });
         }
 
-        // Make showNotification globally available
-        window.showNotification = showNotification;
-    });
+        function deselectAll() {
+            document.querySelectorAll('.file-checkbox').forEach(cb => {
+                cb.checked = false;
+                const item = cb.closest('.file-item');
+                if (item) {
+                    item.classList.remove('selected');
+                }
+            });
+        }
 
-    function selectAll() {
-        document.querySelectorAll('.file-checkbox').forEach(cb => {
-            cb.checked = true;
-            const item = cb.closest('.file-item');
-            if (item) {
-                item.classList.add('selected');
-            }
-        });
-    }
+        function toggleFile(item) {
+            const checkbox = item.querySelector('.file-checkbox');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
 
-    function deselectAll() {
-        document.querySelectorAll('.file-checkbox').forEach(cb => {
-            cb.checked = false;
-            const item = cb.closest('.file-item');
-            if (item) {
-                item.classList.remove('selected');
-            }
-        });
-    }
-
-    function toggleFile(item) {
-        const checkbox = item.querySelector('.file-checkbox');
-        if (checkbox) {
-            checkbox.checked = !checkbox.checked;
-
-            if (checkbox.checked) {
-                item.classList.add('selected');
-            } else {
-                item.classList.remove('selected');
+                if (checkbox.checked) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
             }
         }
-    }
-</script>
-</body>
-</html>
+    </script>
+@endpush

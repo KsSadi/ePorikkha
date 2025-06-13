@@ -489,8 +489,8 @@
                 <li class="nav-item modern-nav-item">
                     <a class="modern-nav-link {{ request()->routeIs('log-tracker.export.form') ? 'active' : '' }}"
                        href="{{ route('log-tracker.export.form') }}">
-                        <i class="fas fa-list"></i>
-                        <span>Export</span>
+                        <i class="fas fa-download"></i>
+                        <span>Export Logs</span>
                     </a>
                 </li>
             </ul>

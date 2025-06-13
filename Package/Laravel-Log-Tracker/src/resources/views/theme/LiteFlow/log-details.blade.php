@@ -1,96 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Log Details - Log Tracker')</title>
-    <!-- Bootstrap 5.3.3 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+@extends('log-tracker::theme.LiteFlow.layouts.app')
+
+@section('title', 'Log Details - Log Tracker')
+
+@push('styles')
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --info-color: #0284c7;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --border-radius: 8px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.2s ease-in-out;
-        }
-
-        body {
-            background-color: var(--gray-50);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            color: var(--gray-900);
-            line-height: 1.6;
-        }
-
-        /* Clean Navigation */
-        .navbar {
-            background-color: white;
-            border-bottom: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
-            color: var(--gray-900) !important;
-            font-weight: 600;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--gray-600) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            margin: 0 0.25rem;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
-            background-color: var(--gray-100);
-        }
-
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color) !important;
-            background-color: #dbeafe;
-        }
-
-        .navbar-toggler {
-            border: 1px solid var(--gray-300);
-            padding: 0.25rem 0.5rem;
-        }
 
         /* Modern Breadcrumb */
         .breadcrumb-container {
@@ -877,543 +790,472 @@
             animation: fadeIn 0.3s ease-out;
         }
     </style>
-</head>
-<body>
-<!-- Clean Navigation -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        @if(Route::has('log-tracker.dashboard'))
-            <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
-        @else
-            <a class="navbar-brand" href="#">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
-        @endif
+@endpush
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+@section('content')
+    <!-- Main Content -->
+    <div class="container my-4 page-content">
+        <!-- Modern Breadcrumb -->
+        <div class="breadcrumb-container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
                     @if(Route::has('log-tracker.dashboard'))
-                        <a class="nav-link" href="{{ route('log-tracker.dashboard') }}">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
+                        <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
                     @else
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
+                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                     @endif
-                </li>
-                <li class="nav-item">
                     @if(Route::has('log-tracker.index'))
-                        <a class="nav-link" href="{{ route('log-tracker.index') }}">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
+                        <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
                     @else
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
+                        <li class="breadcrumb-item"><a href="#">Log Files</a></li>
                     @endif
-                </li>
-            </ul>
+                    <li class="breadcrumb-item active">{{ $logName ?? 'Log Details' }}</li>
+                </ol>
+            </nav>
         </div>
-    </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container my-4 page-content">
-    <!-- Modern Breadcrumb -->
-    <div class="breadcrumb-container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                @if(Route::has('log-tracker.dashboard'))
-                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.dashboard') }}">Dashboard</a></li>
-                @else
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                @endif
-                @if(Route::has('log-tracker.index'))
-                    <li class="breadcrumb-item"><a href="{{ route('log-tracker.index') }}">Log Files</a></li>
-                @else
-                    <li class="breadcrumb-item"><a href="#">Log Files</a></li>
-                @endif
-                <li class="breadcrumb-item active">{{ $logName ?? 'Log Details' }}</li>
-            </ol>
-        </nav>
-    </div>
-
-    <!-- Enhanced Header -->
-    <div class="page-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h1 class="header-title">
-                    <i class="fas fa-file-code"></i>
-                    {{ $logName ?? 'Log File' }}
-                </h1>
-                <p class="header-subtitle">
-                    Analyze and explore log entries with advanced filtering and export options
-                </p>
-                <div class="header-meta">
-                    @if(isset($logName) && file_exists(storage_path('logs/' . $logName)))
-                        <div class="meta-item">
-                            <i class="fas fa-hdd"></i>
-                            <span>{{ round(filesize(storage_path('logs/' . $logName)) / 1024, 2) }} KB</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>{{ date('M d, Y', filemtime(storage_path('logs/' . $logName))) }}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-clock"></i>
-                            <span>{{ date('h:i A', filemtime(storage_path('logs/' . $logName))) }}</span>
-                        </div>
-                    @else
-                        <div class="meta-item">
-                            <i class="fas fa-info-circle"></i>
-                            <span>File information unavailable</span>
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            <div class="header-actions">
-                <a href="{{ url()->previous() }}" class="action-btn">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back</span>
-                </a>
-
-                @if(Route::has('log-tracker.download') && isset($logName))
-                    <a href="{{ route('log-tracker.download', ['logName' => $logName]) }}" class="action-btn success">
-                        <i class="fas fa-download"></i>
-                        <span>Download</span>
-                    </a>
-                @else
-                    <a href="#" class="action-btn success">
-                        <i class="fas fa-download"></i>
-                        <span>Download</span>
-                    </a>
-                @endif
-
-                <div class="export-dropdown">
-                    <button class="action-btn warning" onclick="toggleExportMenu(event)">
-                        <i class="fas fa-share-alt"></i>
-                        <span>Export</span>
-                        <i class="fas fa-chevron-down" style="margin-left: 0.25rem; font-size: 0.7rem;"></i>
-                    </button>
-                    <div class="export-menu" id="exportMenu">
-                        @if(Route::has('log-tracker.export.quick') && isset($logName))
-                            <a href="{{ route('log-tracker.export.quick', [$logName, 'csv']) }}">
-                                <i class="fas fa-table"></i>CSV
-                            </a>
-                            <a href="{{ route('log-tracker.export.quick', [$logName, 'json']) }}">
-                                <i class="fas fa-code"></i>JSON
-                            </a>
-                            <a href="{{ route('log-tracker.export.quick', [$logName, 'excel']) }}">
-                                <i class="fas fa-file-excel"></i>Excel
-                            </a>
-                            <a href="{{ route('log-tracker.export.quick', [$logName, 'pdf']) }}">
-                                <i class="fas fa-file-pdf"></i>PDF
-                            </a>
+        <!-- Enhanced Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="header-title">
+                        <i class="fas fa-file-code"></i>
+                        {{ $logName ?? 'Log File' }}
+                    </h1>
+                    <p class="header-subtitle">
+                        Analyze and explore log entries with advanced filtering and export options
+                    </p>
+                    <div class="header-meta">
+                        @if(isset($logName) && file_exists(storage_path('logs/' . $logName)))
+                            <div class="meta-item">
+                                <i class="fas fa-hdd"></i>
+                                <span>{{ round(filesize(storage_path('logs/' . $logName)) / 1024, 2) }} KB</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ date('M d, Y', filemtime(storage_path('logs/' . $logName))) }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ date('h:i A', filemtime(storage_path('logs/' . $logName))) }}</span>
+                            </div>
                         @else
-                            <a href="#">
-                                <i class="fas fa-table"></i>CSV
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-code"></i>JSON
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-file-excel"></i>Excel
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-file-pdf"></i>PDF
-                            </a>
+                            <div class="meta-item">
+                                <i class="fas fa-info-circle"></i>
+                                <span>File information unavailable</span>
+                            </div>
                         @endif
                     </div>
                 </div>
 
-                @if(Route::has('log-tracker.delete') && config('log-tracker.allow_delete', false) && isset($logName))
-                    <form action="{{ route('log-tracker.delete', ['logName' => $logName]) }}" method="POST" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="action-btn danger" onclick="return confirm('Are you sure you want to delete this log file?')">
-                            <i class="fas fa-trash"></i>
-                            <span>Delete</span>
+                <div class="header-actions">
+                    <a href="{{ url()->previous() }}" class="action-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </a>
+
+                    @if(Route::has('log-tracker.download') && isset($logName))
+                        <a href="{{ route('log-tracker.download', ['logName' => $logName]) }}" class="action-btn success">
+                            <i class="fas fa-download"></i>
+                            <span>Download</span>
+                        </a>
+                    @else
+                        <a href="#" class="action-btn success">
+                            <i class="fas fa-download"></i>
+                            <span>Download</span>
+                        </a>
+                    @endif
+
+                    <div class="export-dropdown">
+                        <button class="action-btn warning" onclick="toggleExportMenu(event)">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Export</span>
+                            <i class="fas fa-chevron-down" style="margin-left: 0.25rem; font-size: 0.7rem;"></i>
                         </button>
-                    </form>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <!-- Filters Section -->
-    <div class="filters-section">
-        <div class="filters-header">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <h5 class="filters-title">
-                    <i class="fas fa-filter"></i>
-                    Smart Filters
-                </h5>
-                <div class="total-entries">
-                    {{ number_format(count($entries ?? [])) }} Total Entries
-                </div>
-            </div>
-            <button class="collapse-btn" onclick="toggleFilters()">
-                <i class="fas fa-chevron-up" id="collapseIcon"></i>
-            </button>
-        </div>
-        <div class="filters-body" id="filtersBody">
-            <div class="filters-content">
-                <div class="level-switches">
-                    @forelse($logLevels ?? [] as $level => $config)
-                        <div class="level-switch active log-filter" data-level="{{ $level }}">
-                            <div class="level-info">
-                                <div class="level-icon" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
-                                    <i class="{{ $config['icon'] ?? 'fas fa-circle' }}"></i>
-                                </div>
-                                <span class="level-name">{{ ucfirst($level) }}</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div class="level-count" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
-                                    {{ isset($counts[$level]) ? $counts[$level] : 0 }}
-                                </div>
-                                <div class="switch-toggle active"></div>
-                            </div>
-                            <input type="checkbox" class="d-none level-checkbox" value="{{ $level }}" checked>
-                        </div>
-                    @empty
-                        <div class="level-switch active log-filter" data-level="error">
-                            <div class="level-info">
-                                <div class="level-icon" style="background-color: #dc2626;">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                </div>
-                                <span class="level-name">Error</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div class="level-count" style="background-color: #dc2626;">0</div>
-                                <div class="switch-toggle active"></div>
-                            </div>
-                            <input type="checkbox" class="d-none level-checkbox" value="error" checked>
-                        </div>
-                        <div class="level-switch active log-filter" data-level="warning">
-                            <div class="level-info">
-                                <div class="level-icon" style="background-color: #d97706;">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <span class="level-name">Warning</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div class="level-count" style="background-color: #d97706;">0</div>
-                                <div class="switch-toggle active"></div>
-                            </div>
-                            <input type="checkbox" class="d-none level-checkbox" value="warning" checked>
-                        </div>
-                        <div class="level-switch active log-filter" data-level="info">
-                            <div class="level-info">
-                                <div class="level-icon" style="background-color: #0284c7;">
-                                    <i class="fas fa-info-circle"></i>
-                                </div>
-                                <span class="level-name">Info</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div class="level-count" style="background-color: #0284c7;">0</div>
-                                <div class="switch-toggle active"></div>
-                            </div>
-                            <input type="checkbox" class="d-none level-checkbox" value="info" checked>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="content-card">
-        <div class="content-header">
-            <h5 class="content-title">Log Entries</h5>
-            <div class="content-badge" id="entriesCount">{{ number_format(count($entries ?? [])) }} entries</div>
-        </div>
-
-        <div class="search-bar">
-            <div style="position: relative;">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-bar-input log-search" placeholder="Search through log messages, timestamps, and more..." id="mainSearchInput">
-            </div>
-        </div>
-
-        <div class="log-container">
-            <table class="log-table">
-                <thead>
-                <tr>
-                    <th style="width: 120px;">Level</th>
-                    <th style="width: 180px;">Timestamp</th>
-                    <th>Message</th>
-                    <th style="width: 100px;">Actions</th>
-                </tr>
-                </thead>
-                <tbody id="logTableBody">
-                @forelse($entries ?? [] as $index => $log)
-                    <tr class="log-row" data-level="{{ strtolower($log['level'] ?? 'info') }}" data-index="{{ $index }}">
-                        <td>
-                            <div class="log-level-badge" style="background-color: {{ $log['color'] ?? '#6b7280' }};">
-                                <i class="{{ $log['icon'] ?? 'fas fa-circle' }}"></i>
-                                {{ strtoupper($log['level'] ?? 'INFO') }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="timestamp">{{ $log['timestamp'] ?? 'N/A' }}</div>
-                        </td>
-                        <td>
-                            <div class="log-message">{{ $log['message'] ?? 'No message' }}</div>
-                        </td>
-                        <td>
-                            @if (!empty($log['stack']))
-                                <button class="stack-btn" onclick="toggleStackTrace({{ $index }})">
-                                    <i class="fas fa-code"></i>
-                                    <span>Stack</span>
-                                </button>
+                        <div class="export-menu" id="exportMenu">
+                            @if(Route::has('log-tracker.export.quick') && isset($logName))
+                                <a href="{{ route('log-tracker.export.quick', [$logName, 'csv']) }}">
+                                    <i class="fas fa-table"></i>CSV
+                                </a>
+                                <a href="{{ route('log-tracker.export.quick', [$logName, 'json']) }}">
+                                    <i class="fas fa-code"></i>JSON
+                                </a>
+                                <a href="{{ route('log-tracker.export.quick', [$logName, 'excel']) }}">
+                                    <i class="fas fa-file-excel"></i>Excel
+                                </a>
+                                <a href="{{ route('log-tracker.export.quick', [$logName, 'pdf']) }}">
+                                    <i class="fas fa-file-pdf"></i>PDF
+                                </a>
+                            @else
+                                <a href="#">
+                                    <i class="fas fa-table"></i>CSV
+                                </a>
+                                <a href="#">
+                                    <i class="fas fa-code"></i>JSON
+                                </a>
+                                <a href="#">
+                                    <i class="fas fa-file-excel"></i>Excel
+                                </a>
+                                <a href="#">
+                                    <i class="fas fa-file-pdf"></i>PDF
+                                </a>
                             @endif
-                        </td>
+                        </div>
+                    </div>
+
+                    @if(Route::has('log-tracker.delete') && config('log-tracker.allow_delete', false) && isset($logName))
+                        <form action="{{ route('log-tracker.delete', ['logName' => $logName]) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="action-btn danger" onclick="return confirm('Are you sure you want to delete this log file?')">
+                                <i class="fas fa-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h5 class="filters-title">
+                        <i class="fas fa-filter"></i>
+                        Smart Filters
+                    </h5>
+                    <div class="total-entries">
+                        {{ number_format(count($entries ?? [])) }} Total Entries
+                    </div>
+                </div>
+                <button class="collapse-btn" onclick="toggleFilters()">
+                    <i class="fas fa-chevron-up" id="collapseIcon"></i>
+                </button>
+            </div>
+            <div class="filters-body" id="filtersBody">
+                <div class="filters-content">
+                    <div class="level-switches">
+                        @forelse($logLevels ?? [] as $level => $config)
+                            <div class="level-switch active log-filter" data-level="{{ $level }}">
+                                <div class="level-info">
+                                    <div class="level-icon" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+                                        <i class="{{ $config['icon'] ?? 'fas fa-circle' }}"></i>
+                                    </div>
+                                    <span class="level-name">{{ ucfirst($level) }}</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="level-count" style="background-color: {{ $config['color'] ?? '#6b7280' }};">
+                                        {{ isset($counts[$level]) ? $counts[$level] : 0 }}
+                                    </div>
+                                    <div class="switch-toggle active"></div>
+                                </div>
+                                <input type="checkbox" class="d-none level-checkbox" value="{{ $level }}" checked>
+                            </div>
+                        @empty
+                            <div class="level-switch active log-filter" data-level="error">
+                                <div class="level-info">
+                                    <div class="level-icon" style="background-color: #dc2626;">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </div>
+                                    <span class="level-name">Error</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="level-count" style="background-color: #dc2626;">0</div>
+                                    <div class="switch-toggle active"></div>
+                                </div>
+                                <input type="checkbox" class="d-none level-checkbox" value="error" checked>
+                            </div>
+                            <div class="level-switch active log-filter" data-level="warning">
+                                <div class="level-info">
+                                    <div class="level-icon" style="background-color: #d97706;">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <span class="level-name">Warning</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="level-count" style="background-color: #d97706;">0</div>
+                                    <div class="switch-toggle active"></div>
+                                </div>
+                                <input type="checkbox" class="d-none level-checkbox" value="warning" checked>
+                            </div>
+                            <div class="level-switch active log-filter" data-level="info">
+                                <div class="level-info">
+                                    <div class="level-icon" style="background-color: #0284c7;">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <span class="level-name">Info</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div class="level-count" style="background-color: #0284c7;">0</div>
+                                    <div class="switch-toggle active"></div>
+                                </div>
+                                <input type="checkbox" class="d-none level-checkbox" value="info" checked>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-card">
+            <div class="content-header">
+                <h5 class="content-title">Log Entries</h5>
+                <div class="content-badge" id="entriesCount">{{ number_format(count($entries ?? [])) }} entries</div>
+            </div>
+
+            <div class="search-bar">
+                <div style="position: relative;">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-bar-input log-search" placeholder="Search through log messages, timestamps, and more..." id="mainSearchInput">
+                </div>
+            </div>
+
+            <div class="log-container">
+                <table class="log-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 120px;">Level</th>
+                        <th style="width: 180px;">Timestamp</th>
+                        <th>Message</th>
+                        <th style="width: 100px;">Actions</th>
                     </tr>
-                    @if (!empty($log['stack']))
-                        <tr id="stacktrace-{{ $index }}" class="stack-trace-row d-none">
-                            <td colspan="4">
-                                <pre class="stack-trace">{{ $log['stack'] }}</pre>
+                    </thead>
+                    <tbody id="logTableBody">
+                    @forelse($entries ?? [] as $index => $log)
+                        <tr class="log-row" data-level="{{ strtolower($log['level'] ?? 'info') }}" data-index="{{ $index }}">
+                            <td>
+                                <div class="log-level-badge" style="background-color: {{ $log['color'] ?? '#6b7280' }};">
+                                    <i class="{{ $log['icon'] ?? 'fas fa-circle' }}"></i>
+                                    {{ strtoupper($log['level'] ?? 'INFO') }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="timestamp">{{ $log['timestamp'] ?? 'N/A' }}</div>
+                            </td>
+                            <td>
+                                <div class="log-message">{{ $log['message'] ?? 'No message' }}</div>
+                            </td>
+                            <td>
+                                @if (!empty($log['stack']))
+                                    <button class="stack-btn" onclick="toggleStackTrace({{ $index }})">
+                                        <i class="fas fa-code"></i>
+                                        <span>Stack</span>
+                                    </button>
+                                @endif
                             </td>
                         </tr>
-                    @endif
-                @empty
-                    <tr class="no-data-row">
+                        @if (!empty($log['stack']))
+                            <tr id="stacktrace-{{ $index }}" class="stack-trace-row d-none">
+                                <td colspan="4">
+                                    <pre class="stack-trace">{{ $log['stack'] }}</pre>
+                                </td>
+                            </tr>
+                        @endif
+                    @empty
+                        <tr class="no-data-row">
+                            <td colspan="4">
+                                <div class="no-data-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                <h4>No Log Entries Found</h4>
+                                <p>This log file appears to be empty or has no readable entries.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+
+                    <!-- No Data Row for Search Results -->
+                    <tr id="noDataRow" class="no-data-row" style="display: none;">
                         <td colspan="4">
                             <div class="no-data-icon">
-                                <i class="fas fa-inbox"></i>
+                                <i class="fas fa-search-minus"></i>
                             </div>
-                            <h4>No Log Entries Found</h4>
-                            <p>This log file appears to be empty or has no readable entries.</p>
+                            <h4>No matching logs found</h4>
+                            <p>Try adjusting your search criteria or filters</p>
                         </td>
                     </tr>
-                @endforelse
-
-                <!-- No Data Row for Search Results -->
-                <tr id="noDataRow" class="no-data-row" style="display: none;">
-                    <td colspan="4">
-                        <div class="no-data-icon">
-                            <i class="fas fa-search-minus"></i>
-                        </div>
-                        <h4>No matching logs found</h4>
-                        <p>Try adjusting your search criteria or filters</p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <p class="mb-0">
-                © <span id="year">{{ date('Y') }}</span>
-                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
-                    Log Tracker
-                </a>
-                - Efficient logging, effortless insights.
-            </p>
-        </div>
-    </div>
-</footer>
+@endsection
 
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+@push('scripts')
+    <script>
+        // Simple and working filter function
+        function filterLogs() {
+            const activeLevels = Array.from(document.querySelectorAll('.level-checkbox:checked')).map(cb => cb.value);
+            const searchTerm = document.getElementById('mainSearchInput').value.toLowerCase();
+            const logRows = document.querySelectorAll('.log-row');
+            let visibleCount = 0;
 
-<script>
-    // Simple and working filter function
-    function filterLogs() {
-        const activeLevels = Array.from(document.querySelectorAll('.level-checkbox:checked')).map(cb => cb.value);
-        const searchTerm = document.getElementById('mainSearchInput').value.toLowerCase();
-        const logRows = document.querySelectorAll('.log-row');
-        let visibleCount = 0;
+            logRows.forEach(row => {
+                const level = row.getAttribute('data-level');
+                const text = row.textContent.toLowerCase();
+                let showRow = activeLevels.includes(level);
 
-        logRows.forEach(row => {
-            const level = row.getAttribute('data-level');
-            const text = row.textContent.toLowerCase();
-            let showRow = activeLevels.includes(level);
+                if (searchTerm && showRow) {
+                    showRow = text.includes(searchTerm);
+                }
 
-            if (searchTerm && showRow) {
-                showRow = text.includes(searchTerm);
-            }
+                const stackRow = document.getElementById(`stacktrace-${row.dataset.index}`);
 
-            const stackRow = document.getElementById(`stacktrace-${row.dataset.index}`);
+                if (showRow) {
+                    row.style.display = '';
+                    visibleCount++;
 
-            if (showRow) {
-                row.style.display = '';
-                visibleCount++;
-
-                if (stackRow) {
-                    if (!stackRow.classList.contains('d-none')) {
-                        stackRow.style.display = '';
-                    } else {
+                    if (stackRow) {
+                        if (!stackRow.classList.contains('d-none')) {
+                            stackRow.style.display = '';
+                        } else {
+                            stackRow.style.display = 'none';
+                        }
+                    }
+                } else {
+                    row.style.display = 'none';
+                    if (stackRow) {
                         stackRow.style.display = 'none';
                     }
                 }
+            });
+
+            const badge = document.getElementById('entriesCount');
+            badge.textContent = `${visibleCount.toLocaleString()} ${visibleCount === 1 ? 'entry' : 'entries'}`;
+
+            const noDataRow = document.getElementById('noDataRow');
+            const originalNoData = document.querySelector('.no-data-row:not(#noDataRow)');
+
+            // Only show no data row if we have entries to filter but none are visible
+            if (logRows.length > 0 && visibleCount === 0) {
+                noDataRow.style.display = '';
+                if (originalNoData) originalNoData.style.display = 'none';
             } else {
-                row.style.display = 'none';
-                if (stackRow) {
-                    stackRow.style.display = 'none';
+                noDataRow.style.display = 'none';
+                if (originalNoData && logRows.length === 0) {
+                    originalNoData.style.display = '';
+                } else if (originalNoData) {
+                    originalNoData.style.display = 'none';
                 }
+            }
+        }
+
+        function toggleLevel(levelSwitch) {
+            const checkbox = levelSwitch.querySelector('.level-checkbox');
+            const toggle = levelSwitch.querySelector('.switch-toggle');
+
+            checkbox.checked = !checkbox.checked;
+
+            if (checkbox.checked) {
+                levelSwitch.classList.add('active');
+                toggle.classList.add('active');
+            } else {
+                levelSwitch.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+
+            filterLogs();
+        }
+
+        function toggleStackTrace(index) {
+            const stackRow = document.getElementById(`stacktrace-${index}`);
+            const mainRow = document.querySelector(`[data-index="${index}"]`);
+
+            if (!stackRow || !mainRow || mainRow.style.display === 'none') {
+                return;
+            }
+
+            stackRow.classList.toggle('d-none');
+
+            if (stackRow.classList.contains('d-none')) {
+                stackRow.style.display = 'none';
+            } else {
+                stackRow.style.display = '';
+            }
+        }
+
+        function toggleFilters() {
+            const body = document.getElementById('filtersBody');
+            const icon = document.getElementById('collapseIcon');
+
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                body.style.display = 'none';
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+
+        function toggleExportMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('exportMenu');
+            const button = event.currentTarget;
+
+            if (menu.classList.contains('show')) {
+                menu.classList.remove('show');
+                return;
+            }
+
+            // Position the menu
+            const rect = button.getBoundingClientRect();
+            const menuWidth = 140;
+            const viewportWidth = window.innerWidth;
+
+            // Reset positioning
+            menu.style.right = '0';
+            menu.style.left = 'auto';
+
+            // Check if menu would go off screen
+            if (rect.right < menuWidth) {
+                menu.style.right = 'auto';
+                menu.style.left = '0';
+            }
+
+            menu.classList.add('show');
+        }
+
+        // Close export menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const exportDropdown = document.querySelector('.export-dropdown');
+            const exportMenu = document.getElementById('exportMenu');
+
+            if (exportMenu && !exportDropdown.contains(event.target)) {
+                exportMenu.classList.remove('show');
             }
         });
 
-        const badge = document.getElementById('entriesCount');
-        badge.textContent = `${visibleCount.toLocaleString()} ${visibleCount === 1 ? 'entry' : 'entries'}`;
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.level-switch').forEach(levelSwitch => {
+                levelSwitch.addEventListener('click', function() {
+                    toggleLevel(this);
+                });
+            });
 
-        const noDataRow = document.getElementById('noDataRow');
-        const originalNoData = document.querySelector('.no-data-row:not(#noDataRow)');
+            const mainSearchInput = document.getElementById('mainSearchInput');
+            mainSearchInput.addEventListener('input', function() {
+                filterLogs();
+            });
 
-        // Only show no data row if we have entries to filter but none are visible
-        if (logRows.length > 0 && visibleCount === 0) {
-            noDataRow.style.display = '';
-            if (originalNoData) originalNoData.style.display = 'none';
-        } else {
-            noDataRow.style.display = 'none';
-            if (originalNoData && logRows.length === 0) {
-                originalNoData.style.display = '';
-            } else if (originalNoData) {
-                originalNoData.style.display = 'none';
-            }
-        }
-    }
+            document.getElementById('noDataRow').style.display = 'none';
 
-    function toggleLevel(levelSwitch) {
-        const checkbox = levelSwitch.querySelector('.level-checkbox');
-        const toggle = levelSwitch.querySelector('.switch-toggle');
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    e.preventDefault();
+                    document.getElementById('mainSearchInput').focus();
+                }
 
-        checkbox.checked = !checkbox.checked;
-
-        if (checkbox.checked) {
-            levelSwitch.classList.add('active');
-            toggle.classList.add('active');
-        } else {
-            levelSwitch.classList.remove('active');
-            toggle.classList.remove('active');
-        }
-
-        filterLogs();
-    }
-
-    function toggleStackTrace(index) {
-        const stackRow = document.getElementById(`stacktrace-${index}`);
-        const mainRow = document.querySelector(`[data-index="${index}"]`);
-
-        if (!stackRow || !mainRow || mainRow.style.display === 'none') {
-            return;
-        }
-
-        stackRow.classList.toggle('d-none');
-
-        if (stackRow.classList.contains('d-none')) {
-            stackRow.style.display = 'none';
-        } else {
-            stackRow.style.display = '';
-        }
-    }
-
-    function toggleFilters() {
-        const body = document.getElementById('filtersBody');
-        const icon = document.getElementById('collapseIcon');
-
-        if (body.style.display === 'none') {
-            body.style.display = 'block';
-            icon.className = 'fas fa-chevron-up';
-        } else {
-            body.style.display = 'none';
-            icon.className = 'fas fa-chevron-down';
-        }
-    }
-
-    function toggleExportMenu(event) {
-        event.stopPropagation();
-        const menu = document.getElementById('exportMenu');
-        const button = event.currentTarget;
-
-        if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-            return;
-        }
-
-        // Position the menu
-        const rect = button.getBoundingClientRect();
-        const menuWidth = 140;
-        const viewportWidth = window.innerWidth;
-
-        // Reset positioning
-        menu.style.right = '0';
-        menu.style.left = 'auto';
-
-        // Check if menu would go off screen
-        if (rect.right < menuWidth) {
-            menu.style.right = 'auto';
-            menu.style.left = '0';
-        }
-
-        menu.classList.add('show');
-    }
-
-    // Close export menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const exportDropdown = document.querySelector('.export-dropdown');
-        const exportMenu = document.getElementById('exportMenu');
-
-        if (exportMenu && !exportDropdown.contains(event.target)) {
-            exportMenu.classList.remove('show');
-        }
-    });
-
-    // Initialize when DOM is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.level-switch').forEach(levelSwitch => {
-            levelSwitch.addEventListener('click', function() {
-                toggleLevel(this);
+                if (e.key === 'Escape') {
+                    mainSearchInput.value = '';
+                    filterLogs();
+                    const exportMenu = document.getElementById('exportMenu');
+                    if (exportMenu) {
+                        exportMenu.classList.remove('show');
+                    }
+                }
             });
         });
-
-        const mainSearchInput = document.getElementById('mainSearchInput');
-        mainSearchInput.addEventListener('input', function() {
-            filterLogs();
-        });
-
-        document.getElementById('noDataRow').style.display = 'none';
-
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-                e.preventDefault();
-                document.getElementById('mainSearchInput').focus();
-            }
-
-            if (e.key === 'Escape') {
-                mainSearchInput.value = '';
-                filterLogs();
-                const exportMenu = document.getElementById('exportMenu');
-                if (exportMenu) {
-                    exportMenu.classList.remove('show');
-                }
-            }
-        });
-    });
-</script>
-</body>
-</html>
+    </script>
+@endpush

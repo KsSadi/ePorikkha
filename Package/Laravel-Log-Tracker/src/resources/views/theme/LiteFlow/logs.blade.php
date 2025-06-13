@@ -1,97 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Log Files Management - Log Tracker')</title>
-    <!-- Bootstrap 5.3.3 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+@extends('log-tracker::theme.LiteFlow.layouts.app')
+
+@section('title', 'Log List - Log Tracker')
+
+@push('styles')
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --info-color: #0284c7;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --border-radius: 8px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.2s ease-in-out;
-        }
-
-        body {
-            background-color: var(--gray-50);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            color: var(--gray-900);
-            line-height: 1.6;
-        }
-
-        /* Clean Navigation */
-        .navbar {
-            background-color: white;
-            border-bottom: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
-            color: var(--gray-900) !important;
-            font-weight: 600;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--gray-600) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            margin: 0 0.25rem;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
-            background-color: var(--gray-100);
-        }
-
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color) !important;
-            background-color: #dbeafe;
-        }
-
-        .navbar-toggler {
-            border: 1px solid var(--gray-300);
-            padding: 0.25rem 0.5rem;
-        }
-
         /* Enhanced Page Header */
         .page-header {
             background-color: white;
@@ -208,8 +120,15 @@
             border-radius: var(--border-radius);
             font-size: 0.875rem;
             transition: var(--transition);
-            background: white;
             cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px;
+
         }
 
         .date-filter:focus {
@@ -862,603 +781,532 @@
             background: var(--gray-400);
         }
     </style>
-</head>
-<body>
-<!-- Clean Navigation -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        @if(Route::has('log-tracker.dashboard'))
-            <a class="navbar-brand" href="{{ route('log-tracker.dashboard') }}">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
-        @else
-            <a class="navbar-brand" href="#">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>Log Tracker</span>
-            </a>
+@endpush
+
+@section('content')
+    <!-- Main Content -->
+    <div class="container my-4 page-content">
+        <!-- Success/Error Messages -->
+        @if(session('success'))
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            </div>
         @endif
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    @if(Route::has('log-tracker.dashboard'))
-                        <a class="nav-link" href="{{ route('log-tracker.dashboard') }}">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
-                    @else
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-chart-line"></i>
-                            Dashboard
-                        </a>
-                    @endif
-                </li>
-                <li class="nav-item">
-                    @if(Route::has('log-tracker.index'))
-                        <a class="nav-link active" href="{{ route('log-tracker.index') }}">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
-                    @else
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-list"></i>
-                            Log Files
-                        </a>
-                    @endif
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content -->
-<div class="container my-4 page-content">
-    <!-- Success/Error Messages -->
-    @if(session('success'))
-        <div class="alert alert-success" role="alert">
-            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>{{ session('error') }}
-        </div>
-    @endif
-
-    <!-- Modern Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1><i class="fas fa-list"></i>Log Files Management</h1>
-                <p>Monitor, analyze, and manage your application logs efficiently</p>
+        @if(session('error'))
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>{{ session('error') }}
             </div>
-            <div class="col-md-4 text-end">
-                <div style="font-size: 4rem; opacity: 0.1; color: var(--primary-color);">
-                    <i class="fas fa-server"></i>
+        @endif
+
+        <!-- Modern Header -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-list"></i>Log Files Management</h1>
+                    <p>Monitor, analyze, and manage your application logs efficiently</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div style="font-size: 4rem; opacity: 0.1; color: var(--primary-color);">
+                        <i class="fas fa-server"></i>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Enhanced Filter Section -->
-    <div class="filters-section">
-        <div class="filter-header">
-            <div class="filter-title">
-                <i class="fas fa-filter"></i>
-                Smart Filters
-            </div>
-            @if(Route::has('log-tracker.export.form'))
-                <a href="{{ route('log-tracker.export.form') }}" class="btn-outline-primary">
-                    <i class="fas fa-download"></i>Bulk Export
-                </a>
-            @else
-                <a href="#" class="btn-outline-primary">
-                    <i class="fas fa-download"></i>Bulk Export
-                </a>
-            @endif
-        </div>
-
-        <div class="filter-controls">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchLogFiles" class="search-input" placeholder="Search log files by name or date...">
-            </div>
-
-            <select class="date-filter" id="dateFilter">
-                <option value="all">All Time</option>
-                <option value="today">Today</option>
-                <option value="last7">Last 7 Days</option>
-                <option value="last30">Last 30 Days</option>
-                <option value="custom">Custom Range</option>
-            </select>
-
-            <button class="apply-btn" onclick="applyFilters()">
-                <i class="fas fa-search"></i>
-                <span>Apply</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Stats Overview -->
-    <div class="stats-overview">
-        <div class="stat-card">
-            <div class="stat-number">{{ $totalFiles ?? 0 }}</div>
-            <div class="stat-label">Total Files</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ isset($counts) ? number_format(array_sum(array_column($counts, 'total'))) : 0 }}</div>
-            <div class="stat-label">Total Logs</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ isset($counts) ? number_format(array_sum(array_column($counts, 'error'))) : 0 }}</div>
-            <div class="stat-label">Total Errors</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">
-                @if(isset($logFiles) && is_array($logFiles))
-                    {{ round(array_sum(array_map(function($file) { return file_exists(storage_path('logs/' . $file)) ? filesize(storage_path('logs/' . $file)) : 0; }, $logFiles)) / 1024 / 1024, 2) }}MB
+        <!-- Enhanced Filter Section -->
+        <div class="filters-section">
+            <div class="filter-header">
+                <div class="filter-title">
+                    <i class="fas fa-filter"></i>
+                    Smart Filters
+                </div>
+                @if(Route::has('log-tracker.export.form'))
+                    <a href="{{ route('log-tracker.export.form') }}" class="btn-outline-primary">
+                        <i class="fas fa-download"></i>Bulk Export
+                    </a>
                 @else
-                    0MB
+                    <a href="#" class="btn-outline-primary">
+                        <i class="fas fa-download"></i>Bulk Export
+                    </a>
                 @endif
             </div>
-            <div class="stat-label">Total Size</div>
-        </div>
-    </div>
 
-    <!-- Modern Log Cards -->
-    <div class="logs-container">
-        <div class="logs-header">
-            <div class="logs-title">Log Files</div>
-            <div class="file-count-badge" id="fileCountBadge">{{ $totalFiles ?? 0 }} files</div>
+            <div class="filter-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchLogFiles" class="search-input" placeholder="Search log files by name or date...">
+                </div>
+
+                <select class="date-filter" id="dateFilter">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="last7">Last 7 Days</option>
+                    <option value="last30">Last 30 Days</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+
+                <button class="apply-btn" onclick="applyFilters()">
+                    <i class="fas fa-search"></i>
+                    <span>Apply</span>
+                </button>
+            </div>
         </div>
 
-        <div class="logs-grid" id="logsGrid">
-            <!-- Header Row -->
-            <div class="logs-header-row">
-                <div class="header-cell">File Information</div>
-                <div class="header-cell">Total</div>
-                <div class="header-cell">Errors</div>
-                <div class="header-cell">Warnings</div>
-                <div class="header-cell">Info</div>
-                <div class="header-cell">Size</div>
-                <div class="header-cell">Actions</div>
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-number">{{ $totalFiles ?? 0 }}</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ isset($counts) ? number_format(array_sum(array_column($counts, 'total'))) : 0 }}</div>
+                <div class="stat-label">Total Logs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ isset($counts) ? number_format(array_sum(array_column($counts, 'error'))) : 0 }}</div>
+                <div class="stat-label">Total Errors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    @if(isset($logFiles) && is_array($logFiles))
+                        {{ round(array_sum(array_map(function($file) { return file_exists(storage_path('logs/' . $file)) ? filesize(storage_path('logs/' . $file)) : 0; }, $logFiles)) / 1024 / 1024, 2) }}MB
+                    @else
+                        0MB
+                    @endif
+                </div>
+                <div class="stat-label">Total Size</div>
+            </div>
+        </div>
+
+        <!-- Modern Log Cards -->
+        <div class="logs-container">
+            <div class="logs-header">
+                <div class="logs-title">Log Files</div>
+                <div class="file-count-badge" id="fileCountBadge">{{ $totalFiles ?? 0 }} files</div>
             </div>
 
-            @forelse($logFiles ?? [] as $file)
-                <div class="log-card" data-log-date="{{ $file }}" data-search-text="{{ strtolower($file) }}">
-                    <div class="log-info">
-                        <div class="log-filename">{{ isset($formattedFileNames[$file]) ? $formattedFileNames[$file] : $file }}</div>
-                        <div class="log-date">
-                            @php
-                                $dateString = 'Unknown date';
-                                if (preg_match('/laravel-(\d{4})-(\d{2})-(\d{2})\.log/', $file, $matches)) {
-                                    try {
-                                        $dateString = \Carbon\Carbon::createFromFormat('Y-m-d', $matches[1] . '-' . $matches[2] . '-' . $matches[3])->format('M d, Y');
-                                    } catch (Exception $e) {
-                                        $dateString = 'Invalid date';
+            <div class="logs-grid" id="logsGrid">
+                <!-- Header Row -->
+                <div class="logs-header-row">
+                    <div class="header-cell">File Information</div>
+                    <div class="header-cell">Total</div>
+                    <div class="header-cell">Errors</div>
+                    <div class="header-cell">Warnings</div>
+                    <div class="header-cell">Info</div>
+                    <div class="header-cell">Size</div>
+                    <div class="header-cell">Actions</div>
+                </div>
+
+                @forelse($logFiles ?? [] as $file)
+                    <div class="log-card" data-log-date="{{ $file }}" data-search-text="{{ strtolower($file) }}">
+                        <div class="log-info">
+                            <div class="log-filename">{{ isset($formattedFileNames[$file]) ? $formattedFileNames[$file] : $file }}</div>
+                            <div class="log-date">
+                                @php
+                                    $dateString = 'Unknown date';
+                                    if (preg_match('/laravel-(\d{4})-(\d{2})-(\d{2})\.log/', $file, $matches)) {
+                                        try {
+                                            $dateString = \Carbon\Carbon::createFromFormat('Y-m-d', $matches[1] . '-' . $matches[2] . '-' . $matches[3])->format('M d, Y');
+                                        } catch (Exception $e) {
+                                            $dateString = 'Invalid date';
+                                        }
+                                    } elseif ($file === 'laravel.log') {
+                                        $dateString = 'Current log';
                                     }
-                                } elseif ($file === 'laravel.log') {
-                                    $dateString = 'Current log';
-                                }
-                            @endphp
-                            {{ $dateString }}
-                        </div>
-                    </div>
-
-                    <div class="log-stat">
-                        <div class="stat-badge total">{{ isset($counts[$file]['total']) ? $counts[$file]['total'] : 0 }}</div>
-                        <div class="stat-label">Total</div>
-                    </div>
-
-                    <div class="log-stat">
-                        <div class="stat-badge error">{{ isset($counts[$file]['error']) ? $counts[$file]['error'] : 0 }}</div>
-                        <div class="stat-label">Errors</div>
-                    </div>
-
-                    <div class="log-stat">
-                        <div class="stat-badge warning">{{ isset($counts[$file]['warning']) ? $counts[$file]['warning'] : 0 }}</div>
-                        <div class="stat-label">Warnings</div>
-                    </div>
-
-                    <div class="log-stat">
-                        <div class="stat-badge info">{{ isset($counts[$file]['info']) ? $counts[$file]['info'] : 0 }}</div>
-                        <div class="stat-label">Info</div>
-                    </div>
-
-                    <div class="file-size">{{ isset($fileSizes[$file]) ? $fileSizes[$file] : 'Unknown' }}</div>
-
-                    <div class="log-actions">
-                        @if(Route::has('log-tracker.show'))
-                            <a href="{{ route('log-tracker.show', ['logName' => $file]) }}"
-                               class="action-btn view"
-                               title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        @else
-                            <a href="#" class="action-btn view" title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        @endif
-
-                        @if(Route::has('log-tracker.download'))
-                            <a href="{{ route('log-tracker.download', ['logName' => $file]) }}"
-                               class="action-btn download"
-                               title="Download">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        @else
-                            <a href="#" class="action-btn download" title="Download">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        @endif
-
-                        <div class="export-dropdown">
-                            <button class="export-toggle" onclick="toggleExportMenu(this)" title="Export Options">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                            <div class="export-menu">
-                                @if(Route::has('log-tracker.export.quick'))
-                                    <a href="{{ route('log-tracker.export.quick', [$file, 'csv']) }}">
-                                        <i class="fas fa-table"></i>CSV
-                                    </a>
-                                    <a href="{{ route('log-tracker.export.quick', [$file, 'json']) }}">
-                                        <i class="fas fa-code"></i>JSON
-                                    </a>
-                                    <a href="{{ route('log-tracker.export.quick', [$file, 'excel']) }}">
-                                        <i class="fas fa-file-excel"></i>Excel
-                                    </a>
-                                    <a href="{{ route('log-tracker.export.quick', [$file, 'pdf']) }}">
-                                        <i class="fas fa-file-pdf"></i>PDF
-                                    </a>
-                                @else
-                                    <a href="#">
-                                        <i class="fas fa-table"></i>CSV
-                                    </a>
-                                    <a href="#">
-                                        <i class="fas fa-code"></i>JSON
-                                    </a>
-                                    <a href="#">
-                                        <i class="fas fa-file-excel"></i>Excel
-                                    </a>
-                                    <a href="#">
-                                        <i class="fas fa-file-pdf"></i>PDF
-                                    </a>
-                                @endif
+                                @endphp
+                                {{ $dateString }}
                             </div>
                         </div>
 
-                        @if(Route::has('log-tracker.delete') && config('log-tracker.allow_delete', false))
-                            <form action="{{ route('log-tracker.delete', ['logName' => $file]) }}"
-                                  method="POST"
-                                  style="display: inline;">
-                                @csrf
+                        <div class="log-stat">
+                            <div class="stat-badge total">{{ isset($counts[$file]['total']) ? $counts[$file]['total'] : 0 }}</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+
+                        <div class="log-stat">
+                            <div class="stat-badge error">{{ isset($counts[$file]['error']) ? $counts[$file]['error'] : 0 }}</div>
+                            <div class="stat-label">Errors</div>
+                        </div>
+
+                        <div class="log-stat">
+                            <div class="stat-badge warning">{{ isset($counts[$file]['warning']) ? $counts[$file]['warning'] : 0 }}</div>
+                            <div class="stat-label">Warnings</div>
+                        </div>
+
+                        <div class="log-stat">
+                            <div class="stat-badge info">{{ isset($counts[$file]['info']) ? $counts[$file]['info'] : 0 }}</div>
+                            <div class="stat-label">Info</div>
+                        </div>
+
+                        <div class="file-size">{{ isset($fileSizes[$file]) ? $fileSizes[$file] : 'Unknown' }}</div>
+
+                        <div class="log-actions">
+                            @if(Route::has('log-tracker.show'))
+                                <a href="{{ route('log-tracker.show', ['logName' => $file]) }}"
+                                   class="action-btn view"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @else
+                                <a href="#" class="action-btn view" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @endif
+
+                            @if(Route::has('log-tracker.download'))
+                                <a href="{{ route('log-tracker.download', ['logName' => $file]) }}"
+                                   class="action-btn download"
+                                   title="Download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            @else
+                                <a href="#" class="action-btn download" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            @endif
+
+                            <div class="export-dropdown">
+                                <button class="export-toggle" onclick="toggleExportMenu(this)" title="Export Options">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                                <div class="export-menu">
+                                    @if(Route::has('log-tracker.export.quick'))
+                                        <a href="{{ route('log-tracker.export.quick', [$file, 'csv']) }}">
+                                            <i class="fas fa-table"></i>CSV
+                                        </a>
+                                        <a href="{{ route('log-tracker.export.quick', [$file, 'json']) }}">
+                                            <i class="fas fa-code"></i>JSON
+                                        </a>
+                                        <a href="{{ route('log-tracker.export.quick', [$file, 'excel']) }}">
+                                            <i class="fas fa-file-excel"></i>Excel
+                                        </a>
+                                        <a href="{{ route('log-tracker.export.quick', [$file, 'pdf']) }}">
+                                            <i class="fas fa-file-pdf"></i>PDF
+                                        </a>
+                                    @else
+                                        <a href="#">
+                                            <i class="fas fa-table"></i>CSV
+                                        </a>
+                                        <a href="#">
+                                            <i class="fas fa-code"></i>JSON
+                                        </a>
+                                        <a href="#">
+                                            <i class="fas fa-file-excel"></i>Excel
+                                        </a>
+                                        <a href="#">
+                                            <i class="fas fa-file-pdf"></i>PDF
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+
+                            @if(Route::has('log-tracker.delete') && config('log-tracker.allow_delete', false))
+                                <form action="{{ route('log-tracker.delete', ['logName' => $file]) }}"
+                                      method="POST"
+                                      style="display: inline;">
+                                    @csrf
+                                    <button type="button"
+                                            class="action-btn delete"
+                                            title="Delete"
+                                            onclick="confirmDelete(this, '{{ $file }}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            @else
                                 <button type="button"
                                         class="action-btn delete"
                                         title="Delete"
-                                        onclick="confirmDelete(this, '{{ $file }}')">
+                                        onclick="showDeleteDisabled()">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                            </form>
-                        @else
-                            <button type="button"
-                                    class="action-btn delete"
-                                    title="Delete"
-                                    onclick="showDeleteDisabled()">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        @endif
+                            @endif
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h3>No Log Files Found</h3>
-                    <p>There are no log files to display at the moment.</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <p class="mb-0">
-                © <span id="year">{{ date('Y') }}</span>
-                <a href="https://github.com/KsSadi/Laravel-Log-Tracker" class="footer-brand" target="_blank">
-                    Log Tracker
-                </a>
-                - Efficient logging, effortless insights.
-            </p>
-        </div>
-    </div>
-</footer>
-
-<!-- Custom Date Range Modal -->
-<div class="modal fade" id="dateRangeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-calendar-alt me-2" style="color: var(--primary-color);"></i>Select Date Range
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="startDate" class="form-label">Start Date</label>
-                        <input type="date" id="startDate" class="form-control">
+                @empty
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Log Files Found</h3>
+                        <p>There are no log files to display at the moment.</p>
                     </div>
-                    <div class="col-md-6">
-                        <label for="endDate" class="form-label">End Date</label>
-                        <input type="date" id="endDate" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="applyCustomDateRange()">Apply Filter</button>
+                @endforelse
             </div>
         </div>
     </div>
-</div>
+    <!-- Custom Date Range Modal -->
+    <div class="modal fade" id="dateRangeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-calendar-alt me-2" style="color: var(--primary-color);"></i>Select Date Range
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" id="startDate" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="applyCustomDateRange()">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    class LogFilesManager {
-        constructor() {
-            this.init();
-        }
+@endsection
 
-        init() {
-            this.bindEvents();
-            this.setupRealtimeSearch();
-        }
+@push('scripts')
+    <script>
+        class LogFilesManager {
+            constructor() {
+                this.init();
+            }
 
-        bindEvents() {
-            document.getElementById('searchLogFiles').addEventListener('input', () => this.performSearch());
-            document.getElementById('dateFilter').addEventListener('change', () => this.handleDateFilter());
-            document.addEventListener('click', (e) => this.closeExportMenus(e));
-            document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-        }
+            init() {
+                this.bindEvents();
+                this.setupRealtimeSearch();
+            }
 
-        setupRealtimeSearch() {
-            let timeout;
-            document.getElementById('searchLogFiles').addEventListener('input', () => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => this.performSearch(), 300);
-            });
-        }
+            bindEvents() {
+                document.getElementById('searchLogFiles').addEventListener('input', () => this.performSearch());
+                document.getElementById('dateFilter').addEventListener('change', () => this.handleDateFilter());
+                document.addEventListener('click', (e) => this.closeExportMenus(e));
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+            }
 
-        performSearch() {
-            const searchTerm = document.getElementById('searchLogFiles').value.toLowerCase();
-            const dateFilter = document.getElementById('dateFilter').value;
-            const logCards = document.querySelectorAll('.log-card');
-            let visibleCount = 0;
+            setupRealtimeSearch() {
+                let timeout;
+                document.getElementById('searchLogFiles').addEventListener('input', () => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => this.performSearch(), 300);
+                });
+            }
 
-            logCards.forEach(card => {
-                const searchText = card.dataset.searchText;
-                const logDate = card.dataset.logDate;
+            performSearch() {
+                const searchTerm = document.getElementById('searchLogFiles').value.toLowerCase();
+                const dateFilter = document.getElementById('dateFilter').value;
+                const logCards = document.querySelectorAll('.log-card');
+                let visibleCount = 0;
 
-                let showCard = true;
+                logCards.forEach(card => {
+                    const searchText = card.dataset.searchText;
+                    const logDate = card.dataset.logDate;
 
-                if (searchTerm && !searchText.includes(searchTerm)) {
-                    showCard = false;
+                    let showCard = true;
+
+                    if (searchTerm && !searchText.includes(searchTerm)) {
+                        showCard = false;
+                    }
+
+                    if (!this.passesDateFilter(logDate, dateFilter)) {
+                        showCard = false;
+                    }
+
+                    if (showCard) {
+                        card.style.display = 'grid';
+                        card.style.animation = 'fadeIn 0.3s ease-in-out';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                this.updateFileCount(visibleCount);
+                this.toggleEmptyState(visibleCount === 0);
+            }
+
+            passesDateFilter(logFileName, filter) {
+                if (filter === 'all') return true;
+
+                const match = logFileName.match(/laravel-(\d{4})-(\d{2})-(\d{2})\.log/);
+                if (!match) return true;
+
+                const fileDate = new Date(`${match[1]}-${match[2]}-${match[3]}`);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                switch (filter) {
+                    case 'today':
+                        return fileDate.toDateString() === today.toDateString();
+                    case 'last7':
+                        const last7Days = new Date(today);
+                        last7Days.setDate(today.getDate() - 7);
+                        return fileDate >= last7Days;
+                    case 'last30':
+                        const last30Days = new Date(today);
+                        last30Days.setDate(today.getDate() - 30);
+                        return fileDate >= last30Days;
+                    case 'custom':
+                        const startDate = document.getElementById('startDate').value;
+                        const endDate = document.getElementById('endDate').value;
+                        if (!startDate || !endDate) return true;
+                        return fileDate >= new Date(startDate) && fileDate <= new Date(endDate);
+                    default:
+                        return true;
                 }
+            }
 
-                if (!this.passesDateFilter(logDate, dateFilter)) {
-                    showCard = false;
-                }
+            handleDateFilter() {
+                const dateFilter = document.getElementById('dateFilter').value;
 
-                if (showCard) {
-                    card.style.display = 'grid';
-                    card.style.animation = 'fadeIn 0.3s ease-in-out';
-                    visibleCount++;
+                if (dateFilter === 'custom') {
+                    const modal = new bootstrap.Modal(document.getElementById('dateRangeModal'));
+                    modal.show();
                 } else {
-                    card.style.display = 'none';
+                    this.performSearch();
                 }
-            });
-
-            this.updateFileCount(visibleCount);
-            this.toggleEmptyState(visibleCount === 0);
-        }
-
-        passesDateFilter(logFileName, filter) {
-            if (filter === 'all') return true;
-
-            const match = logFileName.match(/laravel-(\d{4})-(\d{2})-(\d{2})\.log/);
-            if (!match) return true;
-
-            const fileDate = new Date(`${match[1]}-${match[2]}-${match[3]}`);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            switch (filter) {
-                case 'today':
-                    return fileDate.toDateString() === today.toDateString();
-                case 'last7':
-                    const last7Days = new Date(today);
-                    last7Days.setDate(today.getDate() - 7);
-                    return fileDate >= last7Days;
-                case 'last30':
-                    const last30Days = new Date(today);
-                    last30Days.setDate(today.getDate() - 30);
-                    return fileDate >= last30Days;
-                case 'custom':
-                    const startDate = document.getElementById('startDate').value;
-                    const endDate = document.getElementById('endDate').value;
-                    if (!startDate || !endDate) return true;
-                    return fileDate >= new Date(startDate) && fileDate <= new Date(endDate);
-                default:
-                    return true;
             }
-        }
 
-        handleDateFilter() {
-            const dateFilter = document.getElementById('dateFilter').value;
-
-            if (dateFilter === 'custom') {
-                const modal = new bootstrap.Modal(document.getElementById('dateRangeModal'));
-                modal.show();
-            } else {
-                this.performSearch();
+            updateFileCount(count) {
+                const badge = document.getElementById('fileCountBadge');
+                badge.textContent = `${count} ${count === 1 ? 'file' : 'files'}`;
+                badge.style.animation = 'pulse 0.3s ease-in-out';
             }
-        }
 
-        updateFileCount(count) {
-            const badge = document.getElementById('fileCountBadge');
-            badge.textContent = `${count} ${count === 1 ? 'file' : 'files'}`;
-            badge.style.animation = 'pulse 0.3s ease-in-out';
-        }
+            toggleEmptyState(show) {
+                const grid = document.getElementById('logsGrid');
+                let emptyState = grid.querySelector('.empty-state:not(.original-empty)');
 
-        toggleEmptyState(show) {
-            const grid = document.getElementById('logsGrid');
-            let emptyState = grid.querySelector('.empty-state:not(.original-empty)');
-
-            if (show && !emptyState) {
-                emptyState = document.createElement('div');
-                emptyState.className = 'empty-state search-empty';
-                emptyState.innerHTML = `
+                if (show && !emptyState) {
+                    emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state search-empty';
+                    emptyState.innerHTML = `
                     <i class="fas fa-search"></i>
                     <h3>No Files Found</h3>
                     <p>Try adjusting your search criteria.</p>
                 `;
-                grid.appendChild(emptyState);
-            } else if (!show && emptyState) {
-                emptyState.remove();
-            }
-        }
-
-        closeExportMenus(event) {
-            if (!event.target.closest('.export-dropdown')) {
-                document.querySelectorAll('.export-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
-                document.querySelectorAll('.log-card').forEach(card => card.classList.remove('active-dropdown'));
-            }
-        }
-
-        handleKeyboard(event) {
-            if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
-                event.preventDefault();
-                document.getElementById('searchLogFiles').focus();
+                    grid.appendChild(emptyState);
+                } else if (!show && emptyState) {
+                    emptyState.remove();
+                }
             }
 
-            if (event.key === 'Escape') {
-                document.getElementById('searchLogFiles').value = '';
-                this.performSearch();
+            closeExportMenus(event) {
+                if (!event.target.closest('.export-dropdown')) {
+                    document.querySelectorAll('.export-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                    document.querySelectorAll('.log-card').forEach(card => card.classList.remove('active-dropdown'));
+                }
             }
-        }
 
-        showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} position-fixed`;
-            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-            notification.innerHTML = `
+            handleKeyboard(event) {
+                if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+                    event.preventDefault();
+                    document.getElementById('searchLogFiles').focus();
+                }
+
+                if (event.key === 'Escape') {
+                    document.getElementById('searchLogFiles').value = '';
+                    this.performSearch();
+                }
+            }
+
+            showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `alert alert-${type} position-fixed`;
+                notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                notification.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
                 ${message}
             `;
 
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease-in-out forwards';
-                setTimeout(() => notification.remove(), 300);
-            }, 4000);
-        }
-    }
-
-    // Global functions
-    function toggleExportMenu(button) {
-        const menu = button.nextElementSibling;
-        const card = button.closest('.log-card');
-        const isOpen = menu.classList.contains('show');
-
-        // Close all other export menus
-        document.querySelectorAll('.export-menu').forEach(m => m.classList.remove('show'));
-        document.querySelectorAll('.log-card').forEach(c => c.classList.remove('active-dropdown'));
-
-        if (!isOpen) {
-            menu.classList.add('show');
-            card.classList.add('active-dropdown');
-
-            setTimeout(() => {
-                const rect = menu.getBoundingClientRect();
-                const windowWidth = window.innerWidth;
-
-                if (rect.right > windowWidth - 10) {
-                    menu.style.right = '0';
-                    menu.style.left = 'auto';
-                }
-
-                if (rect.bottom > window.innerHeight - 20) {
-                    menu.style.top = 'auto';
-                    menu.style.bottom = '100%';
-                    menu.style.marginTop = '0';
-                    menu.style.marginBottom = '5px';
-                }
-            }, 10);
-        }
-    }
-
-    function applyFilters() {
-        logManager.performSearch();
-    }
-
-    function applyCustomDateRange() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('dateRangeModal'));
-        modal.hide();
-        logManager.performSearch();
-    }
-
-    function confirmDelete(button, fileName) {
-        if (confirm(`Are you sure you want to delete "${fileName}"?\n\nThis action cannot be undone.`)) {
-            const icon = button.querySelector('i');
-            if (icon) {
-                icon.className = 'fas fa-spinner fa-spin';
-            }
-            button.disabled = true;
-
-            const form = button.closest('form');
-            form.submit();
-        }
-    }
-
-    function showDeleteDisabled() {
-        alert('File deletion is disabled. Please check your configuration to enable this feature.');
-    }
-
-    // Initialize
-    let logManager;
-    document.addEventListener('DOMContentLoaded', function() {
-        logManager = new LogFilesManager();
-
-        document.querySelectorAll('.export-menu a').forEach(link => {
-            link.addEventListener('click', function() {
-                const icon = this.querySelector('i');
-                const originalClass = icon.className;
-                icon.className = 'fas fa-spinner fa-spin';
+                document.body.appendChild(notification);
 
                 setTimeout(() => {
-                    icon.className = originalClass;
-                }, 2000);
+                    notification.style.animation = 'slideOutRight 0.3s ease-in-out forwards';
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
+        }
+
+        // Global functions
+        function toggleExportMenu(button) {
+            const menu = button.nextElementSibling;
+            const card = button.closest('.log-card');
+            const isOpen = menu.classList.contains('show');
+
+            // Close all other export menus
+            document.querySelectorAll('.export-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.log-card').forEach(c => c.classList.remove('active-dropdown'));
+
+            if (!isOpen) {
+                menu.classList.add('show');
+                card.classList.add('active-dropdown');
+
+                setTimeout(() => {
+                    const rect = menu.getBoundingClientRect();
+                    const windowWidth = window.innerWidth;
+
+                    if (rect.right > windowWidth - 10) {
+                        menu.style.right = '0';
+                        menu.style.left = 'auto';
+                    }
+
+                    if (rect.bottom > window.innerHeight - 20) {
+                        menu.style.top = 'auto';
+                        menu.style.bottom = '100%';
+                        menu.style.marginTop = '0';
+                        menu.style.marginBottom = '5px';
+                    }
+                }, 10);
+            }
+        }
+
+        function applyFilters() {
+            logManager.performSearch();
+        }
+
+        function applyCustomDateRange() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('dateRangeModal'));
+            modal.hide();
+            logManager.performSearch();
+        }
+
+        function confirmDelete(button, fileName) {
+            if (confirm(`Are you sure you want to delete "${fileName}"?\n\nThis action cannot be undone.`)) {
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-spinner fa-spin';
+                }
+                button.disabled = true;
+
+                const form = button.closest('form');
+                form.submit();
+            }
+        }
+
+        function showDeleteDisabled() {
+            alert('File deletion is disabled. Please check your configuration to enable this feature.');
+        }
+
+        // Initialize
+        let logManager;
+        document.addEventListener('DOMContentLoaded', function() {
+            logManager = new LogFilesManager();
+
+            document.querySelectorAll('.export-menu a').forEach(link => {
+                link.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const originalClass = icon.className;
+                    icon.className = 'fas fa-spinner fa-spin';
+
+                    setTimeout(() => {
+                        icon.className = originalClass;
+                    }, 2000);
+                });
             });
         });
-    });
-</script>
-</body>
-</html>
+    </script>
+@endpush
