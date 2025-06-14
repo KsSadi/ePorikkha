@@ -5,6 +5,7 @@
 @push('styles')
     <style>
         /* Enhanced Page Header */
+        /* Enhanced Page Header */
         .page-header {
             background-color: white;
             border: 1px solid var(--gray-200);
@@ -120,15 +121,8 @@
             border-radius: var(--border-radius);
             font-size: 0.875rem;
             transition: var(--transition);
+            background: white;
             cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 12px;
-
         }
 
         .date-filter:focus {
@@ -203,7 +197,9 @@
             border-radius: 12px;
             padding: 0;
             box-shadow: var(--shadow-sm);
-            overflow: hidden;
+            overflow: visible !important;
+            position: relative;
+            z-index: 1;
         }
 
         .logs-header {
@@ -234,6 +230,9 @@
             display: grid;
             gap: 0;
             padding-bottom: 2rem;
+            overflow: visible !important; /* ensure dropdown is not clipped */
+            position: relative;
+            z-index: 1;
         }
 
         .logs-header-row {
@@ -272,6 +271,7 @@
             cursor: pointer;
             position: relative;
             z-index: 1;
+            overflow: visible !important;
         }
 
         .log-card:hover {
@@ -284,7 +284,8 @@
         }
 
         .log-card.active-dropdown {
-            z-index: 1001;
+            z-index: 1100;
+            position: relative;
         }
 
         .log-info {
@@ -402,6 +403,8 @@
         /* Export Dropdown */
         .export-dropdown {
             position: relative;
+            display: inline-block;
+            z-index: 1100;
         }
 
         .export-toggle {
@@ -426,20 +429,25 @@
 
         .export-menu {
             position: absolute;
-            top: 100%;
+            /* Always position below the button */
+            top: 100% !important; 
+            bottom: auto !important;
             right: 0;
             background: white;
             border: 1px solid var(--gray-200);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
             padding: 0.5rem 0;
-            min-width: 140px;
+            min-width: 160px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(-10px);
+            transform: translateY(10px);
             transition: var(--transition);
             margin-top: 5px;
-            z-index: 1000;
+            margin-bottom: 0;
+            z-index: 1050;
+            /* Ensure the menu is not affected by scroll position */
+            position: absolute;
         }
 
         .export-menu.show {
@@ -1242,6 +1250,16 @@
             document.querySelectorAll('.log-card').forEach(c => c.classList.remove('active-dropdown'));
 
             if (!isOpen) {
+                // Force dropdown to appear below the button by setting explicit styles
+                menu.style.top = '100%';
+                menu.style.bottom = 'auto';
+                menu.style.marginTop = '5px';
+                menu.style.marginBottom = '0'; 
+                
+                // Add important flag to CSS to override any potential conflicts
+                menu.style.setProperty('top', '100%', 'important');
+                menu.style.setProperty('bottom', 'auto', 'important');
+                
                 menu.classList.add('show');
                 card.classList.add('active-dropdown');
 
@@ -1249,17 +1267,14 @@
                     const rect = menu.getBoundingClientRect();
                     const windowWidth = window.innerWidth;
 
+                    // Only adjust horizontal position if needed
                     if (rect.right > windowWidth - 10) {
                         menu.style.right = '0';
                         menu.style.left = 'auto';
                     }
-
-                    if (rect.bottom > window.innerHeight - 20) {
-                        menu.style.top = 'auto';
-                        menu.style.bottom = '100%';
-                        menu.style.marginTop = '0';
-                        menu.style.marginBottom = '5px';
-                    }
+                    
+                    // Do not adjust vertical position, always keep it below
+                    // Even if it goes off screen
                 }, 10);
             }
         }

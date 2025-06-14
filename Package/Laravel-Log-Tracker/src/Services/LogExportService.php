@@ -212,7 +212,7 @@ class LogExportService
 <body>
     <div class="print-controls no-print">
         <button class="btn" onclick="window.print()">🖨️ Print to PDF</button>
-        <button class="btn" onclick="window.close()">✕ Close</button>
+        <button class="btn" onclick="history.back()">✕ Back</button>
     </div>
 
     <div class="header">

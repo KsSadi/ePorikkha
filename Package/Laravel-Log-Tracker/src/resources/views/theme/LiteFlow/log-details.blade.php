@@ -6,6 +6,7 @@
     <style>
 
         /* Modern Breadcrumb */
+        /* Modern Breadcrumb */
         .breadcrumb-container {
             background: white;
             border: 1px solid var(--gray-200);
@@ -46,7 +47,7 @@
             margin-bottom: 2rem;
             box-shadow: var(--shadow-sm);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .page-header::before {
@@ -121,6 +122,9 @@
             gap: 0.75rem;
             flex-wrap: wrap;
             align-items: flex-start;
+            position: relative;
+            overflow: visible;
+            z-index: 2;
         }
 
         .action-btn {
@@ -193,8 +197,8 @@
             border: 1px solid var(--gray-200);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
-            min-width: 140px;
-            z-index: 1000;
+            min-width: 160px;
+            z-index: 1050;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
