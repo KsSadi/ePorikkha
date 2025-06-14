@@ -294,7 +294,7 @@
         /* Live Status Indicator */
         .live-status {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
             background: var(--success-gradient);
             color: white;
